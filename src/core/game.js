@@ -1,5 +1,5 @@
-import { Map } from "./map.js"
-import { Player } from "./player.js"
+import { Map } from "../worlds/map.js"
+import { Player } from "../characters/player.js"
 
 /**
  * @class

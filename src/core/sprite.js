@@ -41,7 +41,7 @@ export class Sprite extends GameElement {
 		super({ x, y, width, height })
 
 		this.image = new Image()
-		this.image.src = `assets/${src}`
+		this.image.src = `assets/img/${src}`
 
 		this.sprite = sprite
 	}

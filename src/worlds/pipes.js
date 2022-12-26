@@ -1,7 +1,7 @@
-import { Sprite } from './sprite.js'
-import { getSprite } from './utils.js'
+import { Sprite } from '../core/sprite.js'
+import { getSprite } from '../core/utils.js'
 
-import SpritesData from './sprites/tile.json' assert {type: 'json'}
+import SpritesData from '../../assets/sprites/tile.json' assert {type: 'json'}
 
 /**
  * @class

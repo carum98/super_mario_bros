@@ -1,8 +1,8 @@
-import { Controls } from './controls.js'
-import { Sprite } from './sprite.js'
-import { getAnimation, getSprite } from './utils.js'
+import { Controls } from '../core/controls.js'
+import { Sprite } from '../core/sprite.js'
+import { getAnimation, getSprite } from '../core/utils.js'
 
-import SpritesData from './sprites/player.json' assert {type: 'json'}
+import SpritesData from '../../assets/sprites/player.json' assert {type: 'json'}
 
 /**
  * @class

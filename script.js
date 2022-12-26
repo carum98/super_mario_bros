@@ -1,7 +1,7 @@
-import { Game } from './src/game.js'
-import { GameLoop } from './src/game-loop.js'
-import { Player } from './src/player.js'
-import { getCanvas, scaleCanvas } from './src/utils.js'
+import { Game } from './src/core/game.js'
+import { GameLoop } from './src/core/game-loop.js'
+import { Player } from './src/characters/player.js'
+import { getCanvas, scaleCanvas } from './src/core/utils.js'
 
 const canvas = getCanvas()
 
