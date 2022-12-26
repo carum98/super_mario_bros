@@ -1,9 +1,16 @@
 import { Controls } from "./controls.js"
-import { GameElement } from "./game-element.js"
+import { Sprite } from "./sprite.js"
 
-export class Player extends GameElement {
+export class Player extends Sprite {
 	constructor() {
-		super({ x: 0, y: 0, width: 20, height: 40 })
+		super({
+			image: "assets/sprites.png",
+			x: 0,
+			y: 0,
+			width: 16,
+			height: 32,
+			sprite: { x: 112, y: 88 }
+		})
 
 		this.vy = 0
 		this.speed = 3
@@ -23,7 +30,7 @@ export class Player extends GameElement {
 
 		// Vertical movement
 		if (keys.includes(Controls.DIRECTIONS.UP) && this.onGround()) {
-			this.vy = -10
+			this.vy = -8
 		}
 
 		this.y += this.vy
@@ -36,6 +43,6 @@ export class Player extends GameElement {
 	}
 
 	onGround() {
-		return this.y >= canvas.height - this.height
+		return this.y >= canvas.height - this.height - 32
 	}
 }

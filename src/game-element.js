@@ -10,4 +10,13 @@ export class GameElement {
 	draw(ctx) {
 		ctx.fillRect(this.x, this.y, this.width, this.height)
 	}
+
+	conllidesWith(element) {
+		return (
+			this.x < element.x + element.width &&
+			this.x + this.width > element.x &&
+			this.y < element.y + element.height &&
+			this.y + this.height > element.y
+		)
+	}
 }
