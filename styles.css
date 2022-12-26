@@ -1,0 +1,9 @@
+body {
+	display: grid;
+	place-items: center;
+	background-color: black;
+}
+
+canvas {
+	background-color: white;
+}
