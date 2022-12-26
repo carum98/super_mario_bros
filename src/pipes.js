@@ -1,14 +1,21 @@
-import { Sprite } from "./sprite.js";
+import { Sprite } from './sprite.js'
+import SpritesData from './sprites/tile.json' assert {type: 'json'}
 
+/**
+ * @class
+ * @extends Sprite
+ */
 export class Pipe extends Sprite {
-	constructor({ x, y, sprite, width, height }) {
-		super({
-			image: "assets/tiles.png",
-			x,
-			y,
-			width: 32,
-			height: 32,
-			sprite: { x: 0, y: 80 }
-		});
+	/**
+	 * @param {Object} data
+	 * @param {number} data.x
+	 * @param {number} data.y
+	 */
+	constructor({ x, y }) {
+		const { src, sprites } = SpritesData
+
+		const sprite = sprites.find(s => s.name === 'pipe')?.frame
+
+		super({ src, x, y, sprite })
 	}
 }

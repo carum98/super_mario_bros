@@ -1,14 +1,29 @@
-import { Sprite } from "./sprite.js"
+import { Sprite } from './sprite.js'
+import SpritesData from './sprites/tile.json' assert {type: 'json'}
 
-export const TILE = {
-	CONCRETE: { x: 0, y: 0 },
-	BRICKS: { x: 16, y: 0 },
-	EMPTY: { x: 32, y: 0 },
-	HARD: { x: 48, y: 0 },
-}
-
+/**
+ * @class
+ * @extends Sprite
+ */
 export class Tile extends Sprite {
-	constructor({ x, y, sprite }) {
-		super({ image: "assets/tiles.png", x, y, sprite, width: 16, height: 16 });
+	static TYPE = {
+		CONCRETE: 'concrete',
+		BRICK: 'brick',
+		metal: 'metal',
+		hard: 'hard',
+	}
+
+	/**
+	 * @param {Object} data 
+	 * @param {number} data.x
+	 * @param {number} data.y
+	 * @param {string} data.name
+	 */
+	constructor({ x, y, name }) {
+		const { src, sprites } = SpritesData
+
+		const sprite = sprites.find(s => s.name === name)?.frame
+
+		super({ src, x, y, sprite })
 	}
 }

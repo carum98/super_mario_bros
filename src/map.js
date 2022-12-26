@@ -1,7 +1,15 @@
 import { Pipe } from './pipes.js'
-import { Tile, TILE } from './tile.js'
+import { Tile } from './tile.js'
 
+/**
+ * @class
+ * @property {Array<Sprite>} tiles
+ */
 export class Map {
+	/**
+	 * @param {Object} data
+	 * @param {HTMLCanvasElement} data.canvas
+	 */
 	constructor({ canvas }) {
 		this.tiles = []
 
@@ -10,8 +18,8 @@ export class Map {
 			const x = i * 16
 
 			this.tiles.push(...[
-				new Tile({ x, y: canvas.height - 32, sprite: TILE.CONCRETE }),
-				new Tile({ x, y: canvas.height - 16, sprite: TILE.CONCRETE }),
+				new Tile({ x, y: canvas.height - 32, name: Tile.TYPE.CONCRETE }),
+				new Tile({ x, y: canvas.height - 16, name: Tile.TYPE.CONCRETE }),
 			])
 		}
 
@@ -21,6 +29,9 @@ export class Map {
 		])
 	}
 
+	/**
+	 * @param {CanvasRenderingContext2D} ctx
+	 */
 	draw(ctx) {
 		this.tiles.forEach(tile => {
 			tile.draw(ctx)

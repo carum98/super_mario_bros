@@ -1,0 +1,60 @@
+{
+	"src": "sprites.png",
+	"sprites": [
+		{
+			"name": "idle-small",
+			"frame": {
+				"x": 0,
+				"y": 88,
+				"w": 16,
+				"h": 16
+			}
+		},
+		{
+			"name": "jump-small",
+			"frame": {
+				"x": 80,
+				"y": 88,
+				"w": 16,
+				"h": 16
+			}
+		},
+		{
+			"name": "run-small-1",
+			"frame": {
+				"x": 16,
+				"y": 88,
+				"w": 16,
+				"h": 16
+			}
+		},
+		{
+			"name": "run-small-2",
+			"frame": {
+				"x": 32,
+				"y": 88,
+				"w": 16,
+				"h": 16
+			}
+		},
+		{
+			"name": "run-small-3",
+			"frame": {
+				"x": 48,
+				"y": 88,
+				"w": 16,
+				"h": 16
+			}
+		}
+	],
+	"animation": {
+		"run-small": {
+			"frames": [
+				"run-small-1",
+				"run-small-2",
+				"run-small-3"
+			],
+			"speed": 0.1
+		}
+	}
+}
