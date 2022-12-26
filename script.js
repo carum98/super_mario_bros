@@ -8,7 +8,9 @@ const canvas = getCanvas()
 document.addEventListener('DOMContentLoaded', () => scaleCanvas(canvas))
 window.addEventListener('resize', () => scaleCanvas(canvas))
 
-const player = new Player()
+const player = new Player({
+	canvas
+})
 
 const game = new Game({
 	canvas,

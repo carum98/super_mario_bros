@@ -1,4 +1,6 @@
 import { Sprite } from './sprite.js'
+import { getSprite } from './utils.js'
+
 import SpritesData from './sprites/tile.json' assert {type: 'json'}
 
 /**
@@ -22,7 +24,7 @@ export class Tile extends Sprite {
 	constructor({ x, y, name }) {
 		const { src, sprites } = SpritesData
 
-		const sprite = sprites.find(s => s.name === name)?.frame
+		const sprite = getSprite({ sprites, name })
 
 		super({ src, x, y, sprite })
 	}

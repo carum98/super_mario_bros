@@ -1,5 +1,7 @@
 /**
- * @returns HTMLCanvasElement
+ * @throws {Error} If no canvas is found
+ * 
+ * @returns {HTMLCanvasElement} Canvas
  */
 export function getCanvas() {
 	const canvas = document.querySelector('canvas')
@@ -27,10 +29,45 @@ export function scaleCanvas(canvas) {
 }
 
 /**
- * @param {string} url 
- * @returns Promise<Object>
+ * @param {Object} data
+ * @param {Array<Sprites>} data.sprites
+ * @param {string} data.name
+ * 
+ * @throws {Error} If no sprite is found
+ * 
+ * @returns {Frame} Frame
  */
-export async function getJSON(url) {
-	const response = await fetch(url)
-	return await response.json()
+export function getSprite({ sprites, name }) {
+	const frame = sprites.find(s => s.name === name)?.frame
+
+	if (!frame) {
+		throw new Error(`No sprite found with name ${name}`)
+	}
+
+	return frame
+}
+
+/**
+ * @param {Object} data
+ * @param {Array<Sprites>} data.sprites
+ * @param {Array<Animations>} data.animations
+ * @param {string} data.name
+ * 
+ * @throws {Error} If no animation is found
+ * 
+ * @returns {{ frames: Frame[], speed: number }} Animation
+ */
+export function getAnimation({ sprites, animations, name }) {
+	const animation = animations.find(s => s.name === name)
+
+	if (!animation) {
+		throw new Error(`No animation found with name ${name}`)
+	}
+
+	const frames = animation.frames.map(frame => getSprite({ sprites, name: frame }))
+
+	return {
+		frames,
+		speed: animation.speed,
+	}
 }

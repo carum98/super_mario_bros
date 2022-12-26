@@ -6,16 +6,34 @@ import { GameElement } from './game-element.js'
  * 
  * @property {HTMLImageElement} image
  * @property {Object} sprite
- * @property {Object[]} frames
- * @property {number} index
  */
 export class Sprite extends GameElement {
+	/**
+	 * @type {Frame[]}
+	 */
+	#frames = []
+
+	/**
+	 * @type {number}
+	 */
+	#index = 0
+
+	/**
+	 * @type {number}
+	 */
+	#interval = 0
+
+	/**
+	 * @type {number}
+	 */
+	#speed = 0
+
 	/**
 	 * @param {Object} data
 	 * @param {string} data.src
 	 * @param {number} data.x
 	 * @param {number} data.y
-	 * @param {Object} data.sprite
+	 * @param {Frame} data.sprite
 	 */
 	constructor({ src, x, y, sprite }) {
 		const { w: width, h: height } = sprite
@@ -26,16 +44,32 @@ export class Sprite extends GameElement {
 		this.image.src = `assets/${src}`
 
 		this.sprite = sprite
-
-		this.frames = []
-		this.index = 0
 	}
 
+	/**
+	 * Update the sprite animation frame
+	 * 
+	 * Only update the sprite if has more than one frame 
+	 * and the interval is a multiple of the speed
+	 */
 	update() {
-		if (this.frames.length > 0) {
-			this.index = (this.index + 1) % this.frames.length
-			this.sprite = this.frames[this.index]
+		this.#interval = (this.#interval + 1) % 60
+
+		if (this.#frames.length > 0 && this.#interval % this.#speed === 0) {
+			this.#index = (this.#index + 1) % this.#frames.length
+			this.sprite = this.#frames[this.#index]
 		}
+	}
+
+	/**
+	 * @param {Object} data
+	 * @param {Frame[]} data.frames
+	 * @param {number} data.speed
+	 */
+	setAnimation({ frames, speed }) {
+		this.#frames = frames
+		this.#index = 0
+		this.#speed = speed
 	}
 
 	/**
