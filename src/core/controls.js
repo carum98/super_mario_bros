@@ -69,6 +69,11 @@ export class Controls {
 		if (Object.keys(KEYS).includes(event.code) && !this.keys.includes(KEYS[event.code])) {
 			this.keys.push(KEYS[event.code])
 		}
+
+		// Prevent multiple jumps when holding space bar
+		if (event.repeat && event.code === 'Space') {
+			this.keys.splice(this.keys.indexOf(KEYS[event.code]), 1)
+		}
 	}
 
 	/**

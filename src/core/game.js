@@ -8,6 +8,8 @@ import { Player } from "../characters/player.js"
  * @property {Map} map
  */
 export class Game {
+	#hitbox = false
+
 	/**
 	 * @param {Object} data
 	 * @param {HTMLCanvasElement} data.canvas
@@ -16,9 +18,6 @@ export class Game {
 	constructor({ canvas, player }) {
 		this.map = new Map({ canvas })
 		this.player = player
-
-		// Set player position
-		this.player.y = canvas.height - this.player.height - 32
 
 		this.ctx = canvas.getContext('2d')
 	}
@@ -29,7 +28,7 @@ export class Game {
 	}
 
 	#update() {
-		this.player.update()
+		this.player.update(this.map.tiles)
 	}
 
 	#draw() {
@@ -42,5 +41,11 @@ export class Game {
 		// Draw game elements
 		player.draw(ctx)
 		map.draw(ctx)
+
+		// Draw boxes
+		if (this.#hitbox) {
+			player.drawBox(ctx)
+			player.drawBoxCollision(ctx)
+		}
 	}
 }
