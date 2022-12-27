@@ -50,16 +50,22 @@ export class Player extends Sprite {
 		const { keys } = this.controls
 		const { bottom, top, right, left } = this.#collisions(tiles)
 
-		// Horizontal movement
+		const isJumping = keys.includes(Controls.DIRECTIONS.UP)
+		const isMoving = keys.includes(Controls.DIRECTIONS.LEFT) || keys.includes(Controls.DIRECTIONS.RIGHT)
+
+		const collideTop = Boolean(top)
+		const collideBottom = Boolean(bottom)
+
+		// --- Horizontal movement ---
 		const direction = keys[0]
 
-		if (direction) {
+		if (isMoving && !collideTop) {
 			const { x } = Controls.AXIS[direction]
 			this.x += x * this.speed
 		}
 
-		// Vertical movement
-		if (keys.includes(Controls.DIRECTIONS.UP) && !!bottom) {
+		// --- Vertical movement ---
+		if (isJumping && collideBottom) {
 			this.vy = -8
 		}
 
@@ -71,25 +77,30 @@ export class Player extends Sprite {
 			this.vy = 0
 		}
 
-		// State
+		// --- State ---
 		let lastState = this.state
 
-		if (!!bottom) {
+		if (collideBottom) {
 			this.state = direction ? Player.STATES.RUNNING : Player.STATES.IDLE
 		} else {
 			this.state = Player.STATES.JUMPING
 		}
 
-		// Animation
+		// --- Animation ---
 		if (lastState !== this.state) {
 			this.setAnimation(
 				getAnimation({ ...SpritesData, name: `${this.state}-small` })
 			)
 		}
 
-		// Collision
+		// --- Collision ---
 		if (bottom && this.vy >= 0) {
 			this.y = bottom.y - this.height
+			this.vy = 0
+		}
+
+		if (top && isJumping) {
+			this.y = top.y + top.height
 			this.vy = 0
 		}
 
@@ -100,11 +111,6 @@ export class Player extends Sprite {
 
 			if (left && direction === Controls.DIRECTIONS.LEFT) {
 				this.x = left.x + left.width
-			}
-
-			if (top && direction === Controls.DIRECTIONS.UP) {
-				this.y = top.y + top.height
-				this.vy = 0
 			}
 		}
 

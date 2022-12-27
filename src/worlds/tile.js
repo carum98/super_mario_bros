@@ -1,5 +1,5 @@
 import { Sprite } from '../core/sprite.js'
-import { getSprite } from '../core/utils.js'
+import { getAnimation, getSprite } from '../core/utils.js'
 
 import SpritesData from '../../assets/sprites/tile.json' assert {type: 'json'}
 
@@ -13,6 +13,7 @@ export class Tile extends Sprite {
 		BRICK: 'brick',
 		metal: 'metal',
 		hard: 'hard',
+		LUCKY: 'lucky',
 	}
 
 	/**
@@ -20,12 +21,23 @@ export class Tile extends Sprite {
 	 * @param {number} data.x
 	 * @param {number} data.y
 	 * @param {string} data.name
+	 * @param {boolean} [data.isSolid]
 	 */
-	constructor({ x, y, name }) {
-		const { src, sprites } = SpritesData
+	constructor({ x, y, name, isSolid = true }) {
+		const { src, sprites, animations } = SpritesData
 
-		const sprite = getSprite({ sprites, name })
 
-		super({ src, x, y, sprite })
+		if (isSolid) {
+			const sprite = getSprite({ sprites, name })
+
+			super({ src, x, y, sprite })
+		} else {
+			const { frames, speed } = getAnimation({ sprites, animations, name })
+			const sprite = frames[0]
+
+			super({ src, x, y, sprite })
+
+			this.setAnimation({ frames, speed })
+		}
 	}
 }

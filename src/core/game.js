@@ -29,6 +29,16 @@ export class Game {
 
 	#update() {
 		this.player.update(this.map.tiles)
+		this.map.update()
+
+		if (this.ctx) {
+			const middle = this.ctx.canvas.width / 3
+
+			if (this.player.x > middle) {
+				this.map.move()
+				this.player.x = middle
+			}
+		}
 	}
 
 	#draw() {
