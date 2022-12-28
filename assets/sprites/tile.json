@@ -13,6 +13,15 @@
 		{
 			"name": "brick",
 			"frame": {
+				"x": 224,
+				"y": 0,
+				"w": 16,
+				"h": 16
+			}
+		},
+		{
+			"name": "brick-fill",
+			"frame": {
 				"x": 16,
 				"y": 0,
 				"w": 16,
@@ -38,12 +47,48 @@
 			}
 		},
 		{
+			"name": "empty",
+			"frame": {
+				"x": -16,
+				"y": -16,
+				"w": 16,
+				"h": 16
+			}
+		},
+		{
+			"name": "color-green",
+			"frame": {
+				"x": 192,
+				"y": 112,
+				"w": 16,
+				"h": 16
+			}
+		},
+		{
+			"name": "color-black",
+			"frame": {
+				"x": 208,
+				"y": 112,
+				"w": 16,
+				"h": 16
+			}
+		},
+		{
 			"name": "pipe",
 			"frame": {
 				"x": 0,
 				"y": 80,
 				"w": 32,
 				"h": 32
+			}
+		},
+		{
+			"name": "pipe-base",
+			"frame": {
+				"x": 0,
+				"y": 96,
+				"w": 32,
+				"h": 16
 			}
 		},
 		{
@@ -72,6 +117,186 @@
 				"w": 16,
 				"h": 16
 			}
+		},
+		{
+			"name": "cloud",
+			"frame": {
+				"x": 176,
+				"y": 160,
+				"w": 48,
+				"h": 32
+			}
+		},
+		{
+			"name": "cloud-left",
+			"frame": {
+				"x": 176,
+				"y": 160,
+				"w": 16,
+				"h": 32
+			}
+		},
+		{
+			"name": "cloud-center",
+			"frame": {
+				"x": 192,
+				"y": 160,
+				"w": 16,
+				"h": 32
+			}
+		},
+		{
+			"name": "cloud-right",
+			"frame": {
+				"x": 208,
+				"y": 160,
+				"w": 16,
+				"h": 32
+			}
+		},
+		{
+			"name": "bush",
+			"frame": {
+				"x": 176,
+				"y": 192,
+				"w": 48,
+				"h": 16
+			}
+		},
+		{
+			"name": "bush-left",
+			"frame": {
+				"x": 176,
+				"y": 192,
+				"w": 16,
+				"h": 16
+			}
+		},
+		{
+			"name": "bush-center",
+			"frame": {
+				"x": 192,
+				"y": 192,
+				"w": 16,
+				"h": 16
+			}
+		},
+		{
+			"name": "bush-right",
+			"frame": {
+				"x": 208,
+				"y": 192,
+				"w": 16,
+				"h": 16
+			}
+		},
+		{
+			"name": "mountain",
+			"frame": {
+				"x": 64,
+				"y": 112,
+				"w": 48,
+				"h": 16
+			}
+		},
+		{
+			"name": "mountain-top",
+			"frame": {
+				"x": 112,
+				"y": 112,
+				"w": 16,
+				"h": 16
+			}
+		},
+		{
+			"name": "mountain-left",
+			"frame": {
+				"x": 64,
+				"y": 112,
+				"w": 16,
+				"h": 16
+			}
+		},
+		{
+			"name": "mountain-center",
+			"frame": {
+				"x": 80,
+				"y": 112,
+				"w": 16,
+				"h": 16
+			}
+		},
+		{
+			"name": "mountain-right",
+			"frame": {
+				"x": 96,
+				"y": 112,
+				"w": 16,
+				"h": 16
+			}
+		},
+		{
+			"name": "castle-top",
+			"frame": {
+				"x": 144,
+				"y": 0,
+				"w": 16,
+				"h": 16
+			}
+		},
+		{
+			"name": "castle-top-fill",
+			"frame": {
+				"x": 128,
+				"y": 0,
+				"w": 16,
+				"h": 16
+			}
+		},
+		{
+			"name": "castle-window-left",
+			"frame": {
+				"x": 160,
+				"y": 0,
+				"w": 16,
+				"h": 16
+			}
+		},
+		{
+			"name": "castle-window-right",
+			"frame": {
+				"x": 192,
+				"y": 0,
+				"w": 16,
+				"h": 16
+			}
+		},
+		{
+			"name": "castle-door",
+			"frame": {
+				"x": 176,
+				"y": 0,
+				"w": 16,
+				"h": 16
+			}
+		},
+		{
+			"name": "flag-hoist",
+			"frame": {
+				"x": 192,
+				"y": 208,
+				"w": 16,
+				"h": 16
+			}
+		},
+		{
+			"name": "flag-truck",
+			"frame": {
+				"x": 128,
+				"y": 128,
+				"w": 16,
+				"h": 16
+			}
 		}
 	],
 	"animations": [
@@ -83,6 +308,135 @@
 				"lucky-3"
 			],
 			"speed": 12
+		}
+	],
+	"patterns": [
+		{
+			"name": "cloud-2",
+			"frames": [
+				[
+					"cloud-left",
+					"cloud-center",
+					"cloud-center",
+					"cloud-right"
+				]
+			]
+		},
+		{
+			"name": "cloud-3",
+			"frames": [
+				[
+					"cloud-left",
+					"cloud-center",
+					"cloud-center",
+					"cloud-center",
+					"cloud-right"
+				]
+			]
+		},
+		{
+			"name": "bush-2",
+			"frames": [
+				[
+					"bush-left",
+					"bush-center",
+					"bush-center",
+					"bush-right"
+				]
+			]
+		},
+		{
+			"name": "bush-3",
+			"frames": [
+				[
+					"bush-left",
+					"bush-center",
+					"bush-center",
+					"bush-center",
+					"bush-right"
+				]
+			]
+		},
+		{
+			"name": "mountain",
+			"frames": [
+				[
+					"empty",
+					"mountain-top",
+					"empty"
+				],
+				[
+					"mountain-left",
+					"mountain-center",
+					"mountain-right"
+				]
+			]
+		},
+		{
+			"name": "mountain-2",
+			"frames": [
+				[
+					"empty",
+					"empty",
+					"mountain-top",
+					"empty",
+					"empty"
+				],
+				[
+					"empty",
+					"mountain-left",
+					"mountain-center",
+					"mountain-right",
+					"empty"
+				],
+				[
+					"mountain-left",
+					"mountain-center",
+					"color-green",
+					"mountain-center",
+					"mountain-right"
+				]
+			]
+		},
+		{
+			"name": "castle",
+			"frames": [
+				[
+					"empty",
+					"castle-top",
+					"castle-top",
+					"castle-top",
+					"empty"
+				],
+				[
+					"empty",
+					"castle-window-right",
+					"brick-fill",
+					"castle-window-left",
+					"empty"
+				],
+				[
+					"castle-top",
+					"castle-top-fill",
+					"castle-top-fill",
+					"castle-top-fill",
+					"castle-top"
+				],
+				[
+					"brick-fill",
+					"brick-fill",
+					"castle-door",
+					"brick-fill",
+					"brick-fill"
+				],
+				[
+					"brick-fill",
+					"brick-fill",
+					"color-black",
+					"brick-fill",
+					"brick-fill"
+				]
+			]
 		}
 	]
 }

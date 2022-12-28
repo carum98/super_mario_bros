@@ -71,3 +71,23 @@ export function getAnimation({ sprites, animations, name }) {
 		speed: animation.speed,
 	}
 }
+
+/**
+ * @param {Object} data
+ * @param {Array<Sprites>} data.sprites
+ * @param {Array<Patterns>} data.patterns
+ * @param {string} data.name
+ * 
+ * @throws {Error} If no animation is found
+ * 
+ * @returns {Frame[][]} Animation
+ */
+export function getPattern({ sprites, patterns, name }) {
+	const pattern = patterns.find(s => s.name === name)
+
+	if (!pattern) {
+		throw new Error(`No pattern found with name ${name}`)
+	}
+
+	return pattern.frames.map(row => row.map(frame => getSprite({ sprites, name: frame })))
+}

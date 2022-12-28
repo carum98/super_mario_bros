@@ -32,7 +32,7 @@ export class Game {
 		this.map.update()
 
 		if (this.ctx) {
-			const middle = this.ctx.canvas.width / 3
+			const middle = this.ctx.canvas.width / 4
 
 			if (this.player.x > middle) {
 				this.map.move()
@@ -49,8 +49,8 @@ export class Game {
 		ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
 
 		// Draw game elements
-		player.draw(ctx)
 		map.draw(ctx)
+		player.draw(ctx)
 
 		// Draw boxes
 		if (this.#hitbox) {

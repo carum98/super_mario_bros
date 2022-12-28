@@ -14,6 +14,12 @@
  */
 
 /**
+ * @typedef {Object} Patterns
+ * @property {string} name
+ * @property {string[][]} frames
+ */
+
+/**
  * @typedef {Object} Sprites
  * @property {string} name
  * @property {Frame} frame

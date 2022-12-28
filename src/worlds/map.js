@@ -2,6 +2,7 @@ import { Pipe } from './pipes.js'
 import { Tile } from './tile.js'
 import { LuckyBlock } from './lucky-block.js'
 import { Sprite } from '../core/sprite.js'
+import { BackgroundItem } from '../core/background-item.js'
 
 import Level from '../../assets/levels/1-1.json' assert {type: 'json'}
 
@@ -21,6 +22,11 @@ export class Map {
 	#animations = []
 
 	/**
+	 * @type {Array<BackgroundItem>}
+	 */
+	#backgroundItems = []
+
+	/**
 	 * @param {Object} data
 	 * @param {HTMLCanvasElement} data.canvas
 	 */
@@ -29,7 +35,7 @@ export class Map {
 
 		this.canvas = canvas
 
-		const { floor, pipes, lucky, blocks } = Level
+		const { floor, pipes, lucky, blocks, background } = Level
 
 		// Floor
 		for (let range of floor.ranges) {
@@ -63,15 +69,25 @@ export class Map {
 		}
 
 		// Blocks
-		for (const block of blocks.coord) {
-			const { x, y } = block
-			this.#buffer.push(new Tile({ x: x * 16, y: y * 16, name: blocks.sprite }))
+		for (const { coord, sprite } of blocks) {
+			for (const block of coord) {
+				const { x, y } = block
+				this.#buffer.push(new Tile({ x: x * 16, y: y * 16, name: sprite }))
+			}
 		}
 
 		// Add only tiles that are visible on the screen
 		this.tiles = this.#buffer.filter(tile => {
 			return tile.x + tile.width > 0 && tile.x < this.canvas.width
 		})
+
+		// Background items
+		for (const { coord, name, type } of background) {
+			for (const item of coord) {
+				const { x, y } = item
+				this.#backgroundItems.push(new BackgroundItem({ x: x * 16, y: y * 16, name, type }))
+			}
+		}
 	}
 
 	update() {
@@ -92,14 +108,32 @@ export class Map {
 		this.#buffer.forEach(tile => {
 			tile.x -= 2
 		})
+
+		this.#backgroundItems.forEach(item => {
+			item.x -= 2
+		})
 	}
 
 	/**
 	 * @param {CanvasRenderingContext2D} ctx
 	 */
 	draw(ctx) {
-		this.tiles.forEach(tile => {
-			tile.draw(ctx)
-		})
+		this.#backgroundItems.forEach(item => item.draw(ctx))
+		this.tiles.forEach(tile => tile.draw(ctx))
+
+		// Draw grid
+		// for (let i = 0; i < this.canvas.width; i += 16) {
+		// 	ctx.beginPath()
+		// 	ctx.moveTo(i, 0)
+		// 	ctx.lineTo(i, this.canvas.height)
+		// 	ctx.stroke()
+		// }
+
+		// for (let i = 0; i < this.canvas.height; i += 16) {
+		// 	ctx.beginPath()
+		// 	ctx.moveTo(0, i)
+		// 	ctx.lineTo(this.canvas.width, i)
+		// 	ctx.stroke()
+		// }
 	}
 }
