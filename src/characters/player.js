@@ -15,6 +15,8 @@ import SpritesData from '../../assets/sprites/player.json' assert {type: 'json'}
  * @property {Array<Sprite>} tiles
  */
 export class Player extends Sprite {
+	#debug = false
+
 	/**
 	* @enum {string}
 	*/
@@ -128,6 +130,10 @@ export class Player extends Sprite {
 		const flip = keys.includes(Controls.DIRECTIONS.LEFT) && keys[0] === Controls.DIRECTIONS.LEFT
 
 		super.draw(ctx, flip)
+
+		if (this.#debug) {
+			this.drawBoxCollision(ctx)
+		}
 	}
 
 	/**
@@ -171,5 +177,35 @@ export class Player extends Sprite {
 			box.y < tile.y + tile.height &&
 			box.y + box.height > tile.y
 		)
+	}
+
+	/**
+	 * Switch debug mode to show grid
+	 */
+	toogleDebug() {
+		this.#debug = !this.#debug
+	}
+
+	/**
+	 * Expose params for debug
+	 */
+	get debugParams() {
+		const axisX = Math.floor(this.x)
+		const axisY = Math.floor(this.y)
+
+		const coordX = Math.floor(this.x / 16)
+		const coordY = Math.floor(this.y / 16)
+
+		const { keys } = this.controls
+		const arrows = keys.map((key) => Controls.AXIS[key].character).join(' ')
+
+		return {
+			axisX,
+			axisY,
+			coordX,
+			coordY,
+			state: this.state,
+			arrows,
+		}
 	}
 }

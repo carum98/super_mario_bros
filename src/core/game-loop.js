@@ -13,6 +13,8 @@ export class GameLoop {
 	#then = 0
 	#interval = 1000 / this.#fps
 
+	#currentFps = 0
+
 	/**
 	 * @param {Function} callback
 	 */
@@ -45,13 +47,22 @@ export class GameLoop {
 		const delta = timeStamp - this.#then
 
 		if (delta >= this.#interval) {
-			// console.log(Math.round(1000 / delta))
+			this.#currentFps = Math.round(1000 / delta)
 
 			this.#then = timeStamp - (delta % this.#interval)
 
 			if (this.#callback !== null) {
 				this.#callback()
 			}
+		}
+	}
+
+	/**
+	 * Expose params for debug
+	 */
+	get debugParams() {
+		return {
+			fps: this.#currentFps,
 		}
 	}
 }

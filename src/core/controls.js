@@ -26,14 +26,14 @@ const KEYS = {
 }
 
 /**
- * @enum {{x: number, y: number}}
+ * @enum {{x: number, y: number, character: string}}
  * @readonly
  */
 const AXIS = {
-	[DIRECTIONS.LEFT]: { x: -1, y: 0 },
-	[DIRECTIONS.RIGHT]: { x: 1, y: 0 },
-	[DIRECTIONS.UP]: { x: 0, y: -1 },
-	[DIRECTIONS.DOWN]: { x: 0, y: 1 },
+	[DIRECTIONS.LEFT]: { x: -1, y: 0, character: '←' },
+	[DIRECTIONS.RIGHT]: { x: 1, y: 0, character: '→' },
+	[DIRECTIONS.UP]: { x: 0, y: -1, character: '↑' },
+	[DIRECTIONS.DOWN]: { x: 0, y: 1, character: '↓' },
 }
 
 export class Controls {

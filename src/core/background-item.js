@@ -1,12 +1,16 @@
 import { getPattern, getSprite } from './utils.js'
 
 import SpritesData from '../../assets/sprites/tile.json' assert {type: 'json'}
+import { Sprite } from './sprite.js'
 
 /**
  * @class
+ * @extends Sprite
  * @property {Frame[][]} frames
  */
-export class BackgroundItem {
+export class BackgroundItem extends Sprite {
+	#debug = false
+
 	static TYPE = {
 		CLOUD: 'cloud',
 	}
@@ -21,13 +25,15 @@ export class BackgroundItem {
 	constructor({ x, y, type, name }) {
 		const { src, sprites, patterns } = SpritesData
 
-		this.frames = type === 'sprites' ? [[getSprite({ sprites, name })]] : getPattern({ sprites, patterns, name })
+		const frames = type === 'sprites' ? [[getSprite({ sprites, name })]] : getPattern({ sprites, patterns, name })
 
-		this.x = x
-		this.y = y
+		super({ x, y, src, sprite: frames[0][0] })
 
-		this.image = new Image()
-		this.image.src = `assets/img/${src}`
+		this.frames = frames
+
+		// Recalculate the width and height
+		this.width = this.frames[0].reduce((acc, { w }) => acc + w, 0)
+		this.height = this.frames.reduce((acc, row) => acc + row[0].h, 0)
 	}
 
 	/**
@@ -64,5 +70,16 @@ export class BackgroundItem {
 		}
 
 		ctx.restore()
+
+		if (this.#debug) {
+			this.drawContainer(ctx)
+		}
+	}
+
+	/**
+	 * Switch debug mode to show grid
+	 */
+	toogleDebug() {
+		this.#debug = !this.#debug
 	}
 }

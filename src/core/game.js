@@ -8,7 +8,8 @@ import { Player } from "../characters/player.js"
  * @property {Map} map
  */
 export class Game {
-	#hitbox = false
+	#timeUpdate = 0
+	#timeDraw = 0
 
 	/**
 	 * @param {Object} data
@@ -23,8 +24,13 @@ export class Game {
 	}
 
 	render() {
+		const now = performance.now()
 		this.#update()
+		this.#timeUpdate = performance.now() - now
+
+		const now2 = performance.now()
 		this.#draw()
+		this.#timeDraw = performance.now() - now2
 	}
 
 	#update() {
@@ -51,11 +57,15 @@ export class Game {
 		// Draw game elements
 		map.draw(ctx)
 		player.draw(ctx)
+	}
 
-		// Draw boxes
-		if (this.#hitbox) {
-			player.drawBox(ctx)
-			player.drawBoxCollision(ctx)
+	/**
+	 * Expose params for debug
+	 */
+	get debugParams() {
+		return {
+			timeUpdate: this.#timeUpdate.toFixed(5) + 'ms',
+			timeDraw: this.#timeDraw.toFixed(5) + 'ms',
 		}
 	}
 }

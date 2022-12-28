@@ -8,3 +8,20 @@ canvas {
 	background-color: #5d95fc;
 	image-rendering: pixelated;
 }
+
+.debug {
+	position: absolute;
+	top: 0;
+	left: 0;
+	color: white;
+}
+
+.debug div {
+	margin-bottom: 10px;
+	font-family: 'Courier New', Courier, monospace;
+}
+
+.debug button {
+	margin-bottom: 10px;
+	display: block;
+}

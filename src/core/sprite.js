@@ -142,7 +142,11 @@ export class Sprite extends GameElement {
 	 * @returns void
 	*/
 	drawContainer(ctx) {
-		ctx.fillStyle = 'rgba(255, 0, 0, 0.5)'
-		ctx.fillRect(this.x, this.y, this.width, this.height)
+		ctx.save()
+
+		ctx.strokeStyle = 'red'
+		ctx.strokeRect(this.x, this.y, this.width, this.height)
+
+		ctx.restore()
 	}
 }
