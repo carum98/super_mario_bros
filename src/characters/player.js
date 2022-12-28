@@ -34,7 +34,7 @@ export class Player extends Sprite {
 		super({ src, x: 0, y: 0, sprite })
 
 		this.vy = 0
-		this.speed = 2
+		this.speed = 1
 
 		this.controls = new Controls()
 		this.controls.startListening()
@@ -66,13 +66,13 @@ export class Player extends Sprite {
 
 		// --- Vertical movement ---
 		if (isJumping && collideBottom) {
-			this.vy = -8
+			this.vy = -5.5
 		}
 
 		this.y += this.vy
 
 		if (!this.#collisions(tiles).bottom) {
-			this.vy += 0.5
+			this.vy += 0.2
 		} else {
 			this.vy = 0
 		}
@@ -116,6 +116,18 @@ export class Player extends Sprite {
 
 		// Update sprite
 		super.update()
+	}
+
+
+	/**
+	 * @param {CanvasRenderingContext2D} ctx
+	 * @returns void
+	*/
+	draw(ctx) {
+		const { keys } = this.controls
+		const flip = keys.includes(Controls.DIRECTIONS.LEFT) && keys[0] === Controls.DIRECTIONS.LEFT
+
+		super.draw(ctx, flip)
 	}
 
 	/**

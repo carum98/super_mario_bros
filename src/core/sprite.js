@@ -74,13 +74,23 @@ export class Sprite extends GameElement {
 
 	/**
 	 * @param {CanvasRenderingContext2D} ctx
+	 * @param {boolean} flip - Flip the sprite horizontally
 	 * @returns void
 	*/
-	draw(ctx) {
+	draw(ctx, flip = false) {
 		const { image, x, y, width, height } = this
 		const { x: sx, y: sy, w: sw, h: sh } = this.sprite
 
-		ctx.drawImage(image, sx, sy, sw, sh, x, y, width, height)
+		if (flip) {
+			ctx.save()
+
+			ctx.scale(-1, 1)
+			ctx.drawImage(image, sx, sy, sw, sh, x * -1 - this.width, y, width, height)
+
+			ctx.restore()
+		} else {
+			ctx.drawImage(image, sx, sy, sw, sh, x, y, width, height)
+		}
 	}
 
 	/**
@@ -127,4 +137,12 @@ export class Sprite extends GameElement {
 		ctx.restore()
 	}
 
+	/**
+	 * @param {CanvasRenderingContext2D} ctx
+	 * @returns void
+	*/
+	drawContainer(ctx) {
+		ctx.fillStyle = 'rgba(255, 0, 0, 0.5)'
+		ctx.fillRect(this.x, this.y, this.width, this.height)
+	}
 }
