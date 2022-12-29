@@ -11,7 +11,7 @@ export class Tile extends Sprite {
 	static TYPE = {
 		CONCRETE: 'concrete',
 		BRICK: 'brick',
-		metal: 'metal',
+		METAL: 'metal',
 		hard: 'hard',
 		LUCKY: 'lucky',
 	}
@@ -39,5 +39,9 @@ export class Tile extends Sprite {
 
 			this.setAnimation({ frames, speed })
 		}
+	}
+
+	hit() {
+		this.y = -100
 	}
 }

@@ -42,6 +42,11 @@ export class Controls {
 	 */
 	keys = []
 
+	/**
+	 * @type {String | null}
+	 */
+	horizontal = null
+
 	static DIRECTIONS = DIRECTIONS
 	static AXIS = AXIS
 
@@ -67,7 +72,13 @@ export class Controls {
 	 */
 	#onKeyDown(event) {
 		if (Object.keys(KEYS).includes(event.code) && !this.keys.includes(KEYS[event.code])) {
-			this.keys.push(KEYS[event.code])
+			const key = KEYS[event.code]
+
+			this.keys.push(key)
+
+			if (key === DIRECTIONS.LEFT || key === DIRECTIONS.RIGHT) {
+				this.horizontal = key
+			}
 		}
 
 		// Prevent multiple jumps when holding space bar

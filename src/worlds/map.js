@@ -200,6 +200,17 @@ export class Map {
 	}
 
 	/**
+	 * Switch debug mode to all coins
+	 */
+	toogleCoinsDebug() {
+		this.#buffer.forEach(item => {
+			if (item instanceof LuckyBlock) {
+				item.debugCoin()
+			}
+		})
+	}
+
+	/**
 	 * Expose params for debug
 	 */
 	get debugParams() {

@@ -26,14 +26,18 @@ export class Player extends Sprite {
 		JUMPING: 'jump',
 	}
 
-	constructor() {
+	/**
+	 * @param {Object} data
+	 * @param {HTMLCanvasElement} data.canvas
+	 */
+	constructor({ canvas }) {
 		const { src, sprites } = SpritesData
 
 		const state = Player.STATES.IDLE
 
 		const sprite = getSprite({ sprites, name: `${state}-small` })
 
-		super({ src, x: 0, y: 0, sprite })
+		super({ src, x: 0, y: canvas.height - 48, sprite })
 
 		this.vy = 0
 		this.speed = 1
@@ -104,6 +108,9 @@ export class Player extends Sprite {
 		if (top && isJumping) {
 			this.y = top.y + top.height
 			this.vy = 0
+
+			// @ts-ignore
+			top.hit()
 		}
 
 		if (direction) {
@@ -116,6 +123,11 @@ export class Player extends Sprite {
 			}
 		}
 
+		// Limit player to canvas
+		if (this.x < 0) {
+			this.x = 0
+		}
+
 		// Update sprite
 		super.update()
 	}
@@ -126,8 +138,8 @@ export class Player extends Sprite {
 	 * @returns void
 	*/
 	draw(ctx) {
-		const { keys } = this.controls
-		const flip = keys.includes(Controls.DIRECTIONS.LEFT) && keys[0] === Controls.DIRECTIONS.LEFT
+		const { horizontal } = this.controls
+		const flip = horizontal === Controls.DIRECTIONS.LEFT
 
 		super.draw(ctx, flip)
 

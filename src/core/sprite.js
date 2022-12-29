@@ -73,6 +73,15 @@ export class Sprite extends GameElement {
 	}
 
 	/**
+	 * Stop the sprite animation
+	 */
+	clearAnimation() {
+		this.#frames = []
+		this.#index = 0
+		this.#speed = 0
+	}
+
+	/**
 	 * @param {CanvasRenderingContext2D} ctx
 	 * @param {boolean} flip - Flip the sprite horizontally
 	 * @returns void

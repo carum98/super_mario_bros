@@ -45,6 +45,42 @@
 				"w": 16,
 				"h": 16
 			}
+		},
+		{
+			"name": "coin-1",
+			"frame": {
+				"x": 64,
+				"y": 73,
+				"w": 16,
+				"h": 15
+			}
+		},
+		{
+			"name": "coin-2",
+			"frame": {
+				"x": 80,
+				"y": 73,
+				"w": 16,
+				"h": 15
+			}
+		},
+		{
+			"name": "coin-3",
+			"frame": {
+				"x": 96,
+				"y": 73,
+				"w": 16,
+				"h": 15
+			}
+		},
+		{
+			"name": "coin-4",
+			"frame": {
+				"x": 112,
+				"y": 73,
+				"w": 16,
+				"h": 15
+			}
 		}
 	],
 	"animations": [
@@ -68,6 +104,15 @@
 				"run-small-1",
 				"run-small-2",
 				"run-small-3"
+			],
+			"speed": 6
+		},
+		{
+			"name": "coin",
+			"frames": [
+				"coin-2",
+				"coin-3",
+				"coin-4"
 			],
 			"speed": 6
 		}

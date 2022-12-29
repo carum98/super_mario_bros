@@ -79,6 +79,7 @@ export class Debug {
 			<button id="player-collider">Player Colliders</button>
 			<button id="background-container">Background containers</button>
 			<button id="move-map">Move map to left</button>
+			<button id="show-coins">Show coins</button>
 		`
 
 		document.body.appendChild(element)
@@ -126,9 +127,9 @@ export class Debug {
 					map.innerHTML += `<br />`
 					map.innerHTML += `Buffer tiles: ${tiles}`
 					map.innerHTML += `<br />`
-					map.innerHTML += `Visible background items: ${visibleBackgroundItems}`
+					map.innerHTML += `Visible background: ${visibleBackgroundItems}`
 					map.innerHTML += `<br />`
-					map.innerHTML += `Buffer background items: ${backgroundItems}`
+					map.innerHTML += `Buffer background: ${backgroundItems}`
 				}
 
 				if (game !== null) {
@@ -150,6 +151,7 @@ export class Debug {
 		const playerColliderButton = this.#element?.querySelector('#player-collider')
 		const backgroundContainerButton = this.#element?.querySelector('#background-container')
 		const moveMapButton = this.#element?.querySelector('#move-map')
+		const showCoinsButton = this.#element?.querySelector('#show-coins')
 
 		if (gridButton !== null) {
 			gridButton?.addEventListener('click', (e) => {
@@ -191,6 +193,16 @@ export class Debug {
 				// Remove focus from button
 				// @ts-ignore
 				moveMapButton.blur()
+			})
+		}
+
+		if (showCoinsButton !== null) {
+			showCoinsButton?.addEventListener('click', (e) => {
+				this.game.map.toogleCoinsDebug()
+
+				// Remove focus from button
+				// @ts-ignore
+				showCoinsButton.blur()
 			})
 		}
 	}
