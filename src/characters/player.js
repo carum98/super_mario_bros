@@ -47,7 +47,7 @@ export class Player extends Sprite {
 		this.game = game
 
 		this.vy = 0
-		this.speed = 1
+		this.speed = 1.5
 
 		this.controls = new Controls()
 		this.controls.startListening()

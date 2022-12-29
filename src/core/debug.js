@@ -80,6 +80,7 @@ export class Debug {
 			<button id="background-container">Background containers</button>
 			<button id="move-map">Move map to left</button>
 			<button id="show-coins">Show coins</button>
+			<button id="show-mushroom">Show mushroom</button>
 		`
 
 		document.body.appendChild(element)
@@ -152,6 +153,7 @@ export class Debug {
 		const backgroundContainerButton = this.#element?.querySelector('#background-container')
 		const moveMapButton = this.#element?.querySelector('#move-map')
 		const showCoinsButton = this.#element?.querySelector('#show-coins')
+		const showMushroomButton = this.#element?.querySelector('#show-mushroom')
 
 		if (gridButton !== null) {
 			gridButton?.addEventListener('click', (e) => {
@@ -203,6 +205,16 @@ export class Debug {
 				// Remove focus from button
 				// @ts-ignore
 				showCoinsButton.blur()
+			})
+		}
+
+		if (showMushroomButton !== null) {
+			showMushroomButton?.addEventListener('click', (e) => {
+				this.game.map.toogleMushroosDebug()
+
+				// Remove focus from button
+				// @ts-ignore
+				showMushroomButton.blur()
 			})
 		}
 	}

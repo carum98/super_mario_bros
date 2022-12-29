@@ -41,7 +41,7 @@ export class Map {
 
 		this.canvas = canvas
 
-		const { floor, pipes, lucky, blocks, background } = Level
+		const { floor, pipes, lucky, blocks, background, mushrooms } = Level
 
 		// Floor
 		for (let range of floor.ranges) {
@@ -68,7 +68,11 @@ export class Map {
 		for (const block of lucky.coord) {
 			const { x, y } = block
 
-			const luckyBlock = new LuckyBlock({ x: x * 16, y: y * 16 })
+			const hasMusroom = mushrooms.coord.some(mushroom => mushroom.x === x && mushroom.y === y)
+
+			const item = hasMusroom ? LuckyBlock.ITEM.MUSHROOM : LuckyBlock.ITEM.COIN
+
+			const luckyBlock = new LuckyBlock({ x: x * 16, y: y * 16, item })
 
 			this.#buffer.push(luckyBlock)
 			this.#animations.push(luckyBlock)
@@ -129,7 +133,7 @@ export class Map {
 
 		// Move all tiles and background items to the left
 		[...this.#buffer, ...this.#bufferBackgroundItems].forEach(item => {
-			item.x -= 1
+			item.x -= 2
 		})
 	}
 
@@ -206,6 +210,17 @@ export class Map {
 		this.#buffer.forEach(item => {
 			if (item instanceof LuckyBlock) {
 				item.debugCoin()
+			}
+		})
+	}
+
+	/**
+	 * Switch debug mode to all coins
+	 */
+	toogleMushroosDebug() {
+		this.#buffer.forEach(item => {
+			if (item instanceof LuckyBlock) {
+				item.debugMushroom()
 			}
 		})
 	}

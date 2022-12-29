@@ -5,21 +5,37 @@ import SpritesData from '../../assets/sprites/player.json' assert {type: 'json'}
 
 const emptySprite = { x: -20, y: -20, w: 16, h: 16 }
 
+/**
+ * @class
+ * @extends Sprite
+ * @property {number} vy
+ * @property {number} limit
+ * @property {{ frames: Frame[], speed: number }} animation
+ */
 export class Coin extends Sprite {
 	#debug = false
 	#active = false
 
+	/**
+	 * @param {Object} data 
+	 * @param {number} data.x
+	 * @param {number} data.y
+	 */
 	constructor({ x, y }) {
 		const { src, sprites, animations } = SpritesData
 
 		super({ src, x, y, sprite: emptySprite })
 
-		this.aimation = getAnimation({ sprites, animations, name: 'coin' })
+		this.animation = getAnimation({ sprites, animations, name: 'coin' })
 
 		this.vy = 0
 		this.limit = y
 	}
 
+	/**
+	 * Update coin position only if it's active.
+	 * When coin reach the limit, it will stop moving and clear animation
+	 */
 	update() {
 		if (this.#active) {
 			this.y += this.vy
@@ -39,10 +55,13 @@ export class Coin extends Sprite {
 		}
 	}
 
-	hit() {
+	/**
+	 * Trigger coin animation and activate it
+	 */
+	trigger() {
 		this.#active = true
 
-		const { frames, speed } = this.aimation
+		const { frames, speed } = this.animation
 
 		this.vy = -4
 		this.setAnimation({ frames, speed })

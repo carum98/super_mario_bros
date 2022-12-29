@@ -656,6 +656,23 @@
 			]
 		}
 	],
+	"mushrooms": {
+		"sprite": "mushroom",
+		"coord": [
+			{
+				"x": 21,
+				"y": 9
+			},
+			{
+				"x": 78,
+				"y": 9
+			},
+			{
+				"x": 109,
+				"y": 5
+			}
+		]
+	},
 	"background": [
 		{
 			"name": "cloud",
