@@ -1,5 +1,6 @@
 import { Map } from "../worlds/map.js"
 import { Player } from "../characters/player.js"
+import { Information } from "./information.js"
 
 /**
  * @class
@@ -14,13 +15,19 @@ export class Game {
 	/**
 	 * @param {Object} data
 	 * @param {HTMLCanvasElement} data.canvas
-	 * @param {Player} data.player
 	 */
-	constructor({ canvas, player }) {
-		this.map = new Map({ canvas })
-		this.player = player
-
+	constructor({ canvas }) {
 		this.ctx = canvas.getContext('2d')
+
+		this.map = new Map({ canvas })
+		this.player = new Player({ game: this })
+
+		this.score = 0
+		this.coins = 0
+		this.level = '1 - 1'
+		this.timer = 400
+
+		this.information = new Information({ game: this })
 	}
 
 	render() {
@@ -34,8 +41,9 @@ export class Game {
 	}
 
 	#update() {
-		this.player.update(this.map.tiles)
+		this.player.update()
 		this.map.update()
+		this.information.update()
 
 		if (this.ctx) {
 			const middle = this.ctx.canvas.width / 4
@@ -48,7 +56,7 @@ export class Game {
 	}
 
 	#draw() {
-		const { ctx, player, map } = this
+		const { ctx, player, map, information } = this
 		if (!ctx) return
 
 		// Clear canvas
@@ -57,6 +65,7 @@ export class Game {
 		// Draw game elements
 		map.draw(ctx)
 		player.draw(ctx)
+		information.draw(ctx)
 	}
 
 	/**

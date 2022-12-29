@@ -1,6 +1,9 @@
 import { Controls } from '../core/controls.js'
 import { Sprite } from '../core/sprite.js'
 import { getAnimation, getSprite } from '../core/utils.js'
+import { Game } from '../core/game.js'
+import { LuckyBlock } from '../worlds/lucky-block.js'
+import { Tile } from '../worlds/tile.js'
 
 import SpritesData from '../../assets/sprites/player.json' assert {type: 'json'}
 
@@ -28,16 +31,20 @@ export class Player extends Sprite {
 
 	/**
 	 * @param {Object} data
-	 * @param {HTMLCanvasElement} data.canvas
+	 * @param {Game} data.game
 	 */
-	constructor({ canvas }) {
+	constructor({ game }) {
 		const { src, sprites } = SpritesData
 
 		const state = Player.STATES.IDLE
 
 		const sprite = getSprite({ sprites, name: `${state}-small` })
 
-		super({ src, x: 0, y: canvas.height - 48, sprite })
+		const height = game.ctx?.canvas.height || 0
+
+		super({ src, x: 0, y: height - 48, sprite })
+
+		this.game = game
 
 		this.vy = 0
 		this.speed = 1
@@ -48,12 +55,9 @@ export class Player extends Sprite {
 		this.state = state
 	}
 
-	/**
-	 * @param {Array<Sprite>} tiles
-	 */
-	// @ts-ignore
-	update(tiles) {
+	update() {
 		const { keys } = this.controls
+		const { map: { tiles } } = this.game
 		const { bottom, top, right, left } = this.#collisions(tiles)
 
 		const isJumping = keys.includes(Controls.DIRECTIONS.UP)
@@ -109,8 +113,16 @@ export class Player extends Sprite {
 			this.y = top.y + top.height
 			this.vy = 0
 
-			// @ts-ignore
-			top.hit()
+			if (top instanceof LuckyBlock && top.active) {
+				top.hit()
+
+				this.game.coins++
+				this.game.score += 200
+			} else if (top instanceof Tile) {
+				top.hit()
+
+				this.game.score += 50
+			}
 		}
 
 		if (direction) {

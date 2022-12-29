@@ -129,7 +129,7 @@ export class Map {
 
 		// Move all tiles and background items to the left
 		[...this.#buffer, ...this.#bufferBackgroundItems].forEach(item => {
-			item.x -= 2
+			item.x -= 1
 		})
 	}
 

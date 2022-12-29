@@ -50,6 +50,25 @@ export function getSprite({ sprites, name }) {
 /**
  * @param {Object} data
  * @param {Array<Sprites>} data.sprites
+ * @param {Array<string>} data.names
+ * 
+ * @throws {Error} If no sprite is found
+ * 
+ * @returns {Frame[]} Frame
+ */
+export function getSprites({ sprites, names }) {
+	const frames = []
+
+	for (const name of names) {
+		frames.push(getSprite({ sprites, name }))
+	}
+
+	return frames
+}
+
+/**
+ * @param {Object} data
+ * @param {Array<Sprites>} data.sprites
  * @param {Array<Animations>} data.animations
  * @param {string} data.name
  * 
