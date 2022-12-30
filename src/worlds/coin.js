@@ -1,7 +1,5 @@
 import { Sprite } from '../core/sprite.js'
-import { getAnimation } from '../core/utils.js'
-
-import SpritesData from '../../assets/sprites/player.json' assert {type: 'json'}
+import { Loader } from '../loaders/index.js'
 
 const emptySprite = { x: -20, y: -20, w: 16, h: 16 }
 
@@ -22,12 +20,14 @@ export class Coin extends Sprite {
 	 * @param {number} data.y
 	 */
 	constructor({ x, y }) {
-		const { src, sprites, animations } = SpritesData
+		const { path, animation } = Loader.Sprite.getAnimation({
+			src: Loader.Sprite.SRC.PLAYER,
+			name: 'coin'
+		})
 
-		super({ src, x, y, sprite: emptySprite })
+		super({ path, x, y, sprite: emptySprite })
 
-		this.animation = getAnimation({ sprites, animations, name: 'coin' })
-
+		this.animation = animation
 		this.vy = 0
 		this.limit = y
 	}

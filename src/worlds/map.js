@@ -1,15 +1,12 @@
-import { Pipe } from './pipes.js'
-import { Tile } from './tile.js'
 import { LuckyBlock } from './lucky-block.js'
 import { Sprite } from '../core/sprite.js'
 import { BackgroundItem } from '../core/background-item.js'
-
-import Level from '../../assets/levels/1-1.json' assert {type: 'json'}
+import { Loader } from '../loaders/index.js'
 
 /**
  * @class
  * @property {Array<Sprite>} tiles
- * @property {Array<Sprite>} tilesWithAnimation
+ * @property {HTMLCanvasElement} canvas
  */
 export class Map {
 	#debug = false
@@ -38,76 +35,38 @@ export class Map {
 	 */
 	constructor({ canvas }) {
 		this.tiles = []
-
 		this.canvas = canvas
 
-		const { floor, pipes, lucky, blocks, background, mushrooms } = Level
-
-		// Floor
-		for (let range of floor.ranges) {
-			const { x, y, columns, rows } = range
-
-			for (let i = 0; i < columns; i++) {
-				for (let j = 0; j < rows; j++) {
-					this.#buffer.push(new Tile({
-						x: x * 16 + i * 16,
-						y: y * 16 + j * 16,
-						name: floor.sprite,
-					}))
-				}
-			}
-		}
-
-		// Pipes
-		for (const pipe of pipes.coord) {
-			const { x, y } = pipe
-			this.#buffer.push(new Pipe({ x: x * 16, y: y * 16 }))
-		}
-
-		// Lucky blocks
-		for (const block of lucky.coord) {
-			const { x, y } = block
-
-			const hasMusroom = mushrooms.coord.some(mushroom => mushroom.x === x && mushroom.y === y)
-
-			const item = hasMusroom ? LuckyBlock.ITEM.MUSHROOM : LuckyBlock.ITEM.COIN
-
-			const luckyBlock = new LuckyBlock({ x: x * 16, y: y * 16, item })
-
-			this.#buffer.push(luckyBlock)
-			this.#animations.push(luckyBlock)
-		}
-
-		// Blocks
-		for (const { coord, sprite } of blocks) {
-			for (const block of coord) {
-				const { x, y } = block
-				this.#buffer.push(new Tile({ x: x * 16, y: y * 16, name: sprite }))
-			}
-		}
-
-		// Add only tiles that are visible on the screen
-		this.tiles = this.#buffer.filter(tile => {
-			return tile.x + tile.width > 0 && tile.x < this.canvas.width
-		})
-
-		// Background items
-		for (const { coord, name, type } of background) {
-			for (const item of coord) {
-				const { x, y } = item
-				this.#bufferBackgroundItems.push(new BackgroundItem({ x: x * 16, y: y * 16, name, type }))
-			}
-		}
-
-		this.#backgroundItems = this.#bufferBackgroundItems.filter(item => {
-			return item.x + item.width > 0 && item.x < this.canvas.width
-		})
+		this.#load('1-1')
 	}
 
+	/**
+	 * Load level
+	 * @param {string} level 
+	 */
+	async #load(level) {
+		const { tiles, backgroundItems, animations } = await Loader.Level.get('1-1')
+
+		this.#buffer = tiles
+		this.#animations = animations
+		this.#bufferBackgroundItems = backgroundItems
+
+		// Add only tiles that are visible on the screen
+		this.tiles = this.#addTiles(this.#buffer)
+		this.#backgroundItems = this.#addTiles(this.#bufferBackgroundItems)
+	}
+
+	/**
+	 * Update tiles with animation
+	 */
 	update() {
 		this.#animations.forEach(tile => tile.update())
 	}
 
+	/**
+	 * Move all tiles to the left and add new tiles that are visible on the screen 
+	 * and remove tiles that are out of the screen
+	 */
 	move() {
 		// Add new tiles that are visible on the screen
 		this.tiles = this.#addTiles(this.#buffer)
@@ -227,12 +186,12 @@ export class Map {
 
 	/**
 	 * Expose params for debug
+	 * @returns {MapDebugParams} MapDebugParams
 	 */
 	get debugParams() {
 		return {
 			tiles: this.#buffer.length,
 			visibleTiles: this.tiles.length,
-			animations: this.#animations.length,
 			backgroundItems: this.#bufferBackgroundItems.length,
 			visibleBackgroundItems: this.#backgroundItems.length,
 		}

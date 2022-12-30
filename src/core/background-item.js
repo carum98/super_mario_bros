@@ -1,6 +1,4 @@
-import { getPattern, getSprite } from './utils.js'
-
-import SpritesData from '../../assets/sprites/tile.json' assert {type: 'json'}
+import { Loader } from '../loaders/index.js'
 import { Sprite } from './sprite.js'
 
 /**
@@ -11,10 +9,6 @@ import { Sprite } from './sprite.js'
 export class BackgroundItem extends Sprite {
 	#debug = false
 
-	static TYPE = {
-		CLOUD: 'cloud',
-	}
-
 	/**
 	 * @param {Object} data
 	 * @param {number} data.x
@@ -23,11 +17,24 @@ export class BackgroundItem extends Sprite {
 	 * @param {string} data.name
 	 */
 	constructor({ x, y, type, name }) {
-		const { src, sprites, patterns } = SpritesData
+		const loader = Loader.Sprite
 
-		const frames = type === 'sprites' ? [[getSprite({ sprites, name })]] : getPattern({ sprites, patterns, name })
+		const frames = []
+		let path = ''
 
-		super({ x, y, src, sprite: frames[0][0] })
+		if (type === loader.TYPE.SPRITES) {
+			const data = loader.getSprite({ src: loader.SRC.TILE, name })
+
+			frames.push([data.sprite])
+			path = data.path
+		} else {
+			const data = loader.getPattern({ src: loader.SRC.TILE, name })
+
+			frames.push(...data.pattern)
+			path = data.path
+		}
+
+		super({ path, x, y, sprite: frames[0][0] })
 
 		this.frames = frames
 

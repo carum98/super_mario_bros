@@ -32,6 +32,9 @@ export class Debug {
 		this.gameLoop = gameLoop
 	}
 
+	/**
+	 * Enable or disable debug mode
+	 */
 	toogle() {
 		if (this.#enable) {
 			this.stop()
@@ -40,6 +43,9 @@ export class Debug {
 		}
 	}
 
+	/**
+	 * Start debug mode
+	 */
 	start() {
 		this.#enable = true
 		console.log('Debug mode enabled')
@@ -51,6 +57,9 @@ export class Debug {
 		this.#listenEvents()
 	}
 
+	/**
+	 * Stop debug mode
+	 */
 	stop() {
 		this.#enable = false
 		console.log('Debug mode disabled')
@@ -134,9 +143,11 @@ export class Debug {
 				}
 
 				if (game !== null) {
-					const { timeDraw, timeUpdate } = this.game.debugParams
+					const { timeDraw, timeUpdate, timeStart } = this.game.debugParams
 
 					game.innerHTML = 'Render:'
+					game.innerHTML += `<br />`
+					game.innerHTML += `Time start: ${timeStart}`
 					game.innerHTML += `<br />`
 					game.innerHTML += `Time update: ${timeUpdate}`
 					game.innerHTML += `<br />`

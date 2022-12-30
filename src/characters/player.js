@@ -1,11 +1,9 @@
 import { Controls } from '../core/controls.js'
 import { Sprite } from '../core/sprite.js'
-import { getAnimation, getSprite } from '../core/utils.js'
 import { Game } from '../core/game.js'
 import { LuckyBlock } from '../worlds/lucky-block.js'
 import { Tile } from '../worlds/tile.js'
-
-import SpritesData from '../../assets/sprites/player.json' assert {type: 'json'}
+import { Loader } from '../loaders/index.js'
 
 /**
  * @class
@@ -14,14 +12,18 @@ import SpritesData from '../../assets/sprites/player.json' assert {type: 'json'}
  * @property {number} vy
  * @property {number} speed
  * @property {Controls} controls
- * @property {PlayerStates} state
+ * @property {Player.STATES} state
  * @property {Array<Sprite>} tiles
  */
 export class Player extends Sprite {
 	#debug = false
 
 	/**
-	* @enum {string}
+	* @readonly
+	* @enum {string} States of the player
+	* @property {string} IDLE - Player is idle (not moving)
+	* @property {string} RUNNING - Player is running (moving horizontally)
+	* @property {string} JUMPING - Player is jumping (moving vertically)
 	*/
 	static STATES = {
 		IDLE: 'idle',
@@ -34,15 +36,16 @@ export class Player extends Sprite {
 	 * @param {Game} data.game
 	 */
 	constructor({ game }) {
-		const { src, sprites } = SpritesData
-
 		const state = Player.STATES.IDLE
 
-		const sprite = getSprite({ sprites, name: `${state}-small` })
+		const { path, sprite } = Loader.Sprite.getSprite({
+			name: `${state}-small`,
+			src: Loader.Sprite.SRC.PLAYER,
+		})
 
 		const height = game.ctx?.canvas.height || 0
 
-		super({ src, x: 0, y: height - 48, sprite })
+		super({ path, x: 0, y: height - 48, sprite })
 
 		this.game = game
 
@@ -98,9 +101,12 @@ export class Player extends Sprite {
 
 		// --- Animation ---
 		if (lastState !== this.state) {
-			this.setAnimation(
-				getAnimation({ ...SpritesData, name: `${this.state}-small` })
-			)
+			const { animation } = Loader.Sprite.getAnimation({
+				name: `${this.state}-small`,
+				src: Loader.Sprite.SRC.PLAYER,
+			})
+
+			this.setAnimation(animation)
 		}
 
 		// --- Collision ---
@@ -147,8 +153,7 @@ export class Player extends Sprite {
 
 	/**
 	 * @param {CanvasRenderingContext2D} ctx
-	 * @returns void
-	*/
+	 */
 	draw(ctx) {
 		const { horizontal } = this.controls
 		const flip = horizontal === Controls.DIRECTIONS.LEFT
@@ -212,6 +217,7 @@ export class Player extends Sprite {
 
 	/**
 	 * Expose params for debug
+	 * @returns {PlayerDebugParams} params 
 	 */
 	get debugParams() {
 		const axisX = Math.floor(this.x)

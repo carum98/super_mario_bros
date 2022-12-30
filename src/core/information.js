@@ -1,8 +1,6 @@
 import { Text } from './text.js'
 import { Sprite } from './sprite.js'
-import { getAnimation } from './utils.js'
-
-import SpritesData from '../../assets/sprites/player.json' assert {type: 'json'}
+import { Loader } from '../loaders/index.js'
 
 export class Information {
 	#interval = 0
@@ -35,13 +33,10 @@ export class Information {
 
 		this.values = this.#getValues()
 
-		const { src, sprites, animations } = SpritesData
-		const { frames, speed } = getAnimation({ sprites, animations, name: 'coin-score' })
+		const { path, animation } = Loader.Sprite.getAnimation({ src: Loader.Sprite.SRC.PLAYER, name: 'coin-score' })
 
-		const sprite = frames[0]
-
-		this.coin = new Sprite({ x: 88, y: 24, src, sprite })
-		this.coin.setAnimation({ frames, speed })
+		this.coin = new Sprite({ path, x: 88, y: 24, sprite: animation.frames[0] })
+		this.coin.setAnimation(animation)
 	}
 
 	update() {

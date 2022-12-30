@@ -30,18 +30,18 @@ export class Sprite extends GameElement {
 
 	/**
 	 * @param {Object} data
-	 * @param {string} data.src
+	 * @param {string} data.path
 	 * @param {number} data.x
 	 * @param {number} data.y
 	 * @param {Frame} data.sprite
 	 */
-	constructor({ src, x, y, sprite }) {
+	constructor({ path, x, y, sprite }) {
 		const { w: width, h: height } = sprite
 
 		super({ x, y, width, height })
 
 		this.image = new Image()
-		this.image.src = `assets/img/${src}`
+		this.image.src = `assets/img/${path}`
 
 		this.sprite = sprite
 	}

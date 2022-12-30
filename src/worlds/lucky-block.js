@@ -1,9 +1,7 @@
-import { getSprite } from '../core/utils.js'
 import { Tile } from './tile.js'
 import { Coin } from './coin.js'
 import { Mushroom } from './mushroom.js'
-
-import SpritesData from '../../assets/sprites/tile.json' assert {type: 'json'}
+import { Loader } from '../loaders/index.js'
 
 /**
  * @class
@@ -70,11 +68,20 @@ export class LuckyBlock extends Tile {
 		this.item.draw(ctx)
 	}
 
+	/**
+	 * Start lucky block animation and trigger item
+	 */
 	hit() {
 		if (this.active) {
 			this.vy = -2
 
-			this.sprite = getSprite({ sprites: SpritesData.sprites, name: Tile.TYPE.METAL })
+			const { sprite } = Loader.Sprite.getSprite({
+				src: Loader.Sprite.SRC.TILE,
+				name: Tile.TYPE.METAL
+			})
+
+			this.sprite = sprite
+
 			this.clearAnimation()
 
 			this.item.trigger()
@@ -83,12 +90,18 @@ export class LuckyBlock extends Tile {
 		this.active = false
 	}
 
+	/**
+	 * Toggle debug mode only if item is a [Coin]
+	 */
 	debugCoin() {
 		if (this.item instanceof Coin) {
 			this.item.toogleDebug()
 		}
 	}
 
+	/**
+	 * Toggle debug mode only if item is a [Mushroom]
+	 */
 	debugMushroom() {
 		if (this.item instanceof Mushroom) {
 			this.item.toogleDebug()

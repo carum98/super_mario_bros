@@ -1,43 +1,43 @@
 import { Sprite } from '../core/sprite.js'
-import { getAnimation, getSprite } from '../core/utils.js'
-
-import SpritesData from '../../assets/sprites/tile.json' assert {type: 'json'}
+import { Loader } from '../loaders/index.js'
 
 /**
  * @class
  * @extends Sprite
  */
 export class Tile extends Sprite {
+	/**
+	 * @readonly
+	 * @enum {string}
+	 */
 	static TYPE = {
 		CONCRETE: 'concrete',
 		BRICK: 'brick',
 		METAL: 'metal',
-		hard: 'hard',
+		HARD: 'hard',
 		LUCKY: 'lucky',
 	}
 
 	/**
-	 * @param {Object} data 
-	 * @param {number} data.x
-	 * @param {number} data.y
-	 * @param {string} data.name
-	 * @param {boolean} [data.isSolid]
+	 * @param {Object} param 
+	 * @param {number} param.x
+	 * @param {number} param.y
+	 * @param {string} param.name
+	 * @param {boolean} [param.isSolid]
 	 */
 	constructor({ x, y, name, isSolid = true }) {
-		const { src, sprites, animations } = SpritesData
-
+		const loader = Loader.Sprite
 
 		if (isSolid) {
-			const sprite = getSprite({ sprites, name })
+			const { path, sprite } = loader.getSprite({ src: loader.SRC.TILE, name })
 
-			super({ src, x, y, sprite })
+			super({ path, x, y, sprite })
 		} else {
-			const { frames, speed } = getAnimation({ sprites, animations, name })
-			const sprite = frames[0]
+			const { path, animation } = loader.getAnimation({ src: loader.SRC.TILE, name })
 
-			super({ src, x, y, sprite })
+			super({ path, x, y, sprite: animation.frames[0] })
 
-			this.setAnimation({ frames, speed })
+			this.setAnimation(animation)
 		}
 	}
 

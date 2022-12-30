@@ -1,7 +1,5 @@
 import { Sprite } from '../core/sprite.js'
-import { getSprite } from '../core/utils.js'
-
-import SpritesData from '../../assets/sprites/player.json' assert {type: 'json'}
+import { Loader } from '../loaders/index.js'
 
 /**
  * @class
@@ -11,12 +9,18 @@ export class Mushroom extends Sprite {
 	#debug = false
 	#active = false
 
+	/**
+	 * @param {Object} param 
+	 * @param {number} param.x
+	 * @param {number} param.y
+	 */
 	constructor({ x, y }) {
-		const { src, sprites } = SpritesData
+		const { path, sprite } = Loader.Sprite.getSprite({
+			src: Loader.Sprite.SRC.PLAYER,
+			name: 'mushroom'
+		})
 
-		const sprite = getSprite({ sprites, name: 'mushroom' })
-
-		super({ src, x, y, sprite })
+		super({ path, x, y, sprite })
 	}
 
 	/**

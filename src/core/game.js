@@ -11,12 +11,15 @@ import { Information } from "./information.js"
 export class Game {
 	#timeUpdate = 0
 	#timeDraw = 0
+	#timeStart = 0
 
 	/**
 	 * @param {Object} data
 	 * @param {HTMLCanvasElement} data.canvas
 	 */
 	constructor({ canvas }) {
+		const now = performance.now()
+
 		this.ctx = canvas.getContext('2d')
 
 		this.map = new Map({ canvas })
@@ -28,6 +31,8 @@ export class Game {
 		this.timer = 400
 
 		this.information = new Information({ game: this })
+
+		this.#timeStart = performance.now() - now
 	}
 
 	render() {
@@ -70,11 +75,13 @@ export class Game {
 
 	/**
 	 * Expose params for debug
+	 * @returns {GameDebugParams} GameDebugParams
 	 */
 	get debugParams() {
 		return {
 			timeUpdate: this.#timeUpdate.toFixed(5) + 'ms',
 			timeDraw: this.#timeDraw.toFixed(5) + 'ms',
+			timeStart: this.#timeStart.toFixed(5) + 'ms',
 		}
 	}
 }

@@ -1,20 +1,34 @@
-import { getSprites } from './utils.js'
+import { Loader } from "../loaders/index.js"
 
-import SpritesData from '../../assets/sprites/font.json' assert {type: 'json'}
-
+/**
+ * @class
+ * @property {Array<Frame>} frames
+ * @property {number} x
+ * @property {number} y
+ * @property {HTMLImageElement} image
+ */
 export class Text {
 	/**
-	 * @param {Object} data
-	 * @param {string} data.text
-	 * @param {number} data.x
-	 * @param {number} data.y
+	 * @param {Object} param 
+	 * @param {string} param.text
+	 * @param {number} param.x
+	 * @param {number} param.y
 	 */
 	constructor({ text, x, y }) {
-		const { src, sprites } = SpritesData
+		let src = ''
 
-		this.frames = getSprites({ sprites, names: text.split('') })
+		const loader = Loader.Sprite
+		const sprites = []
 
-		this.text = text
+		for (const name of text.split('')) {
+			const { path, sprite } = loader.getSprite({ src: loader.SRC.FONT, name })
+
+			sprites.push(sprite)
+			src = path
+		}
+
+		this.frames = sprites
+
 		this.x = x
 		this.y = y
 
