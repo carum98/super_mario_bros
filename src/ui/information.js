@@ -1,5 +1,5 @@
 import { Text } from './text.js'
-import { Sprite } from './sprite.js'
+import { Sprite } from '../entities/sprite.js'
 import { Loader } from '../loaders/index.js'
 
 export class Information {

@@ -1,5 +1,5 @@
 import { Controls } from '../core/controls.js'
-import { Sprite } from '../core/sprite.js'
+import { Sprite } from '../entities/sprite.js'
 import { Game } from '../core/game.js'
 import { LuckyBlock } from '../worlds/lucky-block.js'
 import { Tile } from '../worlds/tile.js'

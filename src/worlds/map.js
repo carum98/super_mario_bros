@@ -1,6 +1,6 @@
 import { LuckyBlock } from './lucky-block.js'
-import { Sprite } from '../core/sprite.js'
-import { BackgroundItem } from '../core/background-item.js'
+import { Sprite } from '../entities/sprite.js'
+import { BackgroundItem } from '../entities/background-item.js'
 import { Loader } from '../loaders/index.js'
 
 /**

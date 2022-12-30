@@ -2,7 +2,7 @@ import SpritesPlayer from '../../assets/sprites/player.json' assert {type: 'json
 import SpritesTile from '../../assets/sprites/tile.json' assert {type: 'json'}
 import SpritesFont from '../../assets/sprites/font.json' assert {type: 'json'}
 
-import { getAnimation, getPattern, getSprite } from './../core/utils.js'
+import { getAnimation, getPattern, getSprite } from '../utilities/utils.js'
 
 export class SpriteLoader {
 	static #player = SpritesPlayer

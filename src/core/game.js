@@ -1,6 +1,6 @@
 import { Map } from "../worlds/map.js"
 import { Player } from "../characters/player.js"
-import { Information } from "./information.js"
+import { Information } from "../ui/information.js"
 
 /**
  * @class

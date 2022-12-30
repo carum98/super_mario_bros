@@ -1,4 +1,4 @@
-import { Sprite } from '../core/sprite.js'
+import { Sprite } from '../entities/sprite.js'
 import { Loader } from '../loaders/index.js'
 
 /**

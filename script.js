@@ -1,7 +1,7 @@
 import { Game } from './src/core/game.js'
 import { GameLoop } from './src/core/game-loop.js'
-import { getCanvas, scaleCanvas } from './src/core/utils.js'
-import { Debug } from './src/core/debug.js'
+import { getCanvas, scaleCanvas } from './src/utilities/utils.js'
+import { Debug } from './src/utilities/debug.js'
 
 const canvas = getCanvas()
 

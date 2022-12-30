@@ -1,5 +1,5 @@
-import { GameLoop } from "./game-loop.js"
-import { Game } from "./game.js"
+import { GameLoop } from "../core/game-loop.js"
+import { Game } from "../core/game.js"
 
 /**
  * @class
