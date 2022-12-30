@@ -92,6 +92,51 @@
 			}
 		},
 		{
+			"name": "idle-fire",
+			"frame": {
+				"x": 112,
+				"y": 120,
+				"w": 16,
+				"h": 32
+			}
+		},
+		{
+			"name": "jump-fire",
+			"frame": {
+				"x": 192,
+				"y": 120,
+				"w": 16,
+				"h": 32
+			}
+		},
+		{
+			"name": "run-fire-1",
+			"frame": {
+				"x": 128,
+				"y": 120,
+				"w": 16,
+				"h": 32
+			}
+		},
+		{
+			"name": "run-fire-2",
+			"frame": {
+				"x": 144,
+				"y": 120,
+				"w": 16,
+				"h": 32
+			}
+		},
+		{
+			"name": "run-fire-3",
+			"frame": {
+				"x": 160,
+				"y": 120,
+				"w": 16,
+				"h": 32
+			}
+		},
+		{
 			"name": "coin-1",
 			"frame": {
 				"x": 64,
@@ -208,6 +253,29 @@
 				"run-big-1",
 				"run-big-2",
 				"run-big-3"
+			],
+			"speed": 6
+		},
+		{
+			"name": "idle-fire",
+			"frames": [
+				"idle-fire"
+			],
+			"speed": 1
+		},
+		{
+			"name": "jump-fire",
+			"frames": [
+				"jump-fire"
+			],
+			"speed": 1
+		},
+		{
+			"name": "run-fire",
+			"frames": [
+				"run-fire-1",
+				"run-fire-2",
+				"run-fire-3"
 			],
 			"speed": 6
 		},
