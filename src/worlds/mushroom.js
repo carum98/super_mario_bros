@@ -1,14 +1,12 @@
-import { Sprite } from '../entities/sprite.js'
+import { Player } from '../characters/player.js'
+import { Entity } from '../entities/entity.js'
 import { Loader } from '../loaders/index.js'
 
 /**
  * @class
- * @extends Sprite
+ * @extends Entity
  */
-export class Mushroom extends Sprite {
-	#debug = false
-	#active = false
-
+export class Mushroom extends Entity {
 	/**
 	 * @param {Object} param 
 	 * @param {number} param.x
@@ -21,32 +19,7 @@ export class Mushroom extends Sprite {
 		})
 
 		super({ path, x, y, sprite })
-	}
 
-	/**
-	 * Trigger mushroom animation and activate it
-	 */
-	trigger() {
-		this.#active = true
-	}
-
-	/**
-	 * @param {CanvasRenderingContext2D} ctx
-	 */
-	draw(ctx) {
-		if (this.#active) {
-			super.draw(ctx)
-		}
-
-		if (this.#debug) {
-			this.drawContainer(ctx)
-		}
-	}
-
-	/**
-	 * Switch debug mode to show grid
-	 */
-	toogleDebug() {
-		this.#debug = !this.#debug
+		this.powerUp = Player.POWER_UPS.MUSHROOM
 	}
 }

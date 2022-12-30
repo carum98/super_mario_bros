@@ -4,9 +4,15 @@ import { Information } from "../ui/information.js"
 
 /**
  * @class
- * @property {Player} player
  * @property {CanvasRenderingContext2D} ctx
+ * @property {Player} player
  * @property {Map} map
+ * @property {Information} information
+ * @property {Entity[]} entities
+ * @property {number} score
+ * @property {number} coins
+ * @property {string} level
+ * @property {number} timer
  */
 export class Game {
 	#timeUpdate = 0
@@ -32,6 +38,8 @@ export class Game {
 
 		this.information = new Information({ game: this })
 
+		this.entities = []
+
 		this.#timeStart = performance.now() - now
 	}
 
@@ -43,6 +51,8 @@ export class Game {
 		const now2 = performance.now()
 		this.#draw()
 		this.#timeDraw = performance.now() - now2
+
+		this.#checkCollision()
 	}
 
 	#update() {
@@ -71,6 +81,27 @@ export class Game {
 		map.draw(ctx)
 		player.draw(ctx)
 		information.draw(ctx)
+	}
+
+	#checkCollision() {
+		const { player, entities } = this
+
+		if (entities.length === 0) return
+
+		entities.forEach((entity) => {
+			if (player.conllidesWith(entity)) {
+				entity.onCollide()
+
+				// Remove entity from array
+				const index = entities.indexOf(entity)
+				entities.splice(index, 1)
+
+				// Add power up to player
+				if (entity.powerUp) {
+					player.powerUp = entity.powerUp
+				}
+			}
+		})
 	}
 
 	/**

@@ -70,6 +70,8 @@ export class Sprite extends GameElement {
 		this.#frames = frames
 		this.#index = 0
 		this.#speed = speed
+
+		this.height = frames[0].h
 	}
 
 	/**

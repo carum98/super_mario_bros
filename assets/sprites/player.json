@@ -47,6 +47,51 @@
 			}
 		},
 		{
+			"name": "idle-big",
+			"frame": {
+				"x": 112,
+				"y": 88,
+				"w": 16,
+				"h": 32
+			}
+		},
+		{
+			"name": "jump-big",
+			"frame": {
+				"x": 192,
+				"y": 88,
+				"w": 16,
+				"h": 32
+			}
+		},
+		{
+			"name": "run-big-1",
+			"frame": {
+				"x": 128,
+				"y": 88,
+				"w": 16,
+				"h": 32
+			}
+		},
+		{
+			"name": "run-big-2",
+			"frame": {
+				"x": 144,
+				"y": 88,
+				"w": 16,
+				"h": 32
+			}
+		},
+		{
+			"name": "run-big-3",
+			"frame": {
+				"x": 160,
+				"y": 88,
+				"w": 16,
+				"h": 32
+			}
+		},
+		{
 			"name": "coin-1",
 			"frame": {
 				"x": 64,
@@ -125,14 +170,14 @@
 			"frames": [
 				"idle-small"
 			],
-			"speed": 2
+			"speed": 1
 		},
 		{
 			"name": "jump-small",
 			"frames": [
 				"jump-small"
 			],
-			"speed": 2
+			"speed": 1
 		},
 		{
 			"name": "run-small",
@@ -140,6 +185,29 @@
 				"run-small-1",
 				"run-small-2",
 				"run-small-3"
+			],
+			"speed": 6
+		},
+		{
+			"name": "idle-big",
+			"frames": [
+				"idle-big"
+			],
+			"speed": 1
+		},
+		{
+			"name": "jump-big",
+			"frames": [
+				"jump-big"
+			],
+			"speed": 1
+		},
+		{
+			"name": "run-big",
+			"frames": [
+				"run-big-1",
+				"run-big-2",
+				"run-big-3"
 			],
 			"speed": 6
 		},

@@ -4,6 +4,7 @@ import { Game } from '../core/game.js'
 import { LuckyBlock } from '../worlds/lucky-block.js'
 import { Tile } from '../worlds/tile.js'
 import { Loader } from '../loaders/index.js'
+import { Mushroom } from '../worlds/mushroom.js'
 
 /**
  * @class
@@ -13,6 +14,7 @@ import { Loader } from '../loaders/index.js'
  * @property {number} speed
  * @property {Controls} controls
  * @property {Player.STATES} state
+ * @property {Player.POWER_UPS} power_up
  * @property {Array<Sprite>} tiles
  */
 export class Player extends Sprite {
@@ -32,20 +34,36 @@ export class Player extends Sprite {
 	}
 
 	/**
+	 * @readonly
+	 * @enum {string} Power ups of the player
+	 * @property {string} NONE - Player has no power up
+	 * @property {string} MUSHROOM - Player has a mushroom power up
+	 * @property {string} FIRE_FLOWER - Player has a fire flower power up
+	 * @property {string} STAR - Player has a star power up
+	 */
+	static POWER_UPS = {
+		NONE: 'small',
+		MUSHROOM: 'big',
+		FIRE_FLOWER: 'fire',
+		STAR: 'star',
+	}
+
+	/**
 	 * @param {Object} data
 	 * @param {Game} data.game
 	 */
 	constructor({ game }) {
 		const state = Player.STATES.IDLE
+		const powerUp = Player.POWER_UPS.NONE
 
 		const { path, sprite } = Loader.Sprite.getSprite({
-			name: `${state}-small`,
+			name: `${state}-${powerUp}`,
 			src: Loader.Sprite.SRC.PLAYER,
 		})
 
 		const height = game.ctx?.canvas.height || 0
 
-		super({ path, x: 0, y: height - 48, sprite })
+		super({ path, x: 0, y: height - (32 + sprite.h), sprite })
 
 		this.game = game
 
@@ -56,6 +74,7 @@ export class Player extends Sprite {
 		this.controls.startListening()
 
 		this.state = state
+		this.powerUp = powerUp
 	}
 
 	update() {
@@ -79,13 +98,13 @@ export class Player extends Sprite {
 
 		// --- Vertical movement ---
 		if (isJumping && collideBottom) {
-			this.vy = -5.5
+			this.vy = this.powerUp === Player.POWER_UPS.NONE ? -5.5 : -8
 		}
 
 		this.y += this.vy
 
 		if (!this.#collisions(tiles).bottom) {
-			this.vy += 0.2
+			this.vy += this.powerUp === Player.POWER_UPS.NONE ? 0.2 : 0.4
 		} else {
 			this.vy = 0
 		}
@@ -101,12 +120,23 @@ export class Player extends Sprite {
 
 		// --- Animation ---
 		if (lastState !== this.state) {
-			const { animation } = Loader.Sprite.getAnimation({
-				name: `${this.state}-small`,
-				src: Loader.Sprite.SRC.PLAYER,
-			})
+			this.clearAnimation()
 
-			this.setAnimation(animation)
+			if (this.state === Player.STATES.RUNNING) {
+				const { animation } = Loader.Sprite.getAnimation({
+					name: `${this.state}-${this.powerUp}`,
+					src: Loader.Sprite.SRC.PLAYER,
+				})
+
+				this.setAnimation(animation)
+			} else {
+				const { sprite } = Loader.Sprite.getSprite({
+					name: `${this.state}-${this.powerUp}`,
+					src: Loader.Sprite.SRC.PLAYER,
+				})
+
+				this.sprite = sprite
+			}
 		}
 
 		// --- Collision ---
@@ -124,7 +154,13 @@ export class Player extends Sprite {
 
 				this.game.coins++
 				this.game.score += 200
-			} else if (top instanceof Tile) {
+
+				const { item } = top
+
+				if (item instanceof Mushroom) {
+					this.game.entities.push(item)
+				}
+			} else if (top instanceof Tile && this.powerUp !== Player.POWER_UPS.NONE) {
 				top.hit()
 
 				this.game.score += 50
