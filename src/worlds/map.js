@@ -149,6 +149,17 @@ export class Map {
 	}
 
 	/**
+	 * Toogle all lucky blocks with mushrooms to fire flower
+	 */
+	toogleMushroomsToFireFlower() {
+		this.#buffer.forEach(item => {
+			if (item instanceof LuckyBlock) {
+				item.toogleMushroomsToFireFlower()
+			}
+		})
+	}
+
+	/**
 	 * Switch debug mode to show grid
 	 */
 	toogleDebug() {

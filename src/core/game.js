@@ -1,6 +1,7 @@
 import { Map } from "../worlds/map.js"
 import { Player } from "../characters/player.js"
 import { Information } from "../ui/information.js"
+import { Mushroom } from "../worlds/mushroom.js"
 
 /**
  * @class
@@ -99,6 +100,11 @@ export class Game {
 				// Add power up to player
 				if (entity.powerUp) {
 					player.powerUp = entity.powerUp
+				}
+
+				// Change all mushrooms to fire flower
+				if (entity instanceof Mushroom) {
+					this.map.toogleMushroomsToFireFlower()
 				}
 			}
 		})

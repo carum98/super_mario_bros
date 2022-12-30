@@ -5,6 +5,7 @@ import { LuckyBlock } from '../worlds/lucky-block.js'
 import { Tile } from '../worlds/tile.js'
 import { Loader } from '../loaders/index.js'
 import { Mushroom } from '../worlds/mushroom.js'
+import { FireFlower } from '../worlds/fire-flower.js'
 
 /**
  * @class
@@ -158,6 +159,10 @@ export class Player extends Sprite {
 				const { item } = top
 
 				if (item instanceof Mushroom) {
+					this.game.entities.push(item)
+				}
+
+				if (item instanceof FireFlower) {
 					this.game.entities.push(item)
 				}
 			} else if (top instanceof Tile && this.powerUp !== Player.POWER_UPS.NONE) {

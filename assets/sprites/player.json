@@ -207,6 +207,42 @@
 				"w": 16,
 				"h": 16
 			}
+		},
+		{
+			"name": "fire-flower-1",
+			"frame": {
+				"x": 0,
+				"y": 168,
+				"w": 16,
+				"h": 16
+			}
+		},
+		{
+			"name": "fire-flower-2",
+			"frame": {
+				"x": 16,
+				"y": 168,
+				"w": 16,
+				"h": 16
+			}
+		},
+		{
+			"name": "fire-flower-3",
+			"frame": {
+				"x": 32,
+				"y": 168,
+				"w": 16,
+				"h": 16
+			}
+		},
+		{
+			"name": "fire-flower-4",
+			"frame": {
+				"x": 48,
+				"y": 168,
+				"w": 16,
+				"h": 16
+			}
 		}
 	],
 	"animations": [
@@ -298,6 +334,16 @@
 				"coin-score-1"
 			],
 			"speed": 10
+		},
+		{
+			"name": "fire-flower",
+			"frames": [
+				"fire-flower-1",
+				"fire-flower-2",
+				"fire-flower-3",
+				"fire-flower-4"
+			],
+			"speed": 8
 		}
 	]
 }

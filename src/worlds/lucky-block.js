@@ -2,6 +2,7 @@ import { Tile } from './tile.js'
 import { Coin } from './coin.js'
 import { Mushroom } from './mushroom.js'
 import { Loader } from '../loaders/index.js'
+import { FireFlower } from './fire-flower.js'
 
 /**
  * @class
@@ -88,6 +89,19 @@ export class LuckyBlock extends Tile {
 		}
 
 		this.active = false
+	}
+
+	/**
+	 * Toggle item between [Mushroom] and [FireFlower]
+	 */
+	toogleMushroomsToFireFlower() {
+		if (this.item instanceof Coin) return
+
+		if (this.item instanceof Mushroom) {
+			this.item = new FireFlower({ x: this.x, y: this.y - this.height })
+		} else {
+			this.item = new Mushroom({ x: this.x, y: this.y - this.height })
+		}
 	}
 
 	/**
