@@ -15,17 +15,7 @@ export class Text {
 	 * @param {number} param.y
 	 */
 	constructor({ text, x, y }) {
-		let src = ''
-
-		const loader = Loader.Sprite
-		const sprites = []
-
-		for (const name of text.split('')) {
-			const { path, sprite } = loader.getSprite({ src: loader.SRC.FONT, name })
-
-			sprites.push(sprite)
-			src = path
-		}
+		const { src, sprites } = this.#getFrames(text)
 
 		this.frames = sprites
 
@@ -58,5 +48,38 @@ export class Text {
 		})
 
 		ctx.restore()
+	}
+
+	/**
+	 * Update the current text
+	 * @param {string} text
+	 */
+	updateText(text) {
+		const { sprites } = this.#getFrames(text)
+
+		this.frames = sprites
+	}
+
+	/**
+	 * @param {string} text 
+	 * @returns {{ src: string, sprites: Array<Frame> }}} 
+	 */
+	#getFrames(text) {
+		let src = ''
+
+		const loader = Loader.Sprite
+		const sprites = []
+
+		for (const name of text.split('')) {
+			const { path, sprite } = loader.getSprite({ src: loader.SRC.FONT, name })
+
+			sprites.push(sprite)
+			src = path
+		}
+
+		return {
+			src,
+			sprites
+		}
 	}
 }

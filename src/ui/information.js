@@ -15,9 +15,24 @@ export class Information {
 				y: 16,
 			}),
 			new Text({
+				text: '000000',
+				x: 16,
+				y: 24,
+			}),
+			new Text({
+				text: '×00',
+				x: 96,
+				y: 24,
+			}),
+			new Text({
 				text: 'WORLD',
 				x: 144,
 				y: 16,
+			}),
+			new Text({
+				text: '1-1',
+				x: 152,
+				y: 24,
 			}),
 			new Text({
 				text: 'TIME',
@@ -25,13 +40,11 @@ export class Information {
 				y: 16,
 			}),
 			new Text({
-				text: '1-1',
-				x: 152,
+				text: '000',
+				x: 216,
 				y: 24,
 			})
 		]
-
-		this.values = this.#getValues()
 
 		const { path, animation } = Loader.Sprite.getAnimation({ src: Loader.Sprite.SRC.PLAYER, name: 'coin-score' })
 
@@ -46,7 +59,12 @@ export class Information {
 
 		if (this.#interval === 0) {
 			this.game.timer -= 1
-			this.values = this.#getValues()
+
+			const { score, coins, timer } = this.game
+
+			this.texts[1].updateText(score.toString().padStart(6, '0'))
+			this.texts[2].updateText('×' + coins.toString().padStart(2, '0'))
+			this.texts[6].updateText(timer.toString().padStart(3, '0'))
 		}
 	}
 
@@ -54,32 +72,7 @@ export class Information {
 	 * @param {CanvasRenderingContext2D} ctx
 	 */
 	draw(ctx) {
-		[...this.texts, ...this.values].forEach((text) => {
-			text.draw(ctx)
-		})
-
+		this.texts.forEach((text) => text.draw(ctx))
 		this.coin.draw(ctx)
-	}
-
-	#getValues() {
-		const score = new Text({
-			text: this.game.score.toString().padStart(6, '0'),
-			x: 16,
-			y: 24,
-		})
-
-		const coins = new Text({
-			text: '×' + this.game.coins.toString().padStart(2, '0'),
-			x: 96,
-			y: 24,
-		})
-
-		const time = new Text({
-			text: this.game.timer.toString().padStart(3, '0'),
-			x: 216,
-			y: 24,
-		});
-
-		return [score, coins, time]
 	}
 }
