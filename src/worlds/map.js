@@ -184,17 +184,6 @@ export class Map {
 	}
 
 	/**
-	 * Switch debug mode to all coins
-	 */
-	toogleMushroosDebug() {
-		this.#buffer.forEach(item => {
-			if (item instanceof LuckyBlock) {
-				item.debugMushroom()
-			}
-		})
-	}
-
-	/**
 	 * Expose params for debug
 	 * @returns {MapDebugParams} MapDebugParams
 	 */

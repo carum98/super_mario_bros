@@ -1,24 +1,30 @@
+import { Player } from '../characters/player.js'
 import { Sound } from '../core/sound.js'
 import { Loader } from '../loaders/index.js'
 import { Entity } from './entity.js'
 
+/**
+ * @class
+ * @extends Entity
+ * @property {Player.POWER_UPS} powerUp
+ */
 export class PowerUp extends Entity {
 	/**
 	 * @readonly
 	 * @enum {Object} Types of power ups
 	 * @property {string} name - Name of the power up
-	 * @property {string} powerUp - Name of the power up
+	 * @property {Player.POWER_UPS} powerUp - Name of the power up
 	 * @property {boolean} isSolid - Whether the power up is solid
 	 */
 	static TYPES = {
 		MUSHROOM: {
 			name: 'mushroom',
-			powerUp: 'big',
+			powerUp: Player.POWER_UPS.MUSHROOM,
 			isSolid: true,
 		},
 		FIRE_FLOWER: {
 			name: 'fire-flower',
-			powerUp: 'fire',
+			powerUp: Player.POWER_UPS.FIRE_FLOWER,
 			isSolid: false,
 		}
 	}
@@ -51,6 +57,8 @@ export class PowerUp extends Entity {
 		}
 
 		this.powerUp = powerUp
+
+		this.activate()
 	}
 
 	onCollide() {

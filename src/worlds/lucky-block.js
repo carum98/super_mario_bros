@@ -2,6 +2,8 @@ import { Tile } from './tile.js'
 import { Mushroom } from './mushroom.js'
 import { Loader } from '../loaders/index.js'
 import { FireFlower } from './fire-flower.js'
+import { Entity } from '../entities/entity.js'
+import { Coin } from './coin.js'
 
 /**
  * @class
@@ -9,7 +11,7 @@ import { FireFlower } from './fire-flower.js'
  * @property {boolean} active
  * @property {number} vy
  * @property {number} limit
- * @property {PowerUp | null} item
+ * @property {LuckyBlock.ITEM} item
  */
 export class LuckyBlock extends Tile {
 	/**
@@ -19,6 +21,7 @@ export class LuckyBlock extends Tile {
 	static ITEM = {
 		COIN: 'coin',
 		MUSHROOM: 'mushroom',
+		FIRE_FLOWER: 'fire-flower',
 	}
 
 	/**
@@ -35,11 +38,7 @@ export class LuckyBlock extends Tile {
 		this.vy = 0
 		this.limit = y
 
-		if (item === LuckyBlock.ITEM.MUSHROOM) {
-			this.item = new Mushroom({ x, y: y - this.height })
-		} else {
-			this.item = null
-		}
+		this.type = item
 	}
 
 	update() {
@@ -53,23 +52,26 @@ export class LuckyBlock extends Tile {
 			}
 		}
 
-		if (this.item) {
-			this.item.x = this.x
-			this.item.update()
-		}
-
 		super.update()
 	}
 
 	/**
-	 * @param {CanvasRenderingContext2D} ctx
+	 * Get item from lucky block
+	 * @returns {Entity}
 	 */
-	draw(ctx) {
-		super.draw(ctx)
+	getItem() {
+		const x = this.x
+		const y = this.y - this.height
 
-		if (this.item) {
-			this.item.draw(ctx)
+		if (this.type === LuckyBlock.ITEM.MUSHROOM) {
+			return new Mushroom({ x, y })
 		}
+
+		if (this.type === LuckyBlock.ITEM.FIRE_FLOWER) {
+			return new FireFlower({ x, y })
+		}
+
+		return new Coin({ x, y })
 	}
 
 	/**
@@ -87,8 +89,6 @@ export class LuckyBlock extends Tile {
 			this.sprite = sprite
 
 			this.clearAnimation()
-
-			this.item?.activate()
 		}
 
 		this.active = false
@@ -98,21 +98,12 @@ export class LuckyBlock extends Tile {
 	 * Toggle item between [Mushroom] and [FireFlower]
 	 */
 	toogleMushroomsToFireFlower() {
-		if (this.item === null) return
+		if (this.type === LuckyBlock.ITEM.COIN) return
 
-		if (this.item instanceof Mushroom) {
-			this.item = new FireFlower({ x: this.x, y: this.y - this.height })
+		if (this.type === LuckyBlock.ITEM.MUSHROOM) {
+			this.type = LuckyBlock.ITEM.FIRE_FLOWER
 		} else {
-			this.item = new Mushroom({ x: this.x, y: this.y - this.height })
-		}
-	}
-
-	/**
-	 * Toggle debug mode only if item is a [Mushroom]
-	 */
-	debugMushroom() {
-		if (this.item instanceof Mushroom) {
-			this.item.toogleDebug()
+			this.type = LuckyBlock.ITEM.MUSHROOM
 		}
 	}
 }

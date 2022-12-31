@@ -3,6 +3,7 @@ import { Player } from "../characters/player.js"
 import { Information } from "../ui/information.js"
 import { Mushroom } from "../worlds/mushroom.js"
 import { Sound } from "./sound.js"
+import { PowerUp } from "../entities/power-up.js"
 
 /**
  * @class
@@ -91,6 +92,13 @@ export class Game {
 			if (this.player.x > middle) {
 				this.map.move()
 				this.player.x = middle
+
+				// Move power ups with the map
+				if (this.entities.some((entity) => entity.isActive)) {
+					const powerUps = this.entities.filter((entity) => entity instanceof PowerUp)
+
+					powerUps.forEach((powerUp) => powerUp.x -= 2)
+				}
 			}
 
 			// Check if player is out of the map
@@ -119,7 +127,14 @@ export class Game {
 		this.entities = this.entities.filter((entity) => entity.isActive)
 
 		if (this.entities.some((entity) => entity.isActive)) {
-			this.entities.forEach((entity) => entity.update())
+			this.entities.forEach((entity) => {
+				if (entity instanceof Mushroom) {
+					entity.move(this.map.tiles)
+				} else {
+					entity.update()
+				}
+			})
+
 			this.entities.forEach((entity) => entity.draw(this.ctx))
 		}
 	}
