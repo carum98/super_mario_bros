@@ -2,6 +2,7 @@ import { Map } from "../worlds/map.js"
 import { Player } from "../characters/player.js"
 import { Information } from "../ui/information.js"
 import { Mushroom } from "../worlds/mushroom.js"
+import { Sound } from "./sound.js"
 
 /**
  * @class
@@ -42,6 +43,13 @@ export class Game {
 
 		this.entities = []
 
+		this.music = new Audio('assets/sounds/music.mp3')
+		this.music.loop = true
+		this.music.volume = 0.2
+
+		window.addEventListener('focus', () => this.music.play())
+		window.addEventListener('blur', () => this.music.pause())
+
 		this.#timeStart = performance.now() - now
 	}
 
@@ -60,6 +68,10 @@ export class Game {
 		this.#timeDraw = performance.now() - now2
 
 		this.#checkCollision()
+
+		if (this.music.paused && this.gameOver === false && this.player.x > 0) {
+			this.music.play()
+		}
 	}
 
 	#update() {
@@ -74,7 +86,13 @@ export class Game {
 				this.map.move()
 				this.player.x = middle
 			}
+
+			// Check if player is out of the map
+			if (this.player.y > this.ctx.canvas.height) {
+				this.#gameOver()
+			}
 		}
+
 	}
 
 	#draw() {
@@ -124,11 +142,13 @@ export class Game {
 					const playerIsDead = enemy.checkCollidePosition(player)
 
 					if (playerIsDead) {
-						this.gameOver = true
+						this.#gameOver()
 					} else {
 						enemy.killed()
 
 						this.score += 100
+
+						Sound.play(Sound.Name.stomp)
 					}
 
 					// Remove enemy from array
@@ -137,6 +157,17 @@ export class Game {
 				}
 			})
 		}
+	}
+
+	/**
+	 * Game over, stop music and play sound die
+	 */
+	#gameOver() {
+		this.gameOver = true
+
+		this.music.pause()
+
+		Sound.play(Sound.Name.die)
 	}
 
 	/**

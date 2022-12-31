@@ -1,4 +1,5 @@
 import { Player } from '../characters/player.js'
+import { Sound } from '../core/sound.js'
 import { Entity } from '../entities/entity.js'
 import { Loader } from '../loaders/index.js'
 
@@ -21,5 +22,11 @@ export class Mushroom extends Entity {
 		super({ path, x, y, sprite })
 
 		this.powerUp = Player.POWER_UPS.MUSHROOM
+	}
+
+	onCollide() {
+		super.onCollide()
+
+		Sound.play(Sound.Name.powerup)
 	}
 }

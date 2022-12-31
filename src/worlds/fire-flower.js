@@ -1,4 +1,5 @@
 import { Player } from '../characters/player.js'
+import { Sound } from '../core/sound.js'
 import { Entity } from '../entities/entity.js'
 import { Loader } from '../loaders/index.js'
 
@@ -16,5 +17,11 @@ export class FireFlower extends Entity {
 		this.setAnimation(animation)
 
 		this.powerUp = Player.POWER_UPS.FIRE_FLOWER
+	}
+
+	onCollide() {
+		super.onCollide()
+
+		Sound.play(Sound.Name.powerup)
 	}
 }

@@ -1,3 +1,4 @@
+import { Sound } from '../core/sound.js'
 import { Sprite } from '../entities/sprite.js'
 import { Loader } from '../loaders/index.js'
 
@@ -65,6 +66,8 @@ export class Coin extends Sprite {
 
 		this.vy = -4
 		this.setAnimation({ frames, speed })
+
+		Sound.play(Sound.Name.coin)
 	}
 
 	/**

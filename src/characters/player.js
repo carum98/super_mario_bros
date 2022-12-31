@@ -7,6 +7,7 @@ import { Loader } from '../loaders/index.js'
 import { Mushroom } from '../worlds/mushroom.js'
 import { FireFlower } from '../worlds/fire-flower.js'
 import { MovementController } from '../core/movement.js'
+import { Sound } from '../core/sound.js'
 
 /**
  * @class
@@ -101,6 +102,8 @@ export class Player extends Sprite {
 		// --- Vertical movement ---
 		if (isJumping && collideBottom) {
 			this.vy = this.powerUp === Player.POWER_UPS.NONE ? -5.5 : -8
+
+			Sound.play(Sound.Name.jump)
 		}
 
 		this.y += this.vy
@@ -166,10 +169,14 @@ export class Player extends Sprite {
 				if (item instanceof FireFlower) {
 					this.game.entities.push(item)
 				}
-			} else if (top instanceof Tile && this.powerUp !== Player.POWER_UPS.NONE) {
+			} else if (top instanceof Tile && !(top instanceof LuckyBlock) && this.powerUp !== Player.POWER_UPS.NONE) {
 				top.hit()
 
 				this.game.score += 50
+
+				Sound.play(Sound.Name.break)
+			} else {
+				Sound.play(Sound.Name.bump)
 			}
 		}
 
