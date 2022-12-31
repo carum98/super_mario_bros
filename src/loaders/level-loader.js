@@ -1,4 +1,5 @@
 import { Goomba } from '../characters/goomba.js'
+import { Koopa } from '../characters/koopa.js'
 import { BackgroundItem } from '../entities/background-item.js'
 import { Enemy } from '../entities/enemy.js'
 import { Sprite } from '../entities/sprite.js'
@@ -84,7 +85,13 @@ export class LevelLoader {
 			for (const enemy of coord) {
 				const { x, y } = enemy
 
-				enemies.push(new Goomba({ x: x * 16, y: y * 16 }))
+				if (name === 'goomba') {
+					enemies.push(new Goomba({ x: x * 16, y: y * 16 }))
+				}
+
+				if (name === 'koopa') {
+					enemies.push(new Koopa({ x: x * 16, y: y * 16 }))
+				}
 			}
 		}
 

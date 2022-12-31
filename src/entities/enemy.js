@@ -7,7 +7,7 @@ import { Sprite } from './sprite.js'
 
 export class Enemy extends Entity {
 	#dead = false
-	#direction = Controls.DIRECTIONS.LEFT
+	direction = Controls.DIRECTIONS.LEFT
 
 	/**
 	 * @param {HTMLCanvasElement} canvas 
@@ -64,18 +64,18 @@ export class Enemy extends Entity {
 		const { bottom, left, right } = MovementController.collisions(this, tiles)
 
 		if (!bottom) {
-			this.#direction = Controls.DIRECTIONS.DOWN
+			this.direction = Controls.DIRECTIONS.DOWN
 		}
 
 		if (left) {
-			this.#direction = Controls.DIRECTIONS.RIGHT
+			this.direction = Controls.DIRECTIONS.RIGHT
 		}
 
 		if (right) {
-			this.#direction = Controls.DIRECTIONS.LEFT
+			this.direction = Controls.DIRECTIONS.LEFT
 		}
 
-		const { x, y } = Controls.AXIS[this.#direction]
+		const { x, y } = Controls.AXIS[this.direction]
 
 		this.x += x / 2
 		this.y += y

@@ -270,6 +270,24 @@
 				"w": 16,
 				"h": 16
 			}
+		},
+		{
+			"name": "koopa-1",
+			"frame": {
+				"x": 224,
+				"y": 0,
+				"w": 16,
+				"h": 24
+			}
+		},
+		{
+			"name": "koopa-2",
+			"frame": {
+				"x": 240,
+				"y": 0,
+				"w": 16,
+				"h": 24
+			}
 		}
 	],
 	"animations": [
@@ -377,6 +395,14 @@
 			"frames": [
 				"goomba-1",
 				"goomba-2"
+			],
+			"speed": 10
+		},
+		{
+			"name": "koopa",
+			"frames": [
+				"koopa-1",
+				"koopa-2"
 			],
 			"speed": 10
 		}

@@ -25,10 +25,11 @@ export class Entity extends Sprite {
 
 	/**
 	 * @param {CanvasRenderingContext2D} ctx
+	 * @param {boolean} [flip] - Flip the sprite horizontally
 	 */
-	draw(ctx) {
+	draw(ctx, flip) {
 		if (this.#active) {
-			super.draw(ctx)
+			super.draw(ctx, flip)
 		}
 
 		if (this.#debug) {
