@@ -6,6 +6,7 @@ import { Tile } from '../worlds/tile.js'
 import { Loader } from '../loaders/index.js'
 import { Mushroom } from '../worlds/mushroom.js'
 import { FireFlower } from '../worlds/fire-flower.js'
+import { MovementController } from '../core/movement.js'
 
 /**
  * @class
@@ -81,7 +82,7 @@ export class Player extends Sprite {
 	update() {
 		const { keys } = this.controls
 		const { map: { tiles } } = this.game
-		const { bottom, top, right, left } = this.#collisions(tiles)
+		const { bottom, top, right, left } = MovementController.collisions(this, tiles)
 
 		const isJumping = keys.includes(Controls.DIRECTIONS.UP)
 		const isMoving = keys.includes(Controls.DIRECTIONS.LEFT) || keys.includes(Controls.DIRECTIONS.RIGHT)
@@ -104,7 +105,7 @@ export class Player extends Sprite {
 
 		this.y += this.vy
 
-		if (!this.#collisions(tiles).bottom) {
+		if (!MovementController.collisions(this, tiles).bottom) {
 			this.vy += this.powerUp === Player.POWER_UPS.NONE ? 0.2 : 0.4
 		} else {
 			this.vy = 0
@@ -204,49 +205,6 @@ export class Player extends Sprite {
 		if (this.#debug) {
 			this.drawBoxCollision(ctx)
 		}
-	}
-
-	/**
-	 * @param {Array<Sprite>} tiles
-	 * @returns {{bottom: Sprite | undefined, top: Sprite | undefined, left: Sprite | undefined, right: Sprite | undefined}}}
-	 */
-	#collisions(tiles) {
-		const { x, y, width, height } = this
-
-		const right = { x: x + width, y: y + height / 4, width: width / 4, height: height / 2 }
-		const bottom = { x: x + width / 4, y: y + height, width: width / 2, height: height / 4 }
-		const top = { x: x + width / 4, y: y - height / 4, width: width / 2, height: height / 4 }
-		const left = { x: x - width / 4, y: y + height / 4, width: width / 4, height: height / 2 }
-
-		return {
-			bottom: this.#collideBox(bottom, tiles),
-			top: this.#collideBox(top, tiles),
-			left: this.#collideBox(left, tiles),
-			right: this.#collideBox(right, tiles),
-		}
-	}
-
-	/**
-	 * @param {Object} box 
-	 * @param {Array<Sprite>} tiles 
-	 * @returns {Sprite | undefined}
-	 */
-	#collideBox(box, tiles) {
-		return tiles.find((tile) => this.#collideTile(box, tile))
-	}
-
-	/**
-	 * @param {Object} box 
-	 * @param {Sprite} tile 
-	 * @returns {boolean}
-	 */
-	#collideTile(box, tile) {
-		return (
-			box.x < tile.x + tile.width &&
-			box.x + box.width > tile.x &&
-			box.y < tile.y + tile.height &&
-			box.y + box.height > tile.y
-		)
 	}
 
 	/**
