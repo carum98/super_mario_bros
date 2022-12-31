@@ -1,13 +1,22 @@
+import { Goomba } from '../characters/goomba.js'
 import { BackgroundItem } from '../entities/background-item.js'
+import { Enemy } from '../entities/enemy.js'
 import { Sprite } from '../entities/sprite.js'
 import { LuckyBlock } from '../worlds/lucky-block.js'
 import { Pipe } from '../worlds/pipes.js'
 import { Tile } from '../worlds/tile.js'
 
+/**
+ * @typedef {Object} LevelProps
+ * @property {Array<Sprite>} tiles
+ * @property {Array<BackgroundItem>} backgroundItems
+ * @property {Array<Sprite>} animations
+ * @property {Array<Enemy>} enemies
+ */
 export class LevelLoader {
 	/**
 	 * @param {string} level
-	 * @returns {Promise<{ tiles: Array<Sprite>, backgroundItems: Array<BackgroundItem>, animations: Array<Sprite> }>}
+	 * @returns {Promise<LevelProps>}
 	 */
 	static async get(level) {
 		const data = await import(`../../assets/levels/${level}.json`, { assert: { type: "json" } })
@@ -17,6 +26,7 @@ export class LevelLoader {
 		const tiles = []
 		const backgroundItems = []
 		const animations = []
+		const enemies = []
 
 		// Floor
 		for (let range of floor.ranges) {
@@ -69,10 +79,20 @@ export class LevelLoader {
 			}
 		}
 
+		// Enemies
+		for (const { coord, name } of data.default.enemies) {
+			for (const enemy of coord) {
+				const { x, y } = enemy
+
+				enemies.push(new Goomba({ x: x * 16, y: y * 16 }))
+			}
+		}
+
 		return {
 			tiles,
 			backgroundItems,
 			animations,
+			enemies
 		}
 	}
 }

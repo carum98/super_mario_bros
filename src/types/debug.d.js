@@ -21,4 +21,6 @@
  * @property {number} visibleTiles - Number of visible tiles
  * @property {number} backgroundItems - Number of background items in buffer
  * @property {number} visibleBackgroundItems - Number of visible background items
+ * @property {number} enemies - Number of enemies in buffer
+ * @property {number} visibleEnemies - Number of visible enemies
  */

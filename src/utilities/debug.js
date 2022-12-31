@@ -129,7 +129,7 @@ export class Debug {
 				}
 
 				if (map !== null) {
-					const { visibleTiles, tiles, visibleBackgroundItems, backgroundItems } = this.game.map.debugParams
+					const { visibleTiles, tiles, visibleBackgroundItems, backgroundItems, enemies, visibleEnemies } = this.game.map.debugParams
 
 					map.innerHTML = 'Map:'
 					map.innerHTML += `<br />`
@@ -140,6 +140,11 @@ export class Debug {
 					map.innerHTML += `Visible background: ${visibleBackgroundItems}`
 					map.innerHTML += `<br />`
 					map.innerHTML += `Buffer background: ${backgroundItems}`
+					map.innerHTML += `<br />`
+					map.innerHTML += `Visible enemies: ${visibleEnemies}`
+					map.innerHTML += `<br />`
+					map.innerHTML += `Buffer enemies: ${enemies}`
+
 				}
 
 				if (game !== null) {

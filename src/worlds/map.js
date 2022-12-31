@@ -2,10 +2,12 @@ import { LuckyBlock } from './lucky-block.js'
 import { Sprite } from '../entities/sprite.js'
 import { BackgroundItem } from '../entities/background-item.js'
 import { Loader } from '../loaders/index.js'
+import { Enemy } from '../entities/enemy.js'
 
 /**
  * @class
  * @property {Array<Sprite>} tiles
+ * @property {Array<Enemy>} enemies
  * @property {HTMLCanvasElement} canvas
  */
 export class Map {
@@ -32,12 +34,17 @@ export class Map {
 	/**
 	 * @param {Object} data
 	 * @param {HTMLCanvasElement} data.canvas
+	 * @param {{ world: number, level: number }} data.map
 	 */
-	constructor({ canvas }) {
-		this.tiles = []
+	constructor({ canvas, map }) {
 		this.canvas = canvas
 
-		this.#load('1-1')
+		/** @type {Array<Sprite>} */
+		this.tiles = []
+		/** @type {Array<Enemy>} */
+		this.enemies = []
+
+		this.#load(`${map.world}-${map.level}`)
 	}
 
 	/**
@@ -45,11 +52,12 @@ export class Map {
 	 * @param {string} level 
 	 */
 	async #load(level) {
-		const { tiles, backgroundItems, animations } = await Loader.Level.get('1-1')
+		const { tiles, backgroundItems, animations, enemies } = await Loader.Level.get(level)
 
 		this.#buffer = tiles
 		this.#animations = animations
 		this.#bufferBackgroundItems = backgroundItems
+		this.enemies = enemies
 
 		// Add only tiles that are visible on the screen
 		this.tiles = this.#addTiles(this.#buffer)
@@ -61,6 +69,7 @@ export class Map {
 	 */
 	update() {
 		this.#animations.forEach(tile => tile.update())
+		this.enemies.forEach(enemy => enemy.update(this.canvas, this.tiles))
 	}
 
 	/**
@@ -91,7 +100,7 @@ export class Map {
 		// -------
 
 		// Move all tiles and background items to the left
-		[...this.#buffer, ...this.#bufferBackgroundItems].forEach(item => {
+		[...this.#buffer, ...this.#bufferBackgroundItems, ...this.enemies].forEach(item => {
 			item.x -= 2
 		})
 	}
@@ -102,6 +111,7 @@ export class Map {
 	draw(ctx) {
 		this.#backgroundItems.forEach(item => item.draw(ctx))
 		this.tiles.forEach(tile => tile.draw(ctx))
+		this.enemies.forEach(enemy => enemy.draw(ctx))
 
 		// Draw grid
 		if (this.#debug) {
@@ -205,6 +215,8 @@ export class Map {
 			visibleTiles: this.tiles.length,
 			backgroundItems: this.#bufferBackgroundItems.length,
 			visibleBackgroundItems: this.#backgroundItems.length,
+			enemies: this.enemies.length,
+			visibleEnemies: this.enemies.filter(enemy => enemy.isActive).length,
 		}
 	}
 }

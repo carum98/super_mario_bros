@@ -29,13 +29,14 @@ export class Game {
 
 		this.ctx = canvas.getContext('2d')
 
-		this.map = new Map({ canvas })
+		this.map = new Map({ canvas, map: { world: 1, level: 1 } })
 		this.player = new Player({ game: this })
 
 		this.score = 0
 		this.coins = 0
 		this.level = '1 - 1'
 		this.timer = 400
+		this.gameOver = false
 
 		this.information = new Information({ game: this })
 
@@ -45,6 +46,11 @@ export class Game {
 	}
 
 	render() {
+		if (this.gameOver) {
+			console.log('Game Over')
+			return
+		}
+
 		const now = performance.now()
 		this.#update()
 		this.#timeUpdate = performance.now() - now
@@ -85,29 +91,52 @@ export class Game {
 	}
 
 	#checkCollision() {
-		const { player, entities } = this
+		const { player, entities, map } = this
 
-		if (entities.length === 0) return
+		if (entities.length !== 0) {
+			entities.forEach((entity) => {
+				if (player.conllidesWith(entity)) {
+					entity.onCollide()
 
-		entities.forEach((entity) => {
-			if (player.conllidesWith(entity)) {
-				entity.onCollide()
+					// Remove entity from array
+					const index = entities.indexOf(entity)
+					entities.splice(index, 1)
 
-				// Remove entity from array
-				const index = entities.indexOf(entity)
-				entities.splice(index, 1)
+					// Add power up to player
+					if (entity.powerUp) {
+						player.powerUp = entity.powerUp
+					}
 
-				// Add power up to player
-				if (entity.powerUp) {
-					player.powerUp = entity.powerUp
+					// Change all mushrooms to fire flower
+					if (entity instanceof Mushroom) {
+						this.map.toogleMushroomsToFireFlower()
+					}
 				}
+			})
+		}
+		const enemies = map.enemies.filter((enemy) => enemy.isActive)
 
-				// Change all mushrooms to fire flower
-				if (entity instanceof Mushroom) {
-					this.map.toogleMushroomsToFireFlower()
+		if (enemies.length !== 0) {
+			enemies.forEach((enemy) => {
+				if (player.conllidesWith(enemy)) {
+					enemy.onCollide()
+
+					const playerIsDead = enemy.checkCollidePosition(player)
+
+					if (playerIsDead) {
+						this.gameOver = true
+					} else {
+						enemy.killed()
+
+						this.score += 100
+					}
+
+					// Remove enemy from array
+					const index = map.enemies.indexOf(enemy)
+					map.enemies.splice(index, 1)
 				}
-			}
-		})
+			})
+		}
 	}
 
 	/**

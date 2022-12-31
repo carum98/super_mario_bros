@@ -243,6 +243,33 @@
 				"w": 16,
 				"h": 16
 			}
+		},
+		{
+			"name": "goomba-1",
+			"frame": {
+				"x": 80,
+				"y": 0,
+				"w": 16,
+				"h": 16
+			}
+		},
+		{
+			"name": "goomba-2",
+			"frame": {
+				"x": 96,
+				"y": 0,
+				"w": 16,
+				"h": 16
+			}
+		},
+		{
+			"name": "goomba-dead",
+			"frame": {
+				"x": 112,
+				"y": 0,
+				"w": 16,
+				"h": 16
+			}
 		}
 	],
 	"animations": [
@@ -344,6 +371,14 @@
 				"fire-flower-4"
 			],
 			"speed": 8
+		},
+		{
+			"name": "goomba",
+			"frames": [
+				"goomba-1",
+				"goomba-2"
+			],
+			"speed": 10
 		}
 	]
 }
