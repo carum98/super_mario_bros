@@ -1,5 +1,4 @@
 import { Tile } from './tile.js'
-import { Coin } from './coin.js'
 import { Mushroom } from './mushroom.js'
 import { Loader } from '../loaders/index.js'
 import { FireFlower } from './fire-flower.js'
@@ -10,7 +9,7 @@ import { FireFlower } from './fire-flower.js'
  * @property {boolean} active
  * @property {number} vy
  * @property {number} limit
- * @property {Coin|Mushroom} item
+ * @property {PowerUp | null} item
  */
 export class LuckyBlock extends Tile {
 	/**
@@ -39,7 +38,7 @@ export class LuckyBlock extends Tile {
 		if (item === LuckyBlock.ITEM.MUSHROOM) {
 			this.item = new Mushroom({ x, y: y - this.height })
 		} else {
-			this.item = new Coin({ x, y: y - this.height })
+			this.item = null
 		}
 	}
 
@@ -54,8 +53,10 @@ export class LuckyBlock extends Tile {
 			}
 		}
 
-		this.item.x = this.x
-		this.item.update()
+		if (this.item) {
+			this.item.x = this.x
+			this.item.update()
+		}
 
 		super.update()
 	}
@@ -66,7 +67,9 @@ export class LuckyBlock extends Tile {
 	draw(ctx) {
 		super.draw(ctx)
 
-		this.item.draw(ctx)
+		if (this.item) {
+			this.item.draw(ctx)
+		}
 	}
 
 	/**
@@ -85,7 +88,7 @@ export class LuckyBlock extends Tile {
 
 			this.clearAnimation()
 
-			this.item.trigger()
+			this.item?.trigger()
 		}
 
 		this.active = false
@@ -95,21 +98,12 @@ export class LuckyBlock extends Tile {
 	 * Toggle item between [Mushroom] and [FireFlower]
 	 */
 	toogleMushroomsToFireFlower() {
-		if (this.item instanceof Coin) return
+		if (this.item === null) return
 
 		if (this.item instanceof Mushroom) {
 			this.item = new FireFlower({ x: this.x, y: this.y - this.height })
 		} else {
 			this.item = new Mushroom({ x: this.x, y: this.y - this.height })
-		}
-	}
-
-	/**
-	 * Toggle debug mode only if item is a [Coin]
-	 */
-	debugCoin() {
-		if (this.item instanceof Coin) {
-			this.item.toogleDebug()
 		}
 	}
 

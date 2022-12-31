@@ -1,0 +1,61 @@
+import { Sound } from '../core/sound.js'
+import { Loader } from '../loaders/index.js'
+import { Entity } from './entity.js'
+
+export class PowerUp extends Entity {
+	/**
+	 * @readonly
+	 * @enum {Object} Types of power ups
+	 * @property {string} name - Name of the power up
+	 * @property {string} powerUp - Name of the power up
+	 * @property {boolean} isSolid - Whether the power up is solid
+	 */
+	static TYPES = {
+		MUSHROOM: {
+			name: 'mushroom',
+			powerUp: 'big',
+			isSolid: true,
+		},
+		FIRE_FLOWER: {
+			name: 'fire-flower',
+			powerUp: 'fire',
+			isSolid: false,
+		}
+	}
+
+	/**
+	 * @param {Object} param
+	 * @param {number} param.x
+	 * @param {number} param.y
+	 * @param {TYPES} param.type
+	 */
+	constructor({ x, y, type }) {
+		const { name, powerUp, isSolid } = type
+
+		if (isSolid) {
+			const { path, sprite } = Loader.Sprite.getSprite({
+				src: Loader.Sprite.SRC.PLAYER,
+				name
+			})
+
+			super({ path, x, y, sprite })
+		} else {
+			const { path, animation } = Loader.Sprite.getAnimation({
+				src: Loader.Sprite.SRC.PLAYER,
+				name
+			})
+
+			super({ path, x, y, sprite: animation.frames[0] })
+
+			this.setAnimation(animation)
+		}
+
+		this.powerUp = powerUp
+	}
+
+	onCollide() {
+		super.onCollide()
+
+		Sound.play(Sound.Name.powerup)
+	}
+}

@@ -88,7 +88,6 @@ export class Debug {
 			<button id="player-collider">Player Colliders</button>
 			<button id="background-container">Background containers</button>
 			<button id="move-map">Move map to left</button>
-			<button id="show-coins">Show coins</button>
 			<button id="show-mushroom">Show mushroom</button>
 		`
 
@@ -168,7 +167,6 @@ export class Debug {
 		const playerColliderButton = this.#element?.querySelector('#player-collider')
 		const backgroundContainerButton = this.#element?.querySelector('#background-container')
 		const moveMapButton = this.#element?.querySelector('#move-map')
-		const showCoinsButton = this.#element?.querySelector('#show-coins')
 		const showMushroomButton = this.#element?.querySelector('#show-mushroom')
 
 		if (gridButton !== null) {
@@ -211,16 +209,6 @@ export class Debug {
 				// Remove focus from button
 				// @ts-ignore
 				moveMapButton.blur()
-			})
-		}
-
-		if (showCoinsButton !== null) {
-			showCoinsButton?.addEventListener('click', (e) => {
-				this.game.map.toogleCoinsDebug()
-
-				// Remove focus from button
-				// @ts-ignore
-				showCoinsButton.blur()
 			})
 		}
 
