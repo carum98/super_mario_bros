@@ -8,6 +8,7 @@ import { Mushroom } from '../worlds/mushroom.js'
 import { FireFlower } from '../worlds/fire-flower.js'
 import { MovementController } from '../core/movement.js'
 import { Sound } from '../core/sound.js'
+import { Coin } from '../worlds/coin.js'
 
 /**
  * @class
@@ -168,6 +169,11 @@ export class Player extends Sprite {
 
 				if (item instanceof FireFlower) {
 					this.game.entities.push(item)
+				}
+
+				if (item === null) {
+					const coin = new Coin({ x: top.x, y: top.y - top.height })
+					this.game.entities.push(coin)
 				}
 			} else if (top instanceof Tile && !(top instanceof LuckyBlock) && this.powerUp !== Player.POWER_UPS.NONE) {
 				top.hit()

@@ -9,10 +9,17 @@ export class Entity extends Sprite {
 	}
 
 	/**
-	 * Trigger mushroom animation and activate it
+	 * Activate entity
 	 */
-	trigger() {
+	activate() {
 		this.#active = true
+	}
+
+	/**
+	 * Deactivate entity
+	 */
+	deactivate() {
+		this.#active = false
 	}
 
 	/**

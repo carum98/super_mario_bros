@@ -22,7 +22,7 @@ export class Enemy extends Entity {
 			super.update()
 		} else {
 			if (this.x < canvas.width) {
-				this.trigger()
+				this.activate()
 			}
 		}
 

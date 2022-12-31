@@ -88,7 +88,7 @@ export class LuckyBlock extends Tile {
 
 			this.clearAnimation()
 
-			this.item?.trigger()
+			this.item?.activate()
 		}
 
 		this.active = false

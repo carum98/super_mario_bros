@@ -21,6 +21,8 @@ export class Game {
 	#timeDraw = 0
 	#timeStart = 0
 
+	#muted = true
+
 	/**
 	 * @param {Object} data
 	 * @param {HTMLCanvasElement} data.canvas
@@ -47,8 +49,10 @@ export class Game {
 		this.music.loop = true
 		this.music.volume = 0.2
 
-		window.addEventListener('focus', () => this.music.play())
-		window.addEventListener('blur', () => this.music.pause())
+		if (!this.#muted) {
+			window.addEventListener('focus', () => this.music.play())
+			window.addEventListener('blur', () => this.music.pause())
+		}
 
 		this.#timeStart = performance.now() - now
 	}
@@ -69,7 +73,9 @@ export class Game {
 
 		this.#checkCollision()
 
-		if (this.music.paused && this.gameOver === false && this.player.x > 0) {
+		this.#renderEntities()
+
+		if (!this.#muted && this.music.paused && this.gameOver === false && this.player.x > 0) {
 			this.music.play()
 		}
 	}
@@ -106,6 +112,16 @@ export class Game {
 		map.draw(ctx)
 		player.draw(ctx)
 		information.draw(ctx)
+	}
+
+	#renderEntities() {
+		// Remove inactive entities
+		this.entities = this.entities.filter((entity) => entity.isActive)
+
+		if (this.entities.some((entity) => entity.isActive)) {
+			this.entities.forEach((entity) => entity.update())
+			this.entities.forEach((entity) => entity.draw(this.ctx))
+		}
 	}
 
 	#checkCollision() {
@@ -179,6 +195,8 @@ export class Game {
 			timeUpdate: this.#timeUpdate.toFixed(5) + 'ms',
 			timeDraw: this.#timeDraw.toFixed(5) + 'ms',
 			timeStart: this.#timeStart.toFixed(5) + 'ms',
+			entities: this.entities.length,
+			visibleEntities: this.entities.filter((enemy) => enemy.isActive).length,
 		}
 	}
 }

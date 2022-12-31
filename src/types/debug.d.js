@@ -13,6 +13,8 @@
  * @property {string} timeDraw - Time to draw
  * @property {string} timeUpdate - Time to update
  * @property {string} timeStart - Total time
+ * @property {number} entities - Number of entities in buffer
+ * @property {number} visibleEntities - Number of visible entities
  */
 
 /**

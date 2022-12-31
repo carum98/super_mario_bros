@@ -1,20 +1,14 @@
 import { Sound } from '../core/sound.js'
-import { Sprite } from '../entities/sprite.js'
+import { Entity } from '../entities/entity.js'
 import { Loader } from '../loaders/index.js'
-
-const emptySprite = { x: -20, y: -20, w: 16, h: 16 }
 
 /**
  * @class
- * @extends Sprite
+ * @extends Entity
  * @property {number} vy
  * @property {number} limit
- * @property {{ frames: Frame[], speed: number }} animation
  */
-export class Coin extends Sprite {
-	#debug = false
-	#active = false
-
+export class Coin extends Entity {
 	/**
 	 * @param {Object} data 
 	 * @param {number} data.x
@@ -26,67 +20,34 @@ export class Coin extends Sprite {
 			name: 'coin'
 		})
 
-		super({ path, x, y, sprite: emptySprite })
+		super({ path, x, y, sprite: animation.frames[0] })
 
-		this.animation = animation
-		this.vy = 0
-		this.limit = y
-	}
-
-	/**
-	 * Update coin position only if it's active.
-	 * When coin reach the limit, it will stop moving and clear animation
-	 */
-	update() {
-		if (this.#active) {
-			this.y += this.vy
-			this.vy += 0.2
-
-			if (this.y >= this.limit) {
-				this.y = this.limit
-				this.vy = 0
-
-				this.clearAnimation()
-
-				this.sprite = emptySprite
-				this.#active = false
-			}
-
-			super.update()
-		}
-	}
-
-	/**
-	 * Trigger coin animation and activate it
-	 */
-	trigger() {
-		this.#active = true
-
-		const { frames, speed } = this.animation
+		this.activate()
 
 		this.vy = -4
-		this.setAnimation({ frames, speed })
+		this.limit = y
+
+		this.setAnimation(animation)
 
 		Sound.play(Sound.Name.coin)
 	}
 
 	/**
-	 * @param {CanvasRenderingContext2D} ctx
+	 * When coin reach the limit, it will stop moving and clear animation
 	 */
-	draw(ctx) {
-		if (this.#active) {
-			super.draw(ctx)
+	update() {
+		this.y += this.vy
+		this.vy += 0.2
+
+		if (this.y >= this.limit) {
+			this.y = this.limit
+			this.vy = 0
+
+			this.clearAnimation()
+
+			this.deactivate()
 		}
 
-		if (this.#debug) {
-			this.drawContainer(ctx)
-		}
-	}
-
-	/**
-	 * Switch debug mode to show grid
-	 */
-	toogleDebug() {
-		this.#debug = !this.#debug
+		super.update()
 	}
 }
