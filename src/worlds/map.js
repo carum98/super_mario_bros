@@ -3,6 +3,7 @@ import { Sprite } from '../entities/sprite.js'
 import { BackgroundItem } from '../entities/background-item.js'
 import { Loader } from '../loaders/index.js'
 import { Enemy } from '../entities/enemy.js'
+import { Entity } from '../entities/entity.js'
 
 /**
  * @class
@@ -43,6 +44,8 @@ export class Map {
 		this.tiles = []
 		/** @type {Array<Enemy>} */
 		this.enemies = []
+		/** @type {Array<Entity>} */
+		this.checkpoints = []
 
 		this.#load(`${map.world}-${map.level}`)
 	}
@@ -52,12 +55,13 @@ export class Map {
 	 * @param {string} level 
 	 */
 	async #load(level) {
-		const { tiles, backgroundItems, animations, enemies } = await Loader.Level.get(level)
+		const { tiles, backgroundItems, animations, enemies, checkpoints } = await Loader.Level.get(level)
 
 		this.#buffer = tiles
 		this.#animations = animations
 		this.#bufferBackgroundItems = backgroundItems
 		this.enemies = enemies
+		this.checkpoints = checkpoints
 
 		// Add only tiles that are visible on the screen
 		this.tiles = this.#addTiles(this.#buffer)
@@ -70,6 +74,7 @@ export class Map {
 	update() {
 		this.#animations.forEach(tile => tile.update())
 		this.enemies.forEach(enemy => enemy.update(this.canvas, this.tiles))
+		this.checkpoints.forEach(checkpoint => checkpoint.update())
 	}
 
 	/**
@@ -100,7 +105,7 @@ export class Map {
 		// -------
 
 		// Move all tiles and background items to the left
-		[...this.#buffer, ...this.#bufferBackgroundItems, ...this.enemies].forEach(item => {
+		[...this.#buffer, ...this.#bufferBackgroundItems, ...this.enemies, ...this.checkpoints].forEach(item => {
 			item.x -= 2
 		})
 	}
@@ -112,6 +117,7 @@ export class Map {
 		this.#backgroundItems.forEach(item => item.draw(ctx))
 		this.tiles.forEach(tile => tile.draw(ctx))
 		this.enemies.forEach(enemy => enemy.draw(ctx))
+		this.checkpoints.forEach(checkpoint => checkpoint.draw(ctx))
 
 		// Draw grid
 		if (this.#debug) {

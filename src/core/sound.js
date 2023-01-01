@@ -11,6 +11,7 @@ export class Sound {
 		bump: Symbol('bump'),
 		break: Symbol('break'),
 		stomp: Symbol('stomp'),
+		goal: Symbol('goal'),
 	}
 
 	static #sounds = {
@@ -21,6 +22,7 @@ export class Sound {
 		[Sound.Name.bump]: new Audio('./assets/sounds/bump.wav'),
 		[Sound.Name.break]: new Audio('./assets/sounds/breakblock.wav'),
 		[Sound.Name.stomp]: new Audio('./assets/sounds/stomp.wav'),
+		[Sound.Name.goal]: new Audio('./assets/sounds/goal.wav'),
 	}
 
 	/**

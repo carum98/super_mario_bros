@@ -188,6 +188,14 @@ export class Game {
 				}
 			})
 		}
+
+		map.checkpoints.forEach((checkpoint) => {
+			if (player.conllidesWith(checkpoint)) {
+				checkpoint.activate()
+
+				this.#reachGoal()
+			}
+		})
 	}
 
 	/**
@@ -199,6 +207,14 @@ export class Game {
 		this.music.pause()
 
 		Sound.play(Sound.Name.die)
+	}
+
+	#reachGoal() {
+		this.gameOver = true
+
+		this.music.pause()
+
+		Sound.play(Sound.Name.goal)
 	}
 
 	/**

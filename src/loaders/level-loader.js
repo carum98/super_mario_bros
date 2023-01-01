@@ -2,7 +2,9 @@ import { Goomba } from '../characters/goomba.js'
 import { Koopa } from '../characters/koopa.js'
 import { BackgroundItem } from '../entities/background-item.js'
 import { Enemy } from '../entities/enemy.js'
+import { Entity } from '../entities/entity.js'
 import { Sprite } from '../entities/sprite.js'
+import { Flag } from '../worlds/flag.js'
 import { LuckyBlock } from '../worlds/lucky-block.js'
 import { Pipe } from '../worlds/pipes.js'
 import { Tile } from '../worlds/tile.js'
@@ -13,6 +15,7 @@ import { Tile } from '../worlds/tile.js'
  * @property {Array<BackgroundItem>} backgroundItems
  * @property {Array<Sprite>} animations
  * @property {Array<Enemy>} enemies
+ * @property {Array<Entity>} checkpoints
  */
 export class LevelLoader {
 	/**
@@ -28,6 +31,7 @@ export class LevelLoader {
 		const backgroundItems = []
 		const animations = []
 		const enemies = []
+		const checkpoints = []
 
 		// Floor
 		for (let range of floor.ranges) {
@@ -95,11 +99,21 @@ export class LevelLoader {
 			}
 		}
 
+		// Checkpoints
+		for (const { coord, name } of data.default.checkpoints) {
+			const { x, y } = coord
+
+			if (name === 'end') {
+				checkpoints.push(new Flag({ x: x * 16, y: y * 16 }))
+			}
+		}
+
 		return {
 			tiles,
 			backgroundItems,
 			animations,
-			enemies
+			enemies,
+			checkpoints,
 		}
 	}
 }
