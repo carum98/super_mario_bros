@@ -12,6 +12,7 @@ export class Sound {
 		break: Symbol('break'),
 		stomp: Symbol('stomp'),
 		goal: Symbol('goal'),
+		fireball: Symbol('fireball'),
 	}
 
 	static #sounds = {
@@ -23,6 +24,7 @@ export class Sound {
 		[Sound.Name.break]: new Audio('./assets/sounds/breakblock.wav'),
 		[Sound.Name.stomp]: new Audio('./assets/sounds/stomp.wav'),
 		[Sound.Name.goal]: new Audio('./assets/sounds/goal.wav'),
+		[Sound.Name.fireball]: new Audio('./assets/sounds/fireball.wav'),
 	}
 
 	/**

@@ -297,6 +297,42 @@
 				"w": 16,
 				"h": 16
 			}
+		},
+		{
+			"name": "fireball-1",
+			"frame": {
+				"x": 144,
+				"y": 32,
+				"w": 8,
+				"h": 8
+			}
+		},
+		{
+			"name": "fireball-2",
+			"frame": {
+				"x": 152,
+				"y": 32,
+				"w": 8,
+				"h": 8
+			}
+		},
+		{
+			"name": "fireball-3",
+			"frame": {
+				"x": 144,
+				"y": 40,
+				"w": 8,
+				"h": 8
+			}
+		},
+		{
+			"name": "fireball-4",
+			"frame": {
+				"x": 152,
+				"y": 40,
+				"w": 8,
+				"h": 8
+			}
 		}
 	],
 	"animations": [
@@ -414,6 +450,16 @@
 				"koopa-2"
 			],
 			"speed": 10
+		},
+		{
+			"name": "fireball",
+			"frames": [
+				"fireball-1",
+				"fireball-2",
+				"fireball-3",
+				"fireball-4"
+			],
+			"speed": 18
 		}
 	]
 }

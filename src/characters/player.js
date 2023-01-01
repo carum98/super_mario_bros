@@ -6,6 +6,7 @@ import { Tile } from '../worlds/tile.js'
 import { Loader } from '../loaders/index.js'
 import { MovementController } from '../core/movement.js'
 import { Sound } from '../core/sound.js'
+import { FireBall } from '../worlds/fireball.js'
 
 /**
  * @class
@@ -17,6 +18,7 @@ import { Sound } from '../core/sound.js'
  * @property {Player.STATES} state
  * @property {Player.POWER_UPS} power_up
  * @property {Array<Sprite>} tiles
+ * @property {Array<FireBall>} fireballs
  */
 export class Player extends Sprite {
 	#debug = false
@@ -76,6 +78,14 @@ export class Player extends Sprite {
 
 		this.state = state
 		this.powerUp = powerUp
+
+		this.fireballs = []
+
+		document.addEventListener('keydown', (e) => {
+			if (e.code === 'Enter') {
+				this.addFireBall()
+			}
+		})
 	}
 
 	update() {
@@ -185,6 +195,9 @@ export class Player extends Sprite {
 			this.x = 0
 		}
 
+		// Update fireballs
+		this.fireballs.forEach((fireball) => fireball.update(tiles))
+
 		// Update sprite
 		super.update()
 	}
@@ -202,6 +215,8 @@ export class Player extends Sprite {
 		if (this.#debug) {
 			this.drawBoxCollision(ctx)
 		}
+
+		this.fireballs.forEach((fireball) => fireball.draw(ctx))
 	}
 
 	/**
@@ -209,6 +224,22 @@ export class Player extends Sprite {
 	 */
 	toogleDebug() {
 		this.#debug = !this.#debug
+	}
+
+	addFireBall() {
+		if (this.powerUp === Player.POWER_UPS.FIRE_FLOWER) {
+			const { horizontal } = this.controls
+
+			const fireball = new FireBall({
+				x: this.x + this.width / 2,
+				y: this.y + 8,
+				direction: horizontal || Controls.DIRECTIONS.RIGHT,
+			})
+
+			this.fireballs.push(fireball)
+
+			Sound.play(Sound.Name.fireball)
+		}
 	}
 
 	/**

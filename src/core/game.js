@@ -186,6 +186,21 @@ export class Game {
 					const index = map.enemies.indexOf(enemy)
 					map.enemies.splice(index, 1)
 				}
+
+				// Check if enemy collide with player fireball
+				if (player.fireballs.some((fireball) => fireball.conllidesWith(enemy))) {
+					enemy.onCollide()
+
+					enemy.killed()
+
+					this.score += 100
+
+					Sound.play(Sound.Name.stomp)
+
+					// Remove enemy from array
+					const index = map.enemies.indexOf(enemy)
+					map.enemies.splice(index, 1)
+				}
 			})
 		}
 
