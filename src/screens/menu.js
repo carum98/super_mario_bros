@@ -1,8 +1,8 @@
 import { Loader } from '../loaders/index.js'
-import { Information } from './information.js'
-import { Text } from './text.js'
+import { Information } from '../ui/information.js'
+import { Text } from '../ui/text.js'
 
-export class Landing {
+export class MenuScreen {
 	#hero = {
 		x: 0,
 		y: 128,

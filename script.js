@@ -2,7 +2,8 @@ import { Game } from './src/core/game.js'
 import { GameLoop } from './src/core/game-loop.js'
 import { getCanvas, scaleCanvas } from './src/utilities/utils.js'
 import { Debug } from './src/utilities/debug.js'
-import { Landing } from './src/ui/landing.js'
+import { MenuScreen } from './src/screens/menu.js'
+import { LoadingScreen } from './src/screens/loading.js'
 
 const canvas = getCanvas()
 
@@ -12,7 +13,7 @@ const game = new Game({
 	level: 1,
 })
 
-const menu = new Landing({
+const menu = new MenuScreen({
 	canvas
 })
 
@@ -25,6 +26,12 @@ const debug = new Debug({
 	gameLoop
 })
 
+const loading = new LoadingScreen({
+	canvas,
+	world: 1,
+	level: 1,
+})
+
 document.addEventListener('DOMContentLoaded', () => scaleCanvas(canvas))
 window.addEventListener('resize', () => scaleCanvas(canvas))
 
@@ -34,8 +41,11 @@ window.addEventListener('load', () => {
 
 	document.addEventListener('keypress', (event) => {
 		if (event.key === 'Enter') {
-			gameLoop.start()
-			debug.toogle()
+			loading.render()
+
+			setTimeout(() => {
+				gameLoop.start()
+			}, 2000)
 		}
 	}, { once: true })
 }, { once: true })
