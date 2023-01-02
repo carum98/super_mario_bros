@@ -49,13 +49,13 @@ export class LevelLoader {
 		}
 
 		// Pipes
-		for (const pipe of pipes.coord) {
+		for (const pipe of pipes?.coord || []) {
 			const { x, y } = pipe
 			tiles.push(new Pipe({ x: x * 16, y: y * 16 }))
 		}
 
 		// Lucky blocks
-		for (const block of lucky.coord) {
+		for (const block of lucky?.coord || []) {
 			const { x, y } = block
 
 			const hasMusroom = mushrooms.coord.some(mushroom => mushroom.x === x && mushroom.y === y)
@@ -69,7 +69,7 @@ export class LevelLoader {
 		}
 
 		// Blocks
-		for (const { coord, sprite } of blocks) {
+		for (const { coord, sprite } of blocks || []) {
 			for (const block of coord) {
 				const { x, y } = block
 				tiles.push(new Tile({ x: x * 16, y: y * 16, name: sprite }))
@@ -77,7 +77,7 @@ export class LevelLoader {
 		}
 
 		// Background items
-		for (const { coord, name, type } of background) {
+		for (const { coord, name, type } of background || []) {
 			for (const item of coord) {
 				const { x, y } = item
 				backgroundItems.push(new BackgroundItem({ x: x * 16, y: y * 16, name, type }))
@@ -85,7 +85,7 @@ export class LevelLoader {
 		}
 
 		// Enemies
-		for (const { coord, name } of data.default.enemies) {
+		for (const { coord, name } of data.default.enemies || []) {
 			for (const enemy of coord) {
 				const { x, y } = enemy
 
@@ -100,7 +100,7 @@ export class LevelLoader {
 		}
 
 		// Checkpoints
-		for (const { coord, name } of data.default.checkpoints) {
+		for (const { coord, name } of data.default.checkpoints || []) {
 			const { x, y } = coord
 
 			if (name === 'end') {

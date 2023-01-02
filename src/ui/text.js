@@ -71,6 +71,11 @@ export class Text {
 		const sprites = []
 
 		for (const name of text.split('')) {
+			if (name === ' ') {
+				sprites.push({ x: -8, y: -8, w: 8, h: 8 })
+				continue
+			}
+
 			const { path, sprite } = loader.getSprite({ src: loader.SRC.FONT, name })
 
 			sprites.push(sprite)

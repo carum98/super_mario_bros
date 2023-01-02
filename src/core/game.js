@@ -22,27 +22,27 @@ export class Game {
 	#timeDraw = 0
 	#timeStart = 0
 
-	#muted = true
-
 	/**
 	 * @param {Object} data
 	 * @param {HTMLCanvasElement} data.canvas
+	 * @param {number} data.world
+	 * @param {number} data.level
 	 */
-	constructor({ canvas }) {
+	constructor({ canvas, world, level }) {
 		const now = performance.now()
 
 		this.ctx = canvas.getContext('2d')
 
-		this.map = new Map({ canvas, map: { world: 1, level: 1 } })
+		this.map = new Map({ canvas, map: { world, level } })
 		this.player = new Player({ game: this })
 
 		this.score = 0
 		this.coins = 0
-		this.level = '1 - 1'
+		this.level = `${world}-${level}`
 		this.timer = 400
 		this.gameOver = false
 
-		this.information = new Information({ game: this })
+		this.information = new Information()
 
 		this.entities = []
 
@@ -50,10 +50,8 @@ export class Game {
 		this.music.loop = true
 		this.music.volume = 0.2
 
-		if (!this.#muted) {
-			window.addEventListener('focus', () => this.music.play())
-			window.addEventListener('blur', () => this.music.pause())
-		}
+		window.addEventListener('focus', () => this.music.play())
+		window.addEventListener('blur', () => this.music.pause())
 
 		this.#timeStart = performance.now() - now
 	}
@@ -76,7 +74,7 @@ export class Game {
 
 		this.#renderEntities()
 
-		if (!this.#muted && this.music.paused && this.gameOver === false && this.player.x > 0) {
+		if (this.music.paused && this.gameOver === false) {
 			this.music.play()
 		}
 	}
@@ -84,7 +82,7 @@ export class Game {
 	#update() {
 		this.player.update()
 		this.map.update()
-		this.information.update()
+		this.information.update(this)
 
 		if (this.ctx) {
 			const middle = this.ctx.canvas.width / 4

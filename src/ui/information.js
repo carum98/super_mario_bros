@@ -1,13 +1,12 @@
 import { Text } from './text.js'
 import { Sprite } from '../entities/sprite.js'
 import { Loader } from '../loaders/index.js'
+import { Game } from '../core/game.js'
 
 export class Information {
 	#interval = 0
 
-	constructor({ game }) {
-		this.game = game
-
+	constructor() {
 		this.texts = [
 			new Text({
 				text: 'MARIO',
@@ -52,15 +51,18 @@ export class Information {
 		this.coin.setAnimation(animation)
 	}
 
-	update() {
+	/**
+	 * @param {Game} game 
+	 */
+	update(game) {
 		this.coin.update()
 
 		this.#interval = (this.#interval + 1) % 60
 
 		if (this.#interval === 0) {
-			this.game.timer -= 1
+			game.timer -= 1
 
-			const { score, coins, timer } = this.game
+			const { score, coins, timer } = game
 
 			this.texts[1].updateText(score.toString().padStart(6, '0'))
 			this.texts[2].updateText('×' + coins.toString().padStart(2, '0'))
