@@ -35,6 +35,7 @@ export class GameLoop {
 	stop() {
 		if (this.#loopId !== null) {
 			cancelAnimationFrame(this.#loopId)
+			this.#loopId = null
 		}
 	}
 
@@ -55,6 +56,14 @@ export class GameLoop {
 				this.#callback()
 			}
 		}
+	}
+
+	/** 
+	 * Check if the game loop is running
+	 * @returns {boolean}
+	 */
+	get isRunning() {
+		return this.#loopId !== null
 	}
 
 	/**

@@ -110,3 +110,11 @@ export function getPattern({ sprites, patterns, name }) {
 
 	return pattern.frames.map(row => row.map(frame => getSprite({ sprites, name: frame })))
 }
+
+/**
+ * @param {number} ms 
+ * @returns {Promise<void>}
+ */
+export function timeout(ms) {
+	return new Promise(resolve => setTimeout(resolve, ms))
+}

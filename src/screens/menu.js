@@ -58,7 +58,7 @@ export class MenuScreen {
 		this.background = []
 
 		this.#load()
-		this.#moveIndicator()
+		document.addEventListener('keydown', this.#moveIndicator.bind(this))
 	}
 
 	render() {
@@ -124,19 +124,27 @@ export class MenuScreen {
 		this.background = backgroundItems
 	}
 
-	#moveIndicator() {
-		document.addEventListener('keydown', e => {
-			if (['ArrowUp', 'ArrowDown'].includes(e.key)) {
-				if (e.key === 'ArrowUp') {
-					this.indicatorPosition = 1
-				}
-
-				if (e.key === 'ArrowDown') {
-					this.indicatorPosition = 2
-				}
-
-				this.render()
+	/**
+	 * @param {KeyboardEvent} e 
+	 */
+	#moveIndicator(e) {
+		if (['ArrowUp', 'ArrowDown'].includes(e.key)) {
+			if (e.key === 'ArrowUp') {
+				this.indicatorPosition = 1
 			}
-		})
+
+			if (e.key === 'ArrowDown') {
+				this.indicatorPosition = 2
+			}
+
+			this.render()
+		}
+	}
+
+	/**
+	 * Remove all events
+	 */
+	dispose() {
+		document.removeEventListener('keydown', this.#moveIndicator)
 	}
 }
