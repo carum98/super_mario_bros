@@ -19,12 +19,12 @@ export class PowerUp extends Entity {
 	static TYPES = {
 		MUSHROOM: {
 			name: 'mushroom',
-			powerUp: Player.POWER_UPS.MUSHROOM,
+			powerUp: 'big',
 			isSolid: true,
 		},
 		FIRE_FLOWER: {
 			name: 'fire-flower',
-			powerUp: Player.POWER_UPS.FIRE_FLOWER,
+			powerUp: 'fire',
 			isSolid: false,
 		}
 	}
