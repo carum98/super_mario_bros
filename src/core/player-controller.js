@@ -30,6 +30,11 @@ export class PlayerController {
 		right: undefined,
 	}
 
+	#jump = {
+		count: 0,
+		enabled: false,
+	}
+
 	/**
 	 * @param {Object} param 
 	 * @param {Player} param.player
@@ -48,6 +53,7 @@ export class PlayerController {
 		this.#collisions = MovementController.collisions(this.player, this.map.tiles)
 
 		this.#movement()
+		this.#handleDoubleJump()
 		this.#boundaries()
 		this.#state()
 
@@ -77,7 +83,7 @@ export class PlayerController {
 
 		// --- Move vertical ---
 		if (moveUp && bottom) {
-			player.vy = player.powerUp === Player.POWER_UPS.NONE ? -3 : -6
+			player.vy = player.powerUp === Player.POWER_UPS.NONE ? -3.5 : -4
 
 			Sound.play(Sound.Name.jump)
 		}
@@ -170,6 +176,25 @@ export class PlayerController {
 			Sound.play(Sound.Name.break)
 		} else {
 			Sound.play(Sound.Name.bump)
+		}
+	}
+
+	#handleDoubleJump() {
+		const { player } = this
+		const { keys } = this.#controls
+
+		const moveUp = keys.includes(Controls.DIRECTIONS.UP)
+
+		if (moveUp) {
+			this.#jump.count++
+		} else {
+			this.#jump.count = 0
+			this.#jump.enabled = false
+		}
+
+		if (this.#jump.count !== 0 && this.#jump.count >= 13 && !this.#jump.enabled) {
+			this.#jump.enabled = true
+			player.vy += player.powerUp === Player.POWER_UPS.NONE ? -2 : -3
 		}
 	}
 }
