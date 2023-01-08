@@ -1,10 +1,7 @@
 import { Controls } from '../core/controls.js'
 import { Sprite } from '../entities/sprite.js'
 import { Game } from '../core/game.js'
-import { LuckyBlock } from '../worlds/lucky-block.js'
-import { Tile } from '../worlds/tile.js'
 import { Loader } from '../loaders/index.js'
-import { MovementController } from '../core/movement.js'
 import { Sound } from '../core/sound.js'
 import { FireBall } from '../worlds/fireball.js'
 
@@ -88,121 +85,6 @@ export class Player extends Sprite {
 		})
 	}
 
-	update() {
-		const { keys } = this.controls
-		const { map: { tiles } } = this.game
-		const { bottom, top, right, left } = MovementController.collisions(this, tiles)
-
-		const isJumping = keys.includes(Controls.DIRECTIONS.UP)
-		const isMoving = keys.includes(Controls.DIRECTIONS.LEFT) || keys.includes(Controls.DIRECTIONS.RIGHT)
-
-		const collideTop = Boolean(top)
-		const collideBottom = Boolean(bottom)
-
-		// --- Horizontal movement ---
-		const direction = keys[0]
-
-		if (isMoving && !collideTop) {
-			const { x } = Controls.AXIS[direction]
-			this.x += x * this.speed
-		}
-
-		// --- Vertical movement ---
-		if (isJumping && collideBottom) {
-			this.vy = this.powerUp === Player.POWER_UPS.NONE ? -5.5 : -8
-
-			Sound.play(Sound.Name.jump)
-		}
-
-		this.y += this.vy
-
-		if (!MovementController.collisions(this, tiles).bottom) {
-			this.vy += this.powerUp === Player.POWER_UPS.NONE ? 0.2 : 0.4
-		} else {
-			this.vy = 0
-		}
-
-		// --- State ---
-		let lastState = this.state
-
-		if (collideBottom) {
-			this.state = direction ? Player.STATES.RUNNING : Player.STATES.IDLE
-		} else {
-			this.state = Player.STATES.JUMPING
-		}
-
-		// --- Animation ---
-		if (lastState !== this.state) {
-			this.clearAnimation()
-
-			if (this.state === Player.STATES.RUNNING) {
-				const { animation } = Loader.Sprite.getAnimation({
-					name: `${this.state}-${this.powerUp}`,
-					src: Loader.Sprite.SRC.PLAYER,
-				})
-
-				this.setAnimation(animation)
-			} else {
-				const { sprite } = Loader.Sprite.getSprite({
-					name: `${this.state}-${this.powerUp}`,
-					src: Loader.Sprite.SRC.PLAYER,
-				})
-
-				this.sprite = sprite
-			}
-		}
-
-		// --- Collision ---
-		if (bottom && this.vy >= 0) {
-			this.y = bottom.y - this.height
-			this.vy = 0
-		}
-
-		if (top && isJumping) {
-			this.y = top.y + top.height
-			this.vy = 0
-
-			if (top instanceof LuckyBlock && top.active) {
-				top.hit()
-
-				this.game.coins++
-				this.game.score += 200
-
-				this.game.entities.push(top.getItem())
-			} else if (top instanceof Tile && !(top instanceof LuckyBlock) && this.powerUp !== Player.POWER_UPS.NONE) {
-				top.hit()
-
-				this.game.score += 50
-
-				Sound.play(Sound.Name.break)
-			} else {
-				Sound.play(Sound.Name.bump)
-			}
-		}
-
-		if (direction) {
-			if (right && direction === Controls.DIRECTIONS.RIGHT) {
-				this.x = right.x - this.width
-			}
-
-			if (left && direction === Controls.DIRECTIONS.LEFT) {
-				this.x = left.x + left.width
-			}
-		}
-
-		// Limit player to canvas
-		if (this.x < 0) {
-			this.x = 0
-		}
-
-		// Update fireballs
-		this.fireballs.forEach((fireball) => fireball.update(tiles))
-
-		// Update sprite
-		super.update()
-	}
-
-
 	/**
 	 * @param {CanvasRenderingContext2D} ctx
 	 */
@@ -217,6 +99,26 @@ export class Player extends Sprite {
 		}
 
 		this.fireballs.forEach((fireball) => fireball.draw(ctx))
+	}
+
+	updateSprite() {
+		this.clearAnimation()
+
+		if (this.state === Player.STATES.RUNNING) {
+			const { animation } = Loader.Sprite.getAnimation({
+				name: `${this.state}-${this.powerUp}`,
+				src: Loader.Sprite.SRC.PLAYER,
+			})
+
+			this.setAnimation(animation)
+		} else {
+			const { sprite } = Loader.Sprite.getSprite({
+				name: `${this.state}-${this.powerUp}`,
+				src: Loader.Sprite.SRC.PLAYER,
+			})
+
+			this.sprite = sprite
+		}
 	}
 
 	/**

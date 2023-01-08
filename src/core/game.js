@@ -4,6 +4,7 @@ import { Information } from "../ui/information.js"
 import { Mushroom } from "../worlds/mushroom.js"
 import { Sound } from "./sound.js"
 import { PowerUp } from "../entities/power-up.js"
+import { PlayerController } from "./player-controller.js"
 
 /**
  * @class
@@ -53,6 +54,12 @@ export class Game {
 		window.addEventListener('focus', () => this.music.play())
 		window.addEventListener('blur', () => this.music.pause())
 
+		this.playerController = new PlayerController({
+			player: this.player,
+			map: this.map,
+			game: this
+		})
+
 		this.#timeStart = performance.now() - now
 	}
 
@@ -80,12 +87,12 @@ export class Game {
 	}
 
 	#update() {
-		this.player.update()
+		this.playerController.update()
 		this.map.update()
 		this.information.update(this)
 
 		if (this.ctx) {
-			const middle = this.ctx.canvas.width / 4
+			const middle = this.ctx.canvas.width / 3
 
 			if (this.player.x > middle) {
 				this.map.move()
