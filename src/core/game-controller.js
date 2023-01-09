@@ -19,7 +19,7 @@ export class GameController {
 		this.canvas = canvas
 		this.renderEngine = null
 
-		this.loop = new GameLoop(() => this.renderEngine?.render())
+		this.loop = new GameLoop(this.render.bind(this))
 
 		this.showMenu()
 	}
@@ -76,5 +76,20 @@ export class GameController {
 				menu.dispose()
 			}
 		}, { once: true })
+	}
+
+	/**
+	 * @param {Function} callbackStop — Stop de game engine
+	 */
+	render(callbackStop) {
+		const stop = () => {
+			callbackStop()
+
+			setTimeout(() => {
+				this.startLevel({ world: 1, level: 1 })
+			}, 2000)
+		}
+
+		this.renderEngine?.render(stop)
 	}
 }

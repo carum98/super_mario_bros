@@ -31,6 +31,7 @@ export class Player extends Sprite {
 		IDLE: 'idle',
 		RUNNING: 'run',
 		JUMPING: 'jump',
+		DEAD: 'dead',
 	}
 
 	/**
@@ -111,6 +112,13 @@ export class Player extends Sprite {
 			})
 
 			this.setAnimation(animation)
+		} else if (this.state === Player.STATES.DEAD) {
+			const { sprite } = Loader.Sprite.getSprite({
+				name: 'dead',
+				src: Loader.Sprite.SRC.PLAYER,
+			})
+
+			this.sprite = sprite
 		} else {
 			const { sprite } = Loader.Sprite.getSprite({
 				name: `${this.state}-${this.powerUp}`,
@@ -119,6 +127,12 @@ export class Player extends Sprite {
 
 			this.sprite = sprite
 		}
+	}
+
+	died() {
+		this.vy = -3.5
+		this.state = Player.STATES.DEAD
+		this.updateSprite()
 	}
 
 	/**

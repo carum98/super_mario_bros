@@ -41,7 +41,6 @@ export class Game {
 		this.coins = 0
 		this.level = `${world}-${level}`
 		this.timer = 400
-		this.gameOver = false
 
 		this.information = new Information()
 
@@ -60,15 +59,17 @@ export class Game {
 			game: this
 		})
 
+		if (this.music.paused) {
+			this.music.play()
+		}
+
 		this.#timeStart = performance.now() - now
 	}
 
-	render() {
-		if (this.gameOver) {
-			console.log('Game Over')
-			return
-		}
-
+	/**
+	 * @param {Function} callbackStop - Stop de game engine
+	 */
+	render(callbackStop) {
 		const now = performance.now()
 		this.#update()
 		this.#timeUpdate = performance.now() - now
@@ -81,8 +82,10 @@ export class Game {
 
 		this.#renderEntities()
 
-		if (this.music.paused && this.gameOver === false) {
-			this.music.play()
+		// Check if player is out of the map
+		// @ts-ignore
+		if (this.player.y > this.ctx.canvas.height) {
+			callbackStop()
 		}
 	}
 
@@ -105,13 +108,7 @@ export class Game {
 					powerUps.forEach((powerUp) => powerUp.x -= 2)
 				}
 			}
-
-			// Check if player is out of the map
-			if (this.player.y > this.ctx.canvas.height) {
-				this.#gameOver()
-			}
 		}
-
 	}
 
 	#draw() {
@@ -178,6 +175,8 @@ export class Game {
 					const playerIsDead = enemy.checkCollidePosition(player)
 
 					if (playerIsDead) {
+						player.died()
+
 						this.#gameOver()
 					} else {
 						enemy.killed()
@@ -222,16 +221,12 @@ export class Game {
 	 * Game over, stop music and play sound die
 	 */
 	#gameOver() {
-		this.gameOver = true
-
 		this.music.pause()
 
 		Sound.play(Sound.Name.die)
 	}
 
 	#reachGoal() {
-		this.gameOver = true
-
 		this.music.pause()
 
 		Sound.play(Sound.Name.goal)

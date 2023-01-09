@@ -53,7 +53,7 @@ export class GameLoop {
 			this.#then = timeStamp - (delta % this.#interval)
 
 			if (this.#callback !== null) {
-				this.#callback()
+				this.#callback(this.stop.bind(this))
 			}
 		}
 	}

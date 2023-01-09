@@ -52,6 +52,12 @@ export class PlayerController {
 	update() {
 		this.#collisions = MovementController.collisions(this.player, this.map.tiles)
 
+		// Stop if the player is dead
+		if (this.player.state === Player.STATES.DEAD) {
+			this.#diedAnimation()
+			return
+		}
+
 		this.#movement()
 		this.#handleDoubleJump()
 		this.#boundaries()
@@ -196,5 +202,12 @@ export class PlayerController {
 			this.#jump.enabled = true
 			player.vy += player.powerUp === Player.POWER_UPS.NONE ? -2 : -3
 		}
+	}
+
+	#diedAnimation() {
+		const { player } = this
+
+		player.y += player.vy
+		player.vy += 0.2
 	}
 }
