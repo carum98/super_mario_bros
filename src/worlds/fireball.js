@@ -43,9 +43,7 @@ export class FireBall extends Sprite {
 		}
 
 		if (left || right) {
-			this.#active = false
-
-			Sound.play(Sound.Name.bump)
+			this.remove()
 		}
 
 		const { y } = Controls.AXIS[this.direction]
@@ -73,6 +71,16 @@ export class FireBall extends Sprite {
 	conllidesWith(element) {
 		if (!this.#active) return false
 
-		return super.conllidesWith(element)
+		const collideWith = super.conllidesWith(element)
+
+		if (collideWith) this.remove()
+
+		return collideWith
+	}
+
+	remove() {
+		this.#active = false
+
+		Sound.play(Sound.Name.bump)
 	}
 }
