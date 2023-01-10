@@ -38,6 +38,8 @@ export class GameController {
 	async startLevel() {
 		if (this.loop.isRunning) {
 			this.loop.stop()
+
+			this.state.stopTimer()
 		}
 
 		// Loading screen
@@ -62,12 +64,15 @@ export class GameController {
 
 		if (!this.loop.isRunning) {
 			this.loop.start()
+
+			this.state.startTimer()
 		}
 	}
 
 	async showMenu() {
 		const menu = new MenuScreen({
-			canvas: this.canvas
+			canvas: this.canvas,
+			state: this.state
 		})
 
 		await timeout(100)

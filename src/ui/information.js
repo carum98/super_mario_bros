@@ -2,11 +2,20 @@ import { Text } from './text.js'
 import { Sprite } from '../entities/sprite.js'
 import { Loader } from '../loaders/index.js'
 import { Game } from '../core/game.js'
+import { GameState } from '../core/game-state.js'
 
+/**
+ * @class
+ * @property {GameState} state
+ */
 export class Information {
 	#interval = 0
 
-	constructor() {
+	/**
+	 * @param {Object} data
+	 * @param {GameState} data.state
+	 */
+	constructor({ state }) {
 		this.texts = [
 			new Text({
 				text: 'MARIO',
@@ -45,6 +54,8 @@ export class Information {
 			})
 		]
 
+		this.state = state
+
 		const { path, animation } = Loader.Sprite.getAnimation({ src: Loader.Sprite.SRC.PLAYER, name: 'coin-score' })
 
 		this.coin = new Sprite({ path, x: 88, y: 24, sprite: animation.frames[0] })
@@ -52,17 +63,15 @@ export class Information {
 	}
 
 	/**
-	 * @param {Game} game 
+	 * @method
 	 */
-	update(game) {
+	update() {
 		this.coin.update()
 
 		this.#interval = (this.#interval + 1) % 60
 
 		if (this.#interval === 0) {
-			game.timer -= 1
-
-			const { state: { score, coins }, timer } = game
+			const { score, coins, timer } = this.state
 
 			this.texts[1].updateText(score.toString().padStart(6, '0'))
 			this.texts[2].updateText('×' + coins.toString().padStart(2, '0'))

@@ -1,3 +1,4 @@
+import { GameState } from '../core/game-state.js'
 import { Loader } from '../loaders/index.js'
 import { Information } from '../ui/information.js'
 import { Text } from '../ui/text.js'
@@ -31,10 +32,15 @@ export class MenuScreen {
 		h: 8
 	}
 
-	constructor({ canvas }) {
+	/**
+	 * @param {Object} data
+	 * @param {HTMLCanvasElement} data.canvas
+	 * @param {GameState} data.state
+	 */
+	constructor({ canvas, state }) {
 		this.ctx = canvas.getContext('2d')
 
-		this.information = new Information()
+		this.information = new Information({ state })
 
 		this.x = 40
 		this.y = 34
@@ -63,6 +69,8 @@ export class MenuScreen {
 
 	render() {
 		const { ctx, image, image2 } = this
+
+		if (ctx === null) return
 
 		ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
 

@@ -44,9 +44,7 @@ export class Game {
 
 		this.player = new Player({ game: this })
 
-		this.timer = 400
-
-		this.information = new Information()
+		this.information = new Information({ state })
 
 		this.entities = []
 
@@ -96,7 +94,7 @@ export class Game {
 	#update() {
 		this.playerController.update()
 		this.map.update()
-		this.information.update(this)
+		this.information.update()
 
 		if (this.ctx) {
 			const middle = this.ctx.canvas.width / 3

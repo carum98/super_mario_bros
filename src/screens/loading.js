@@ -28,7 +28,7 @@ export class LoadingScreen {
 
 		this.ctx = canvas.getContext('2d')
 
-		this.information = new Information()
+		this.information = new Information({ state })
 
 		this.image = new Image()
 		this.image.src = 'assets/img/sprites.png'

@@ -8,7 +8,19 @@ export const INCREASE_SCORE = {
 	ENEMY: 100,
 }
 
+/**
+ * @class
+ * @property {number} score
+ * @property {number} coins
+ * @property {number} level
+ * @property {number} world
+ * @property {number} lives
+ * @property {number} timer
+ */
 export class GameState {
+	/** @type {number | null} */
+	#intervalId = null
+
 	score = 0
 	coins = 0
 
@@ -16,6 +28,8 @@ export class GameState {
 	world = 1
 
 	lives = 3
+
+	timer = 0
 
 	/**
 	 * @param {INCREASE_SCORE} value 
@@ -53,6 +67,27 @@ export class GameState {
 	}
 
 	/**
+	 * @method
+	 */
+	startTimer() {
+		this.timer = 400
+
+		this.#intervalId = setInterval(() => {
+			this.timer--
+		}, 1000)
+	}
+
+	/**
+	 * @method
+	 */
+	stopTimer() {
+		if (this.#intervalId !== null) {
+			clearInterval(this.#intervalId)
+			this.#intervalId = null
+		}
+	}
+
+	/**
 	 * Reset game state
 	 */
 	reset() {
@@ -63,5 +98,7 @@ export class GameState {
 		this.world = 1
 
 		this.lives = 3
+
+		this.timer = 0
 	}
 }

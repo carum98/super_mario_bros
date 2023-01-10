@@ -13,7 +13,7 @@ export class GameOverScreen {
 
 		this.ctx = canvas.getContext('2d')
 
-		this.information = new Information()
+		this.information = new Information({ state })
 
 		this.text = new Text({
 			text: 'GAME OVER',
