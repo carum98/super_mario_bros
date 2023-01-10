@@ -3,10 +3,13 @@ import { GameLoop } from '../core/game-loop.js'
 import { MenuScreen } from '../screens/menu.js'
 import { timeout } from '../utilities/utils.js'
 import { Game } from './game.js'
+import { GameState } from './game-state.js'
+import { GameOverScreen } from '../screens/game-over.js'
 
 /**
  * @class
  * @property {HTMLCanvasElement} canvas
+ * @property {GameState} state
  * @property {GameLoop} loop
  * @property {Game | null} renderEngine
  */
@@ -14,9 +17,12 @@ export class GameController {
 	/**
 	 * @param {Object} param 
 	 * @param {HTMLCanvasElement} param.canvas 
+	 * @param {GameState} param.state
 	 */
-	constructor({ canvas }) {
+	constructor({ canvas, state }) {
 		this.canvas = canvas
+		this.state = state
+
 		this.renderEngine = null
 
 		this.loop = new GameLoop(this.render.bind(this))
@@ -29,7 +35,7 @@ export class GameController {
 	 * @param {number} param.world
 	 * @param {number} param.level
 	 */
-	async startLevel({ world, level }) {
+	async startLevel() {
 		if (this.loop.isRunning) {
 			this.loop.stop()
 		}
@@ -37,8 +43,7 @@ export class GameController {
 		// Loading screen
 		const loading = new LoadingScreen({
 			canvas: this.canvas,
-			world,
-			level,
+			state: this.state
 		})
 
 		await timeout(100)
@@ -50,8 +55,7 @@ export class GameController {
 		// Game screen
 		const game = new Game({
 			canvas: this.canvas,
-			world,
-			level,
+			state: this.state
 		})
 
 		this.renderEngine = game
@@ -61,21 +65,36 @@ export class GameController {
 		}
 	}
 
-	showMenu() {
+	async showMenu() {
 		const menu = new MenuScreen({
 			canvas: this.canvas
 		})
 
-		window.addEventListener('load', () => {
-			menu.render()
-		}, { once: true })
+		await timeout(100)
+
+		menu.render()
 
 		document.addEventListener('keypress', (event) => {
 			if (event.key === 'Enter') {
-				this.startLevel({ world: 1, level: 1 })
+				this.startLevel()
 				menu.dispose()
 			}
 		}, { once: true })
+	}
+
+	async gameOver() {
+		const page = new GameOverScreen({
+			canvas: this.canvas,
+			state: this.state
+		})
+
+		await timeout(100)
+
+		page.render()
+
+		await timeout(3000)
+
+		this.showMenu()
 	}
 
 	/**
@@ -86,7 +105,12 @@ export class GameController {
 			callbackStop()
 
 			setTimeout(() => {
-				this.startLevel({ world: 1, level: 1 })
+				if (this.state.lives > 0) {
+					this.startLevel()
+				} else {
+					this.gameOver()
+					this.state.reset()
+				}
 			}, 2000)
 		}
 

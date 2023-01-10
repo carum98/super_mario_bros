@@ -4,6 +4,7 @@ import { LuckyBlock } from '../worlds/lucky-block.js'
 import { Map } from '../worlds/map.js'
 import { Tile } from '../worlds/tile.js'
 import { Controls } from './controls.js'
+import { INCREASE_SCORE } from './game-state.js'
 import { Game } from './game.js'
 import { MovementController } from './movement.js'
 import { Sound } from './sound.js'
@@ -171,13 +172,12 @@ export class PlayerController {
 		if (block instanceof LuckyBlock && block.active) {
 			block.hit()
 
-			this.game.coins++
-			this.game.score += 200
-
+			this.game.state.increaseCoins()
 			this.game.entities.push(block.getItem())
 		} else if (block instanceof Tile && !(block instanceof LuckyBlock) && player.powerUp !== Player.POWER_UPS.NONE) {
 			block.hit()
-			this.game.score += 50
+
+			this.game.state.increaseScore(INCREASE_SCORE.COIN)
 
 			Sound.play(Sound.Name.break)
 		} else {

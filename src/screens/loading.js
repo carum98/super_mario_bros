@@ -1,6 +1,15 @@
+import { GameState } from '../core/game-state.js'
 import { Information } from '../ui/information.js'
 import { Text } from '../ui/text.js'
 
+/**
+ * @class
+ * @property {HTMLCanvasElement} canvas
+ * @property {CanvasRenderingContext2D} ctx
+ * @property {Image} image
+ * @property {Information} information
+ * @property {Text[]} texts
+ */
 export class LoadingScreen {
 	#mario = {
 		x: 0,
@@ -9,10 +18,13 @@ export class LoadingScreen {
 		h: 16
 	}
 
-	constructor({ canvas, world, level }) {
+	/**
+	 * @param {Object} data
+	 * @param {HTMLCanvasElement} data.canvas
+	 * @param {GameState} data.state
+	 */
+	constructor({ canvas, state }) {
 		this.canvas = canvas
-		this.world = world
-		this.level = level
 
 		this.ctx = canvas.getContext('2d')
 
@@ -22,16 +34,19 @@ export class LoadingScreen {
 		this.image.src = 'assets/img/sprites.png'
 
 		const center = { x: canvas.width / 2, y: canvas.height / 2 }
+		const { world, level, lives } = state
 
 		this.texts = [
 			new Text({ text: `WORLD ${world}-${level}`, x: center.x - 35, y: center.y - 20 }),
 			new Text({ text: '×', x: center.x, y: center.y }),
-			new Text({ text: '3', x: center.x + 20, y: center.y }),
+			new Text({ text: `${lives}`, x: center.x + 20, y: center.y }),
 		]
 	}
 
 	render() {
 		const { ctx, canvas, image } = this
+
+		if (ctx === null) return
 
 		ctx.fillStyle = 'black'
 		ctx.fillRect(0, 0, canvas.width, canvas.height)

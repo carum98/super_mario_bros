@@ -5,6 +5,7 @@ import { Mushroom } from "../worlds/mushroom.js"
 import { Sound } from "./sound.js"
 import { PowerUp } from "../entities/power-up.js"
 import { PlayerController } from "./player-controller.js"
+import { GameState, INCREASE_SCORE } from "./game-state.js"
 
 /**
  * @class
@@ -12,10 +13,8 @@ import { PlayerController } from "./player-controller.js"
  * @property {Player} player
  * @property {Map} map
  * @property {Information} information
+ * @property {GameState} state
  * @property {Entity[]} entities
- * @property {number} score
- * @property {number} coins
- * @property {string} level
  * @property {number} timer
  */
 export class Game {
@@ -26,20 +25,25 @@ export class Game {
 	/**
 	 * @param {Object} data
 	 * @param {HTMLCanvasElement} data.canvas
-	 * @param {number} data.world
-	 * @param {number} data.level
+	 * @param {GameState} data.state
 	 */
-	constructor({ canvas, world, level }) {
+	constructor({ canvas, state }) {
 		const now = performance.now()
 
 		this.ctx = canvas.getContext('2d')
 
-		this.map = new Map({ canvas, map: { world, level } })
+		this.state = state
+
+		this.map = new Map({
+			canvas,
+			map: {
+				level: this.state.level,
+				world: this.state.world,
+			}
+		})
+
 		this.player = new Player({ game: this })
 
-		this.score = 0
-		this.coins = 0
-		this.level = `${world}-${level}`
 		this.timer = 400
 
 		this.information = new Information()
@@ -177,11 +181,13 @@ export class Game {
 					if (playerIsDead) {
 						player.died()
 
+						this.state.decreaseLife()
+
 						this.#gameOver()
 					} else {
 						enemy.killed()
 
-						this.score += 100
+						this.state.increaseScore(INCREASE_SCORE.ENEMY)
 
 						Sound.play(Sound.Name.stomp)
 					}
@@ -197,7 +203,7 @@ export class Game {
 
 					enemy.killed()
 
-					this.score += 100
+					this.state.increaseScore(INCREASE_SCORE.ENEMY)
 
 					Sound.play(Sound.Name.stomp)
 
