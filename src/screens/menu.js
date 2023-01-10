@@ -1,9 +1,27 @@
 import { GameState } from '../core/game-state.js'
 import { Loader } from '../loaders/index.js'
-import { Information } from '../ui/information.js'
 import { Text } from '../ui/text.js'
+import { Screen } from './screen.js'
 
-export class MenuScreen {
+/**
+ * @class
+ * @extends Screen
+ * @property {number} x
+ * @property {number} y
+ * @property {Image} image
+ * @property {Image} image2
+ * @property {number} indicatorPosition
+ * @property {Sprite[]} tiles
+ * @property {BackgroundItem[]} backgroundItems
+ * @property {Text[]} texts
+ */
+export class MenuScreen extends Screen {
+	/**
+	 * Name of the screen
+	 * @type {string}
+	 */
+	static Name = 'menu'
+
 	#hero = {
 		x: 0,
 		y: 128,
@@ -38,9 +56,7 @@ export class MenuScreen {
 	 * @param {GameState} data.state
 	 */
 	constructor({ canvas, state }) {
-		this.ctx = canvas.getContext('2d')
-
-		this.information = new Information({ state })
+		super({ canvas, state })
 
 		this.x = 40
 		this.y = 34
@@ -74,7 +90,7 @@ export class MenuScreen {
 
 		ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
 
-		this.information.draw(ctx)
+		super.render()
 		this.texts.forEach(text => text.draw(ctx))
 
 		this.tiles.forEach(item => item.draw(ctx))

@@ -1,19 +1,26 @@
 import { GameState } from '../core/game-state.js'
-import { Information } from '../ui/information.js'
 import { Text } from '../ui/text.js'
+import { Screen } from './screen.js'
 
-export class GameOverScreen {
+/**
+ * @class
+ * @extends Screen
+ * @property {Text} text
+ */
+export class GameOverScreen extends Screen {
+	/**
+	 * Name of the screen
+	 * @type {string}
+	 */
+	static Name = 'game-over'
+
 	/**
 	  * @param {Object} data
 	  * @param {HTMLCanvasElement} data.canvas
 	  * @param {GameState} data.state
 	  */
 	constructor({ canvas, state }) {
-		this.canvas = canvas
-
-		this.ctx = canvas.getContext('2d')
-
-		this.information = new Information({ state })
+		super({ canvas, state })
 
 		this.text = new Text({
 			text: 'GAME OVER',
@@ -30,8 +37,8 @@ export class GameOverScreen {
 		ctx.fillStyle = 'black'
 		ctx.fillRect(0, 0, canvas.width, canvas.height)
 
-		this.information.draw(ctx)
-
 		this.text.draw(ctx)
+
+		super.render()
 	}
 }

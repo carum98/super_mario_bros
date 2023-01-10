@@ -1,16 +1,21 @@
 import { GameState } from '../core/game-state.js'
-import { Information } from '../ui/information.js'
 import { Text } from '../ui/text.js'
+import { Screen } from './screen.js'
 
 /**
  * @class
- * @property {HTMLCanvasElement} canvas
- * @property {CanvasRenderingContext2D} ctx
+ * @extends Screen
  * @property {Image} image
  * @property {Information} information
  * @property {Text[]} texts
  */
-export class LoadingScreen {
+export class LoadingScreen extends Screen {
+	/**
+	 * Name of the screen
+	 * @type {string}
+	 */
+	static Name = 'Loading'
+
 	#mario = {
 		x: 0,
 		y: 88,
@@ -24,11 +29,7 @@ export class LoadingScreen {
 	 * @param {GameState} data.state
 	 */
 	constructor({ canvas, state }) {
-		this.canvas = canvas
-
-		this.ctx = canvas.getContext('2d')
-
-		this.information = new Information({ state })
+		super({ canvas, state })
 
 		this.image = new Image()
 		this.image.src = 'assets/img/sprites.png'
@@ -51,8 +52,6 @@ export class LoadingScreen {
 		ctx.fillStyle = 'black'
 		ctx.fillRect(0, 0, canvas.width, canvas.height)
 
-		this.information.draw(ctx)
-
 		const { x: xMario, y: yMario, w: wMario, h: hMario } = this.#mario
 
 		ctx.drawImage(
@@ -62,5 +61,7 @@ export class LoadingScreen {
 		)
 
 		this.texts.forEach(text => text.draw(ctx))
+
+		super.render()
 	}
 }

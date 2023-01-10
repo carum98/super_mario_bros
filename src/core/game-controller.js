@@ -1,10 +1,8 @@
-import { LoadingScreen } from '../screens/loading.js'
 import { GameLoop } from '../core/game-loop.js'
-import { MenuScreen } from '../screens/menu.js'
 import { timeout } from '../utilities/utils.js'
 import { Game } from './game.js'
 import { GameState } from './game-state.js'
-import { GameOverScreen } from '../screens/game-over.js'
+import { RouterController, ScreenNames } from './router-controller.js'
 
 /**
  * @class
@@ -12,6 +10,7 @@ import { GameOverScreen } from '../screens/game-over.js'
  * @property {GameState} state
  * @property {GameLoop} loop
  * @property {Game | null} renderEngine
+ * @property {RouterController} router
  */
 export class GameController {
 	/**
@@ -26,6 +25,8 @@ export class GameController {
 		this.renderEngine = null
 
 		this.loop = new GameLoop(this.render.bind(this))
+
+		this.router = new RouterController({ canvas, state })
 
 		this.showMenu()
 	}
@@ -43,14 +44,7 @@ export class GameController {
 		}
 
 		// Loading screen
-		const loading = new LoadingScreen({
-			canvas: this.canvas,
-			state: this.state
-		})
-
-		await timeout(100)
-
-		loading.render()
+		this.router.push(ScreenNames.loading)
 
 		await timeout(2000)
 
@@ -70,32 +64,15 @@ export class GameController {
 	}
 
 	async showMenu() {
-		const menu = new MenuScreen({
-			canvas: this.canvas,
-			state: this.state
-		})
+		this.router.push(ScreenNames.menu)
 
-		await timeout(100)
-
-		menu.render()
-
-		document.addEventListener('keypress', (event) => {
-			if (event.key === 'Enter') {
-				this.startLevel()
-				menu.dispose()
-			}
+		document.addEventListener('keypress', ({ key }) => {
+			if (key === 'Enter') this.startLevel()
 		}, { once: true })
 	}
 
 	async gameOver() {
-		const page = new GameOverScreen({
-			canvas: this.canvas,
-			state: this.state
-		})
-
-		await timeout(100)
-
-		page.render()
+		this.router.push(ScreenNames.gameOver)
 
 		await timeout(3000)
 
