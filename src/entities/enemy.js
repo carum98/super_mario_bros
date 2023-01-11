@@ -43,17 +43,17 @@ export class Enemy extends Entity {
 
 	/**
 	   * @param {Player} player 
-	   * @returns {boolean} true if player is killed, false if enemy is killed
+	   * @returns {boolean} false if player is killed, true if enemy is killed
 	   */
 	checkCollidePosition(player) {
 		if (player.y + player.height < this.y + this.height / 2) {
 			console.log('kill enemy')
 
-			return false
+			return true
 		} else {
 			console.log('kill player')
 
-			return true
+			return false
 		}
 	}
 

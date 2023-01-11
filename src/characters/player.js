@@ -135,6 +135,16 @@ export class Player extends Sprite {
 		this.updateSprite()
 	}
 
+	damage() {
+		if (this.powerUp === Player.POWER_UPS.MUSHROOM) {
+			this.powerUp = Player.POWER_UPS.NONE
+		} else if (this.powerUp === Player.POWER_UPS.FIRE_FLOWER) {
+			this.powerUp = Player.POWER_UPS.MUSHROOM
+		}
+
+		this.updateSprite()
+	}
+
 	/**
 	 * Switch debug mode to show grid
 	 */

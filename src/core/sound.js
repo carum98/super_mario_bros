@@ -14,6 +14,7 @@ export class Sound {
 		goal: Symbol('goal'),
 		fireball: Symbol('fireball'),
 		powerupAppears: Symbol('powerup-appears'),
+		powerdown: Symbol('powerdown'),
 	}
 
 	static #sounds = {
@@ -27,6 +28,7 @@ export class Sound {
 		[Sound.Name.goal]: new Audio('./assets/sounds/goal.wav'),
 		[Sound.Name.fireball]: new Audio('./assets/sounds/fireball.wav'),
 		[Sound.Name.powerupAppears]: new Audio('./assets/sounds/powerup-appears.wav'),
+		[Sound.Name.powerdown]: new Audio('./assets/sounds/powerdown.wav'),
 	}
 
 	/**

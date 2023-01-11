@@ -215,9 +215,15 @@ export class PlayerController {
 			if (player.conllidesWith(enemy)) {
 				enemy.onCollide()
 
-				const playerIsDead = enemy.checkCollidePosition(player)
+				const killEnemy = enemy.checkCollidePosition(player)
 
-				if (playerIsDead) {
+				if (killEnemy) {
+					enemy.killed()
+
+					game.state.increaseScore(INCREASE_SCORE.ENEMY)
+
+					Sound.play(Sound.Name.stomp)
+				} else if (player.powerUp === Player.POWER_UPS.NONE) {
 					player.died()
 
 					game.state.decreaseLife()
@@ -225,11 +231,9 @@ export class PlayerController {
 					game.music.pause()
 					Sound.play(Sound.Name.die)
 				} else {
-					enemy.killed()
+					player.damage()
 
-					game.state.increaseScore(INCREASE_SCORE.ENEMY)
-
-					Sound.play(Sound.Name.stomp)
+					Sound.play(Sound.Name.powerdown)
 				}
 
 				// Remove enemy from array
