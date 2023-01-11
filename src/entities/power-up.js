@@ -61,6 +61,12 @@ export class PowerUp extends Entity {
 		this.activate()
 	}
 
+	activate() {
+		Sound.play(Sound.Name.powerupAppears)
+
+		super.activate()
+	}
+
 	onCollide() {
 		super.onCollide()
 
