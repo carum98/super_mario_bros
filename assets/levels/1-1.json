@@ -976,5 +976,91 @@
 				"y": 2
 			}
 		}
+	],
+	"subLevel": [
+		{
+			"floor": {
+				"sprite": "concrete-blue",
+				"ranges": [
+					{
+						"x": 224,
+						"y": 13,
+						"columns": 16,
+						"rows": 2
+					}
+				]
+			},
+			"wall": {
+				"sprite": "brick-blue",
+				"ranges": [
+					{
+						"x": 224,
+						"y": 2,
+						"columns": 1,
+						"rows": 11
+					},
+					{
+						"x": 228,
+						"y": 2,
+						"columns": 7,
+						"rows": 1
+					},
+					{
+						"x": 228,
+						"y": 10,
+						"columns": 7,
+						"rows": 3
+					}
+				]
+			},
+			"pipes": {
+				"sprite": "pipe-left",
+				"coord": [
+					{
+						"x": 237,
+						"y": 11
+					}
+				]
+			},
+			"blocks": [
+				{
+					"sprite": "pipe-base",
+					"coord": [
+						{
+							"x": 239,
+							"y": 3
+						},
+						{
+							"x": 239,
+							"y": 4
+						},
+						{
+							"x": 239,
+							"y": 5
+						},
+						{
+							"x": 239,
+							"y": 6
+						},
+						{
+							"x": 239,
+							"y": 7
+						},
+						{
+							"x": 239,
+							"y": 8
+						},
+						{
+							"x": 239,
+							"y": 9
+						},
+						{
+							"x": 239,
+							"y": 10
+						}
+					]
+				}
+			]
+		}
 	]
 }

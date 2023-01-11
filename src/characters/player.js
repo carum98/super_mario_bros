@@ -64,7 +64,7 @@ export class Player extends Sprite {
 
 		const height = game.ctx?.canvas.height || 0
 
-		super({ path, x: 0, y: height - (32 + sprite.h), sprite })
+		super({ path, x: 16, y: height - (32 + sprite.h), sprite })
 
 		this.game = game
 

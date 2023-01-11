@@ -10,11 +10,12 @@ export class Pipe extends Sprite {
 	 * @param {Object} param
 	 * @param {number} param.x
 	 * @param {number} param.y
+	 * @param {string} param.name
 	 */
-	constructor({ x, y }) {
+	constructor({ x, y, name }) {
 		const { path, sprite } = Loader.Sprite.getSprite({
 			src: Loader.Sprite.SRC.TILE,
-			name: 'pipe'
+			name
 		})
 
 		super({ path, x, y, sprite })

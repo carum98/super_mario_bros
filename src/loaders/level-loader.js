@@ -25,7 +25,9 @@ export class LevelLoader {
 	static async get(level) {
 		const data = await import(`../../assets/levels/${level}.json`, { assert: { type: "json" } })
 
-		const { floor, pipes, lucky, blocks, background, mushrooms } = data.default
+		const { floor, pipes, lucky, blocks, background, mushrooms, subLevel } = data.default
+
+		const subLevelData = subLevel?.at(0)
 
 		const tiles = []
 		const backgroundItems = []
@@ -34,24 +36,28 @@ export class LevelLoader {
 		const checkpoints = []
 
 		// Floor
-		for (let range of floor.ranges) {
-			const { x, y, columns, rows } = range
+		for (const { ranges = [], sprite } of [floor, subLevelData?.floor || {}, subLevelData?.wall || {}]) {
+			for (let range of ranges) {
+				const { x, y, columns, rows } = range
 
-			for (let i = 0; i < columns; i++) {
-				for (let j = 0; j < rows; j++) {
-					tiles.push(new Tile({
-						x: x * 16 + i * 16,
-						y: y * 16 + j * 16,
-						name: floor.sprite,
-					}))
+				for (let i = 0; i < columns; i++) {
+					for (let j = 0; j < rows; j++) {
+						tiles.push(new Tile({
+							x: x * 16 + i * 16,
+							y: y * 16 + j * 16,
+							name: sprite,
+						}))
+					}
 				}
 			}
 		}
 
 		// Pipes
-		for (const pipe of pipes?.coord || []) {
-			const { x, y } = pipe
-			tiles.push(new Pipe({ x: x * 16, y: y * 16 }))
+		for (const { coord = [], sprite } of [pipes || {}, subLevelData?.pipes || {}]) {
+			for (const pipe of coord) {
+				const { x, y } = pipe
+				tiles.push(new Pipe({ x: x * 16, y: y * 16, name: sprite }))
+			}
 		}
 
 		// Lucky blocks
@@ -69,7 +75,7 @@ export class LevelLoader {
 		}
 
 		// Blocks
-		for (const { coord, sprite } of blocks || []) {
+		for (const { coord, sprite } of [...blocks || [], ...subLevel?.at(0)?.blocks || []]) {
 			for (const block of coord) {
 				const { x, y } = block
 				tiles.push(new Tile({ x: x * 16, y: y * 16, name: sprite }))

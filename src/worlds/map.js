@@ -110,6 +110,14 @@ export class Map {
 		})
 	}
 
+	moveTo(col) {
+		[...this.#buffer, ...this.#bufferBackgroundItems, ...this.enemies, ...this.checkpoints].forEach(item => {
+			item.x -= 16 * col - 18
+		})
+
+		this.move()
+	}
+
 	/**
 	 * @param {CanvasRenderingContext2D} ctx
 	 */
