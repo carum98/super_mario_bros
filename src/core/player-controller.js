@@ -224,12 +224,11 @@ export class PlayerController {
 
 					Sound.play(Sound.Name.stomp)
 				} else if (player.powerUp === Player.POWER_UPS.NONE) {
-					player.died()
+					player.death()
 
 					game.state.decreaseLife()
 
 					game.music.pause()
-					Sound.play(Sound.Name.die)
 				} else {
 					player.damage()
 

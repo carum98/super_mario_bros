@@ -129,10 +129,12 @@ export class Player extends Sprite {
 		}
 	}
 
-	died() {
+	death() {
 		this.vy = -3.5
 		this.state = Player.STATES.DEAD
 		this.updateSprite()
+
+		Sound.play(Sound.Name.die)
 	}
 
 	damage() {

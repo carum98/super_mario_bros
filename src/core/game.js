@@ -88,6 +88,11 @@ export class Game {
 		// @ts-ignore
 		if (this.player.y > this.ctx.canvas.height) {
 			callbackStop()
+
+			if (this.player.state !== Player.STATES.DEAD) {
+				this.music.pause()
+				this.player.death()
+			}
 		}
 	}
 
