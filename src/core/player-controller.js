@@ -63,8 +63,11 @@ export class PlayerController {
 		this.#handleDoubleJump()
 		this.#boundaries()
 		this.#state()
+		this.#collideWithEnemy()
 
-		this.player.fireballs.forEach((fireball) => fireball.update(this.map.tiles))
+		this.#fireballMovement()
+		this.#fireballCollisions()
+
 		this.player.update()
 	}
 
@@ -102,6 +105,18 @@ export class PlayerController {
 			player.vy += player.powerUp === Player.POWER_UPS.NONE ? 0.2 : 0.3
 		}
 	}
+
+	/**
+	 * Handle fireballs movements.
+	 */
+	#fireballMovement() {
+		const { player: { fireballs }, map: { tiles } } = this
+
+		if (fireballs.length === 0) return
+
+		fireballs.forEach((fireball) => fireball.update(tiles))
+	}
+
 
 	/**
 	 * Check if the player is colliding with the map boundaries.
@@ -183,6 +198,79 @@ export class PlayerController {
 		} else {
 			Sound.play(Sound.Name.bump)
 		}
+	}
+
+	/**
+	 * Check if the player is colliding with an enemy.
+	 * Remove the enemy if it is dead or is out of the screen.
+	 */
+	#collideWithEnemy() {
+		const { player, game, map } = this
+
+		const enemies = map.enemies.filter((enemy) => enemy.isActive)
+
+		if (enemies.length === 0) return
+
+		enemies.forEach((enemy) => {
+			if (player.conllidesWith(enemy)) {
+				enemy.onCollide()
+
+				const playerIsDead = enemy.checkCollidePosition(player)
+
+				if (playerIsDead) {
+					player.died()
+
+					game.state.decreaseLife()
+
+					game.music.pause()
+					Sound.play(Sound.Name.die)
+				} else {
+					enemy.killed()
+
+					game.state.increaseScore(INCREASE_SCORE.ENEMY)
+
+					Sound.play(Sound.Name.stomp)
+				}
+
+				// Remove enemy from array
+				const index = this.map.enemies.indexOf(enemy)
+				this.map.enemies.splice(index, 1)
+			}
+
+			// Remove enemy if is out of the screen
+			if (enemy.x + enemy.width < 0) {
+				this.map.enemies.splice(this.map.enemies.indexOf(enemy), 1)
+			}
+		})
+	}
+
+	/**
+	 * Handler fireball collisions with enemies.
+	 */
+	#fireballCollisions() {
+		const { player, map, game } = this
+
+		const fireballs = player.fireballs
+		if (fireballs.length === 0) return
+
+		const enemies = map.enemies.filter((enemy) => enemy.isActive)
+		if (enemies.length === 0) return
+
+		enemies.forEach((enemy) => {
+			if (player.fireballs.some((fireball) => fireball.conllidesWith(enemy))) {
+				enemy.onCollide()
+
+				enemy.killed()
+
+				game.state.increaseScore(INCREASE_SCORE.ENEMY)
+
+				Sound.play(Sound.Name.stomp)
+
+				// Remove enemy from array
+				const index = map.enemies.indexOf(enemy)
+				map.enemies.splice(index, 1)
+			}
+		})
 	}
 
 	#handleDoubleJump() {

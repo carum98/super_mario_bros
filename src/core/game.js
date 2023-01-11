@@ -5,7 +5,7 @@ import { Mushroom } from "../worlds/mushroom.js"
 import { Sound } from "./sound.js"
 import { PowerUp } from "../entities/power-up.js"
 import { PlayerController } from "./player-controller.js"
-import { GameState, INCREASE_SCORE } from "./game-state.js"
+import { GameState } from "./game-state.js"
 
 /**
  * @class
@@ -167,50 +167,6 @@ export class Game {
 				}
 			})
 		}
-		const enemies = map.enemies.filter((enemy) => enemy.isActive)
-
-		if (enemies.length !== 0) {
-			enemies.forEach((enemy) => {
-				if (player.conllidesWith(enemy)) {
-					enemy.onCollide()
-
-					const playerIsDead = enemy.checkCollidePosition(player)
-
-					if (playerIsDead) {
-						player.died()
-
-						this.state.decreaseLife()
-
-						this.#gameOver()
-					} else {
-						enemy.killed()
-
-						this.state.increaseScore(INCREASE_SCORE.ENEMY)
-
-						Sound.play(Sound.Name.stomp)
-					}
-
-					// Remove enemy from array
-					const index = map.enemies.indexOf(enemy)
-					map.enemies.splice(index, 1)
-				}
-
-				// Check if enemy collide with player fireball
-				if (player.fireballs.some((fireball) => fireball.conllidesWith(enemy))) {
-					enemy.onCollide()
-
-					enemy.killed()
-
-					this.state.increaseScore(INCREASE_SCORE.ENEMY)
-
-					Sound.play(Sound.Name.stomp)
-
-					// Remove enemy from array
-					const index = map.enemies.indexOf(enemy)
-					map.enemies.splice(index, 1)
-				}
-			})
-		}
 
 		map.checkpoints.forEach((checkpoint) => {
 			if (player.conllidesWith(checkpoint)) {
@@ -219,15 +175,6 @@ export class Game {
 				this.#reachGoal()
 			}
 		})
-	}
-
-	/**
-	 * Game over, stop music and play sound die
-	 */
-	#gameOver() {
-		this.music.pause()
-
-		Sound.play(Sound.Name.die)
 	}
 
 	#reachGoal() {
