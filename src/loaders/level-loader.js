@@ -5,6 +5,7 @@ import { Enemy } from '../entities/enemy.js'
 import { Entity } from '../entities/entity.js'
 import { Sprite } from '../entities/sprite.js'
 import { Flag } from '../worlds/flag.js'
+import { Limit } from '../worlds/limit.js'
 import { LuckyBlock } from '../worlds/lucky-block.js'
 import { Pipe } from '../worlds/pipes.js'
 import { Tile } from '../worlds/tile.js'
@@ -111,6 +112,9 @@ export class LevelLoader {
 
 			if (name === 'end') {
 				checkpoints.push(new Flag({ x: x * 16, y: y * 16 }))
+			}
+			if (name === 'limit') {
+				checkpoints.push(new Limit({ x: x * 16, y: y * 16 }))
 			}
 		}
 

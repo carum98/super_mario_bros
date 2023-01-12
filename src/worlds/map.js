@@ -31,6 +31,10 @@ export class Map {
 	 * @type {Array<BackgroundItem>}
 	 */
 	#backgroundItems = []
+	/**
+	 * @type {Array<Entity>}
+	 */
+	#bufferCheckpoints = []
 
 	/**
 	 * @param {Object} data
@@ -60,8 +64,8 @@ export class Map {
 		this.#buffer = tiles
 		this.#animations = animations
 		this.#bufferBackgroundItems = backgroundItems
+		this.#bufferCheckpoints = checkpoints
 		this.enemies = enemies
-		this.checkpoints = checkpoints
 
 		// Add only tiles that are visible on the screen
 		this.tiles = this.#addTiles(this.#buffer)
@@ -100,19 +104,25 @@ export class Map {
 		this.#backgroundItems = this.#removeTiles(this.#backgroundItems)
 
 		// Remove from buffer background items that are already on the screen
-		this.#bufferBackgroundItems = this.#removeTiles(this.#bufferBackgroundItems);
+		this.#bufferBackgroundItems = this.#removeTiles(this.#bufferBackgroundItems)
 
 		// -------
 
+		// Add new checkpoints that are visible on the screen
+		this.checkpoints = this.#addTiles(this.#bufferCheckpoints)
+
+		// Remove checkpoints that are out of the screen
+		this.#bufferCheckpoints = this.#removeTiles(this.#bufferCheckpoints);
+
 		// Move all tiles and background items to the left
-		[...this.#buffer, ...this.#bufferBackgroundItems, ...this.enemies, ...this.checkpoints].forEach(item => {
+		[...this.#buffer, ...this.#bufferBackgroundItems, ...this.enemies, ...this.#bufferCheckpoints].forEach(item => {
 			item.x -= 2
 		})
 	}
 
 	moveTo(col) {
-		[...this.#buffer, ...this.#bufferBackgroundItems, ...this.enemies, ...this.checkpoints].forEach(item => {
-			item.x -= 16 * col - 18
+		[...this.#buffer, ...this.#bufferBackgroundItems, ...this.enemies, ...this.#bufferCheckpoints].forEach(item => {
+			item.x -= 16 * col
 		})
 
 		this.move()

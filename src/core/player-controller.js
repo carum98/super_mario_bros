@@ -2,6 +2,7 @@ import { Player } from '../characters/player.js'
 import { Sprite } from '../entities/sprite.js'
 import { LuckyBlock } from '../worlds/lucky-block.js'
 import { Map } from '../worlds/map.js'
+import { Pipe } from '../worlds/pipes.js'
 import { Tile } from '../worlds/tile.js'
 import { Controls } from './controls.js'
 import { INCREASE_SCORE } from './game-state.js'
@@ -154,6 +155,10 @@ export class PlayerController {
 		if (player.x < 0) {
 			player.x = 0
 		}
+
+		if (player.x + player.width > this.map.canvas.width - 5) {
+			player.x = this.map.canvas.width - player.width - 5
+		}
 	}
 
 	/**
@@ -175,6 +180,12 @@ export class PlayerController {
 
 		if (lastState !== player.state) {
 			player.updateSprite()
+		}
+
+		if (bottom instanceof Pipe) {
+			this.map.moveTo(202)
+
+			this.map.canvas.style.background = '#000000'
 		}
 	}
 

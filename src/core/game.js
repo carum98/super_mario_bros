@@ -6,6 +6,7 @@ import { Sound } from "./sound.js"
 import { PowerUp } from "../entities/power-up.js"
 import { PlayerController } from "./player-controller.js"
 import { GameState } from "./game-state.js"
+import { Limit } from "../worlds/limit.js"
 
 /**
  * @class
@@ -103,6 +104,11 @@ export class Game {
 
 		if (this.ctx) {
 			const middle = this.ctx.canvas.width / 3
+
+			if (this.map.checkpoints.some(item => item instanceof Limit)) {
+				console.log('Reached limit')
+				return
+			}
 
 			if (this.player.x > middle) {
 				this.map.move()
