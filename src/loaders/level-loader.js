@@ -56,8 +56,8 @@ export class LevelLoader {
 		// Pipes
 		for (const { coord = [], sprite } of [pipes || {}, subLevelData?.pipes || {}]) {
 			for (const pipe of coord) {
-				const { x, y } = pipe
-				tiles.push(new Pipe({ x: x * 16, y: y * 16, name: sprite }))
+				const { x, y, transport } = pipe
+				tiles.push(new Pipe({ x: x * 16, y: y * 16, name: sprite, transport }))
 			}
 		}
 

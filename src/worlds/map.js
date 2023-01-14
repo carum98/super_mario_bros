@@ -4,6 +4,7 @@ import { BackgroundItem } from '../entities/background-item.js'
 import { Loader } from '../loaders/index.js'
 import { Enemy } from '../entities/enemy.js'
 import { Entity } from '../entities/entity.js'
+import { DIRECTIONS } from '../core/controls.js'
 
 /**
  * @class
@@ -52,6 +53,9 @@ export class Map {
 		this.checkpoints = []
 
 		this.#load(`${map.world}-${map.level}`)
+
+		this.pixel = 0
+		this.column = 0
 	}
 
 	/**
@@ -86,46 +90,33 @@ export class Map {
 	 * and remove tiles that are out of the screen
 	 */
 	move() {
-		// Add new tiles that are visible on the screen
-		this.tiles = this.#addTiles(this.#buffer)
-
-		// Remove tiles that are out of the screen
-		this.tiles = this.#removeTiles(this.tiles)
-
-		// Remove from buffer tiles that are already on the screen
-		this.#buffer = this.#removeTiles(this.#buffer)
-
-		// -------
-
-		// Add new background items that are visible on the screen
-		this.#backgroundItems = this.#addTiles(this.#bufferBackgroundItems)
-
-		// Remove background items that are out of the screen
-		this.#backgroundItems = this.#removeTiles(this.#backgroundItems)
-
-		// Remove from buffer background items that are already on the screen
-		this.#bufferBackgroundItems = this.#removeTiles(this.#bufferBackgroundItems)
-
-		// -------
-
-		// Add new checkpoints that are visible on the screen
-		this.checkpoints = this.#addTiles(this.#bufferCheckpoints)
-
-		// Remove checkpoints that are out of the screen
-		this.#bufferCheckpoints = this.#removeTiles(this.#bufferCheckpoints);
+		// Keep only tiles that are visible on the screen
+		this.#activateTiles()
+		this.#deactivateTiles()
 
 		// Move all tiles and background items to the left
-		[...this.#buffer, ...this.#bufferBackgroundItems, ...this.enemies, ...this.#bufferCheckpoints].forEach(item => {
-			item.x -= 2
-		})
+		this.#moveAllItems(2, DIRECTIONS.LEFT)
+
+		// Increase column every 16 pixels
+		this.pixel += 2
+
+		if (this.pixel >= 16) {
+			this.pixel = 0
+			this.column++
+		}
 	}
 
+	/**
+	 * @param {number} col 
+	 */
 	moveTo(col) {
-		[...this.#buffer, ...this.#bufferBackgroundItems, ...this.enemies, ...this.#bufferCheckpoints].forEach(item => {
-			item.x -= 16 * col
-		})
+		const x = 16 * col - this.pixel
 
-		this.move()
+		this.#moveAllItems(x, x > 0 ? DIRECTIONS.LEFT : DIRECTIONS.RIGHT)
+
+		this.column += col
+
+		this.#activateTiles()
 	}
 
 	/**
@@ -160,6 +151,50 @@ export class Map {
 			ctx.lineTo(this.canvas.width, i)
 			ctx.stroke()
 		}
+	}
+
+	/**
+	 * @param {number} x 
+	 * @param {DIRECTIONS} direction
+	 */
+	#moveAllItems(x, direction) {
+		[...this.#buffer, ...this.#bufferBackgroundItems, ...this.enemies, ...this.#bufferCheckpoints].forEach(item => {
+			if (direction === DIRECTIONS.LEFT) {
+				item.x -= Math.abs(x)
+			}
+
+			if (direction === DIRECTIONS.RIGHT) {
+				item.x += Math.abs(x)
+			}
+		})
+	}
+
+	#activateTiles() {
+		// Add new tiles that are visible on the screen
+		this.tiles = this.#addTiles(this.#buffer)
+
+		// Add new background items that are visible on the screen
+		this.#backgroundItems = this.#addTiles(this.#bufferBackgroundItems)
+
+		// Add new checkpoints that are visible on the screen
+		this.checkpoints = this.#addTiles(this.#bufferCheckpoints)
+	}
+
+	#deactivateTiles() {
+		// Remove tiles that are out of the screen
+		this.tiles = this.#removeTiles(this.tiles)
+
+		// Remove from buffer tiles that are already on the screen
+		this.#buffer = this.#removeTiles(this.#buffer)
+
+		// Remove background items that are out of the screen
+		this.#backgroundItems = this.#removeTiles(this.#backgroundItems)
+
+		// Remove from buffer background items that are already on the screen
+		this.#bufferBackgroundItems = this.#removeTiles(this.#bufferBackgroundItems)
+
+		// Remove checkpoints that are out of the screen
+		this.#bufferCheckpoints = this.#removeTiles(this.#bufferCheckpoints)
 	}
 
 	/**

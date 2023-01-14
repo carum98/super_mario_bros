@@ -182,10 +182,8 @@ export class PlayerController {
 			player.updateSprite()
 		}
 
-		if (bottom instanceof Pipe) {
-			this.map.moveTo(202)
-
-			this.map.canvas.style.background = '#000000'
+		if (bottom instanceof Pipe && keys.includes(Controls.DIRECTIONS.DOWN)) {
+			this.#moveInsidePipe(bottom.transport)
 		}
 	}
 
@@ -311,5 +309,22 @@ export class PlayerController {
 
 		player.y += player.vy
 		player.vy += 0.2
+	}
+
+	/**
+	 * @param {{ x: number, y: number, direction: string } | undefined} transport
+	 */
+	#moveInsidePipe(transport) {
+		if (!transport) return
+
+		const { x, y, direction } = transport
+
+		const style = this.map.canvas.style
+
+		style.background = direction === 'out' ? '#5d95fc' : '#000'
+		this.map.moveTo(x - this.map.column)
+
+		this.player.x = 2 * 16
+		this.player.y = y * 16
 	}
 }
