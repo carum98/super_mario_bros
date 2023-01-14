@@ -65,6 +65,7 @@ export class PlayerController {
 		this.#boundaries()
 		this.#state()
 		this.#collideWithEnemy()
+		this.#collideWithCoin()
 
 		this.#fireballMovement()
 		this.#fireballCollisions()
@@ -281,6 +282,22 @@ export class PlayerController {
 				// Remove enemy from array
 				const index = map.enemies.indexOf(enemy)
 				map.enemies.splice(index, 1)
+			}
+		})
+	}
+
+	#collideWithCoin() {
+		const { map, player } = this
+
+		const coins = map.coins.filter((coin) => coin.isActive)
+
+		if (coins.length === 0) return
+
+		coins.forEach((coin) => {
+			if (player.conllidesWith(coin)) {
+				coin.deactivate()
+
+				this.game.state.increaseCoins()
 			}
 		})
 	}

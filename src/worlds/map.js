@@ -5,6 +5,7 @@ import { Loader } from '../loaders/index.js'
 import { Enemy } from '../entities/enemy.js'
 import { Entity } from '../entities/entity.js'
 import { DIRECTIONS } from '../core/controls.js'
+import { BigCoin } from './big-coin.js'
 
 /**
  * @class
@@ -36,6 +37,10 @@ export class Map {
 	 * @type {Array<Entity>}
 	 */
 	#bufferCheckpoints = []
+	/**
+	 * @type {Array<BigCoin>}
+	 */
+	#bufferCoins = []
 
 	/**
 	 * @param {Object} data
@@ -51,6 +56,8 @@ export class Map {
 		this.enemies = []
 		/** @type {Array<Entity>} */
 		this.checkpoints = []
+		/** @type {Array<BigCoin>} */
+		this.coins = []
 
 		this.#load(`${map.world}-${map.level}`)
 
@@ -63,17 +70,16 @@ export class Map {
 	 * @param {string} level 
 	 */
 	async #load(level) {
-		const { tiles, backgroundItems, animations, enemies, checkpoints } = await Loader.Level.get(level)
+		const { tiles, backgroundItems, animations, enemies, checkpoints, coins } = await Loader.Level.get(level)
 
 		this.#buffer = tiles
 		this.#animations = animations
 		this.#bufferBackgroundItems = backgroundItems
 		this.#bufferCheckpoints = checkpoints
+		this.#bufferCoins = coins
 		this.enemies = enemies
 
-		// Add only tiles that are visible on the screen
-		this.tiles = this.#addTiles(this.#buffer)
-		this.#backgroundItems = this.#addTiles(this.#bufferBackgroundItems)
+		this.#activateTiles()
 	}
 
 	/**
@@ -83,6 +89,7 @@ export class Map {
 		this.#animations.forEach(tile => tile.update())
 		this.enemies.forEach(enemy => enemy.update(this.canvas, this.tiles))
 		this.checkpoints.forEach(checkpoint => checkpoint.update())
+		this.coins.forEach(coin => coin.update())
 	}
 
 	/**
@@ -127,6 +134,7 @@ export class Map {
 		this.tiles.forEach(tile => tile.draw(ctx))
 		this.enemies.forEach(enemy => enemy.draw(ctx))
 		this.checkpoints.forEach(checkpoint => checkpoint.draw(ctx))
+		this.coins.forEach(coin => coin.draw(ctx))
 
 		// Draw grid
 		if (this.#debug) {
@@ -158,7 +166,7 @@ export class Map {
 	 * @param {DIRECTIONS} direction
 	 */
 	#moveAllItems(x, direction) {
-		[...this.#buffer, ...this.#bufferBackgroundItems, ...this.enemies, ...this.#bufferCheckpoints].forEach(item => {
+		[...this.#buffer, ...this.#bufferBackgroundItems, ...this.enemies, ...this.#bufferCheckpoints, ...this.#bufferCoins].forEach(item => {
 			if (direction === DIRECTIONS.LEFT) {
 				item.x -= Math.abs(x)
 			}
@@ -178,6 +186,9 @@ export class Map {
 
 		// Add new checkpoints that are visible on the screen
 		this.checkpoints = this.#addTiles(this.#bufferCheckpoints)
+
+		// Add new coins that are visible on the screen
+		this.coins = this.#addTiles(this.#bufferCoins)
 	}
 
 	#deactivateTiles() {
@@ -195,6 +206,9 @@ export class Map {
 
 		// Remove checkpoints that are out of the screen
 		this.#bufferCheckpoints = this.#removeTiles(this.#bufferCheckpoints)
+
+		// Remove from buffer checkpoints that are already on the screen
+		this.checkpoints = this.#removeTiles(this.checkpoints)
 	}
 
 	/**

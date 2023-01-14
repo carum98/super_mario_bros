@@ -4,6 +4,7 @@ import { BackgroundItem } from '../entities/background-item.js'
 import { Enemy } from '../entities/enemy.js'
 import { Entity } from '../entities/entity.js'
 import { Sprite } from '../entities/sprite.js'
+import { BigCoin } from '../worlds/big-coin.js'
 import { Flag } from '../worlds/flag.js'
 import { Limit } from '../worlds/limit.js'
 import { LuckyBlock } from '../worlds/lucky-block.js'
@@ -17,6 +18,7 @@ import { Tile } from '../worlds/tile.js'
  * @property {Array<Sprite>} animations
  * @property {Array<Enemy>} enemies
  * @property {Array<Entity>} checkpoints
+ * @property {Array<BigCoin>} coins
  */
 export class LevelLoader {
 	/**
@@ -35,6 +37,7 @@ export class LevelLoader {
 		const animations = []
 		const enemies = []
 		const checkpoints = []
+		const coins = []
 
 		// Floor
 		for (const { ranges = [], sprite } of [floor, subLevelData?.floor || {}, subLevelData?.wall || {}]) {
@@ -118,12 +121,20 @@ export class LevelLoader {
 			}
 		}
 
+		// Coins
+		for (const coin of subLevelData?.coins?.coord || []) {
+			const { x, y } = coin
+
+			coins.push(new BigCoin({ x: x * 16, y: y * 16 }))
+		}
+
 		return {
 			tiles,
 			backgroundItems,
 			animations,
 			enemies,
 			checkpoints,
+			coins,
 		}
 	}
 }
