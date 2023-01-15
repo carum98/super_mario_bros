@@ -49,9 +49,7 @@ export class Game {
 
 		this.entities = []
 
-		this.music = new Audio('assets/sounds/music.mp3')
-		this.music.loop = true
-		this.music.volume = 0.2
+		this.music = Sound.backgroundMusic(Sound.Name.overworld)
 
 		window.addEventListener('focus', () => this.music.play())
 		window.addEventListener('blur', () => this.music.pause())
@@ -90,10 +88,7 @@ export class Game {
 		if (this.player.y > this.ctx.canvas.height) {
 			callbackStop()
 
-			if (this.player.state !== Player.STATES.DEAD) {
-				this.music.pause()
-				this.player.death()
-			}
+			this.playerController.playerDeath()
 		}
 	}
 

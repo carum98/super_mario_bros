@@ -15,6 +15,9 @@ export class Sound {
 		fireball: Symbol('fireball'),
 		powerupAppears: Symbol('powerup-appears'),
 		powerdown: Symbol('powerdown'),
+		pipeTravel: Symbol('pipe-travel'),
+		overworld: Symbol('overworld'),
+		background: Symbol('background'),
 	}
 
 	static #sounds = {
@@ -29,6 +32,9 @@ export class Sound {
 		[Sound.Name.fireball]: new Audio('./assets/sounds/fireball.wav'),
 		[Sound.Name.powerupAppears]: new Audio('./assets/sounds/powerup-appears.wav'),
 		[Sound.Name.powerdown]: new Audio('./assets/sounds/powerdown.wav'),
+		[Sound.Name.pipeTravel]: new Audio('./assets/sounds/powerdown.wav'),
+		[Sound.Name.overworld]: new Audio('./assets/sounds/overworld.mp3'),
+		[Sound.Name.background]: new Audio('./assets/sounds/background.mp3'),
 	}
 
 	/**
@@ -55,5 +61,17 @@ export class Sound {
 			sound.pause()
 			sound.currentTime = 0
 		}
+	}
+
+	/**
+	 * @param {Name} Name
+	 * @returns {HTMLAudioElement} Audio
+	 */
+	static backgroundMusic(Name) {
+		const music = Sound.#sounds[Name]
+		music.volume = 0.2
+		music.loop = true
+
+		return music
 	}
 }

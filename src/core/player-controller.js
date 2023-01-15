@@ -1,5 +1,6 @@
 import { Player } from '../characters/player.js'
 import { Sprite } from '../entities/sprite.js'
+import { Loader } from '../loaders/index.js'
 import { LuckyBlock } from '../worlds/lucky-block.js'
 import { Map } from '../worlds/map.js'
 import { Pipe } from '../worlds/pipes.js'
@@ -54,9 +55,8 @@ export class PlayerController {
 	update() {
 		this.#collisions = MovementController.collisions(this.player, this.map.tiles)
 
-		// Stop if the player is dead
-		if (this.player.state === Player.STATES.DEAD) {
-			this.#diedAnimation()
+		if (this.player.animation) {
+			this.#runAnimation()
 			return
 		}
 
@@ -234,11 +234,7 @@ export class PlayerController {
 
 					Sound.play(Sound.Name.stomp)
 				} else if (player.powerUp === Player.POWER_UPS.NONE) {
-					player.death()
-
-					game.state.decreaseLife()
-
-					game.music.pause()
+					this.playerDeath()
 				} else {
 					player.damage()
 
@@ -254,6 +250,54 @@ export class PlayerController {
 			if (enemy.x + enemy.width < 0) {
 				this.map.enemies.splice(this.map.enemies.indexOf(enemy), 1)
 			}
+		})
+	}
+
+	/**
+	 * Handle player death.
+	 */
+	playerDeath() {
+		// Prevent loop
+		if (this.player.animation === Player.ANIMATIONS.DEAD) return
+
+		Sound.play(Sound.Name.die)
+		this.player.animation = Player.ANIMATIONS.DEAD
+
+		// Small jump
+		this.player.vy = -3.5
+
+		const { sprite } = Loader.Sprite.getSprite({
+			name: 'dead',
+			src: Loader.Sprite.SRC.PLAYER,
+		})
+		this.player.sprite = sprite
+
+		// Change the game status
+		this.game.state.decreaseLife()
+		this.game.music.pause()
+	}
+
+	/**
+	 * @param {string} type - 'in' | 'out'
+	 * @param {string} direction - 'top' | 'down' | 'left' | 'right'
+	 * @returns {Promise<void>}
+	 */
+	pipeAnimation(type, direction) {
+		Sound.play(Sound.Name.pipeTravel)
+
+		return new Promise((resolve) => {
+			if (type === 'in') {
+				this.player.animation = Player.ANIMATIONS.PIPE_IN
+			}
+
+			if (type === 'out') {
+				this.player.animation = Player.ANIMATIONS.PIPE_OUT
+			}
+
+			setTimeout(() => {
+				this.player.animation = null
+				resolve()
+			}, 200)
 		})
 	}
 
@@ -321,7 +365,35 @@ export class PlayerController {
 		}
 	}
 
+	#runAnimation() {
+		switch (this.player.animation) {
+			case Player.ANIMATIONS.DEAD:
+				this.#diedAnimation()
+				break
+			case Player.ANIMATIONS.PIPE_IN:
+				this.#inPipeAnimation()
+				break
+			case Player.ANIMATIONS.PIPE_OUT:
+				this.#outPipeAnimation()
+				break
+		}
+	}
+
 	#diedAnimation() {
+		const { player } = this
+
+		player.y += player.vy
+		player.vy += 0.2
+	}
+
+	#inPipeAnimation() {
+		const { player } = this
+
+		player.y += player.vy
+		player.vy += 0.2
+	}
+
+	#outPipeAnimation() {
 		const { player } = this
 
 		player.y += player.vy
@@ -331,14 +403,29 @@ export class PlayerController {
 	/**
 	 * @param {{ x: number, y: number, direction: string } | undefined} transport
 	 */
-	#moveInsidePipe(transport) {
+	async #moveInsidePipe(transport) {
 		if (!transport) return
 
 		const { x, y, direction } = transport
 
+		await this.pipeAnimation(direction, 'left')
+
 		const style = this.map.canvas.style
 
+		// Change background color
 		style.background = direction === 'out' ? '#5d95fc' : '#000'
+
+		// Change background music
+		this.game.music.pause()
+
+		if (direction === 'out') {
+			this.game.music = Sound.backgroundMusic(Sound.Name.overworld)
+		} else {
+			this.game.music = Sound.backgroundMusic(Sound.Name.background)
+		}
+
+		this.game.music.play()
+
 		this.map.moveTo(x - this.map.column)
 
 		this.player.x = 2 * 16

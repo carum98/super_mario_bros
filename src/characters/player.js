@@ -14,6 +14,7 @@ import { FireBall } from '../worlds/fireball.js'
  * @property {Controls} controls
  * @property {Player.STATES} state
  * @property {Player.POWER_UPS} power_up
+ * @property {Player.ANIMATIONS | null} animation
  * @property {Array<Sprite>} tiles
  * @property {Array<FireBall>} fireballs
  */
@@ -50,6 +51,19 @@ export class Player extends Sprite {
 	}
 
 	/**
+	 * @readonly
+	 * @enum {string} Animations of the player
+	 * @property {string} DEAD - Player is dead
+	 * @property {string} IN_PIPE - Player is going into a pipe
+	 * @property {string} OUT_PIPE - Player is coming out of a pipe
+	 */
+	static ANIMATIONS = {
+		DEAD: 'dead',
+		PIPE_IN: 'in-pipe',
+		PIPE_OUT: 'out-pipe',
+	}
+
+	/**
 	 * @param {Object} data
 	 * @param {Game} data.game
 	 */
@@ -76,6 +90,7 @@ export class Player extends Sprite {
 
 		this.state = state
 		this.powerUp = powerUp
+		this.animation = null
 
 		this.fireballs = []
 
@@ -112,13 +127,6 @@ export class Player extends Sprite {
 			})
 
 			this.setAnimation(animation)
-		} else if (this.state === Player.STATES.DEAD) {
-			const { sprite } = Loader.Sprite.getSprite({
-				name: 'dead',
-				src: Loader.Sprite.SRC.PLAYER,
-			})
-
-			this.sprite = sprite
 		} else {
 			const { sprite } = Loader.Sprite.getSprite({
 				name: `${this.state}-${this.powerUp}`,
@@ -127,14 +135,6 @@ export class Player extends Sprite {
 
 			this.sprite = sprite
 		}
-	}
-
-	death() {
-		this.vy = -3.5
-		this.state = Player.STATES.DEAD
-		this.updateSprite()
-
-		Sound.play(Sound.Name.die)
 	}
 
 	damage() {
