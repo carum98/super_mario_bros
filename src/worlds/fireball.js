@@ -4,9 +4,11 @@ import { Sound } from '../core/sound.js'
 import { GameElement } from '../entities/game-element.js'
 import { Sprite } from '../entities/sprite.js'
 import { Loader } from '../loaders/index.js'
+import { timeout } from '../utilities/utils.js'
 
 export class FireBall extends Sprite {
 	#active = true
+	#stopMove = false
 
 	constructor({ x, y, direction }) {
 		const { path, animation } = Loader.Sprite.getAnimation({
@@ -31,6 +33,12 @@ export class FireBall extends Sprite {
 	// @ts-ignore
 	update(tiles) {
 		if (!this.#active) return
+
+		// Stop move the fireball and only play the animation
+		if (this.#stopMove) {
+			super.update()
+			return
+		}
 
 		const { bottom, top, right, left } = MovementController.collisions(this, tiles)
 
@@ -78,7 +86,28 @@ export class FireBall extends Sprite {
 		return collideWith
 	}
 
-	remove() {
+	/**
+	 * Stop the fireball and play the animation of the explosion
+	 */
+	async remove() {
+		this.clearAnimation()
+
+		this.#stopMove = true
+
+		const { animation } = Loader.Sprite.getAnimation({
+			src: Loader.Sprite.SRC.PLAYER,
+			name: 'boom'
+		})
+
+		const sprite = animation.frames[0]
+
+		this.setAnimation(animation)
+
+		this.width = sprite.w
+		this.height = sprite.h
+		this.sprite = sprite
+
+		await timeout(300)
 		this.#active = false
 
 		Sound.play(Sound.Name.bump)
