@@ -1,3 +1,4 @@
+import { Goomba } from '../characters/goomba.js'
 import { Player } from '../characters/player.js'
 import { Sprite } from '../entities/sprite.js'
 import { Loader } from '../loaders/index.js'
@@ -228,11 +229,16 @@ export class PlayerController {
 				const killEnemy = enemy.checkCollidePosition(player)
 
 				if (killEnemy) {
-					enemy.killed()
-
 					game.state.increaseScore(INCREASE_SCORE.ENEMY)
 
 					Sound.play(Sound.Name.stomp)
+
+					// Small jump
+					player.vy = -2
+
+					if (enemy instanceof Goomba) {
+						enemy.killed().then(() => this.map.enemies.splice(this.map.enemies.indexOf(enemy), 1))
+					}
 				} else if (player.powerUp === Player.POWER_UPS.NONE) {
 					this.playerDeath()
 				} else {
@@ -240,10 +246,6 @@ export class PlayerController {
 
 					Sound.play(Sound.Name.powerdown)
 				}
-
-				// Remove enemy from array
-				const index = this.map.enemies.indexOf(enemy)
-				this.map.enemies.splice(index, 1)
 			}
 
 			// Remove enemy if is out of the screen
