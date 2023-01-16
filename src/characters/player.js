@@ -33,6 +33,7 @@ export class Player extends Sprite {
 		RUNNING: 'run',
 		JUMPING: 'jump',
 		DEAD: 'dead',
+		SLIDING: 'sliding',
 	}
 
 	/**
@@ -61,6 +62,7 @@ export class Player extends Sprite {
 		DEAD: 'dead',
 		PIPE_IN: 'in-pipe',
 		PIPE_OUT: 'out-pipe',
+		SLIDING_DOWN: 'sliding-down'
 	}
 
 	/**

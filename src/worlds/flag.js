@@ -11,11 +11,6 @@ export class Flag extends Entity {
 	constructor({ x, y }) {
 		super({ path: '', x, y, sprite: { x: 0, y: 0, w: 16, h: 176 } })
 
-		const base = Loader.Sprite.getSprite({
-			src: Loader.Sprite.SRC.TILE,
-			name: 'hard'
-		})
-
 		const hoist = Loader.Sprite.getSprite({
 			src: Loader.Sprite.SRC.TILE,
 			name: 'flag-hoist'
@@ -32,7 +27,6 @@ export class Flag extends Entity {
 		})
 
 		const sprites = {
-			base: base.sprite,
 			hoist: hoist.sprite,
 			truck: truck.sprite,
 			fly: fly.sprite
@@ -41,7 +35,7 @@ export class Flag extends Entity {
 		this.sprites = sprites
 
 		this.image = new Image()
-		this.image.src = `assets/img/${base.path}`
+		this.image.src = `assets/img/${hoist.path}`
 
 		this.image2 = new Image()
 		this.image2.src = `assets/img/${fly.path}`
@@ -70,7 +64,6 @@ export class Flag extends Entity {
 	draw(ctx) {
 		const { image, image2, x: dx, y: dy, width: dw, height: dh } = this
 
-		const { x: sxBase, y: syBase, w: swBase, h: shBase } = this.sprites.base
 		const { x: sxHoist, y: syHoist, w: swHoist, h: shHoist } = this.sprites.hoist
 		const { x: sxTruck, y: syTruck, w: swTruck, h: shTruck } = this.sprites.truck
 		const { x: sxFly, y: syFly, w: swFly, h: shFly } = this.sprites.fly
@@ -82,9 +75,6 @@ export class Flag extends Entity {
 
 		// truck
 		ctx.drawImage(image, sxTruck, syTruck, swTruck, shTruck, x, y, swTruck, shTruck)
-
-		// base
-		ctx.drawImage(image, sxBase, syBase, swBase, shBase, x, y * 6, swBase, shBase)
 
 		// hoist
 		for (let i = 1; i < 10; i++) {

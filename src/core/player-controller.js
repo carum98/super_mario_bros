@@ -303,6 +303,18 @@ export class PlayerController {
 		})
 	}
 
+	reachedFlag() {
+		if (this.player.animation === Player.ANIMATIONS.SLIDING_DOWN) return
+
+		this.player.state = Player.STATES.SLIDING
+
+		this.player.updateSprite()
+
+		this.player.animation = Player.ANIMATIONS.SLIDING_DOWN
+
+		this.player.x += 12
+	}
+
 	/**
 	 * Handler fireball collisions with enemies.
 	 */
@@ -378,6 +390,9 @@ export class PlayerController {
 			case Player.ANIMATIONS.PIPE_OUT:
 				this.#outPipeAnimation()
 				break
+			case Player.ANIMATIONS.SLIDING_DOWN:
+				this.#slideDownAnimation()
+				break
 		}
 	}
 
@@ -400,6 +415,20 @@ export class PlayerController {
 
 		player.y += player.vy
 		player.vy += 0.2
+	}
+
+	#slideDownAnimation() {
+		const { player } = this
+
+		const { bottom } = this.#collisions
+
+		if (bottom) {
+			player.x = bottom.x
+			player.animation = null
+		} else {
+			player.y += player.vy
+			player.vy += 0.1
+		}
 	}
 
 	/**

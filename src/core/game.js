@@ -178,6 +178,8 @@ export class Game {
 			if (player.conllidesWith(checkpoint)) {
 				checkpoint.activate()
 
+				this.playerController.reachedFlag()
+
 				this.#reachGoal()
 			}
 		})

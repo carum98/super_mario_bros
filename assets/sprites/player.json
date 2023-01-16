@@ -146,6 +146,24 @@
 			}
 		},
 		{
+			"name": "sliding-small",
+			"frame": {
+				"x": 16,
+				"y": 104,
+				"w": 16,
+				"h": 16
+			}
+		},
+		{
+			"name": "sliding-big",
+			"frame": {
+				"x": 32,
+				"y": 120,
+				"w": 16,
+				"h": 32
+			}
+		},
+		{
 			"name": "coin-1",
 			"frame": {
 				"x": 64,
