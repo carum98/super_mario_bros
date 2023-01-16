@@ -7,6 +7,7 @@ import { PowerUp } from "../entities/power-up.js"
 import { PlayerController } from "./player-controller.js"
 import { GameState } from "./game-state.js"
 import { Limit } from "../worlds/limit.js"
+import { Flag } from "../worlds/flag.js"
 
 /**
  * @class
@@ -176,9 +177,10 @@ export class Game {
 
 		map.checkpoints.forEach((checkpoint) => {
 			if (player.conllidesWith(checkpoint)) {
-				checkpoint.activate()
-
-				this.playerController.reachedFlag()
+				if (checkpoint instanceof Flag && !checkpoint.endAnimation) {
+					checkpoint.activate()
+					this.playerController.reachedFlag()
+				}
 
 				this.#reachGoal()
 			}

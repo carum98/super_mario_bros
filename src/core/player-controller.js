@@ -6,7 +6,7 @@ import { LuckyBlock } from '../worlds/lucky-block.js'
 import { Map } from '../worlds/map.js'
 import { Pipe } from '../worlds/pipes.js'
 import { Tile } from '../worlds/tile.js'
-import { Controls } from './controls.js'
+import { Controls, KEY_CODES } from './controls.js'
 import { INCREASE_SCORE } from './game-state.js'
 import { Game } from './game.js'
 import { MovementController } from './movement.js'
@@ -423,8 +423,12 @@ export class PlayerController {
 		const { bottom } = this.#collisions
 
 		if (bottom) {
-			player.x = bottom.x
+			player.x = bottom.x + 16
 			player.animation = null
+
+			this.#controls.loadMacros([
+				{ key: KEY_CODES.ArrowRight, time: 900 }
+			])
 		} else {
 			player.y += player.vy
 			player.vy += 0.1

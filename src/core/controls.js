@@ -10,19 +10,35 @@ export const DIRECTIONS = {
 }
 
 /**
+ * @enum {String}
+ * @readonly
+ */
+export const KEY_CODES = {
+	ArrowLeft: 'ArrowLeft',
+	ArrowRight: 'ArrowRight',
+	ArrowUp: 'ArrowUp',
+	ArrowDown: 'ArrowDown',
+	KeyA: 'KeyA',
+	KeyD: 'KeyD',
+	KeyW: 'KeyW',
+	KeyS: 'KeyS',
+	Space: 'Space',
+}
+
+/**
  * @enum {DIRECTIONS}
  * @readonly
  */
 const KEYS = {
-	ArrowLeft: DIRECTIONS.LEFT,
-	ArrowRight: DIRECTIONS.RIGHT,
-	ArrowUp: DIRECTIONS.UP,
-	ArrowDown: DIRECTIONS.DOWN,
-	KeyA: DIRECTIONS.LEFT,
-	KeyD: DIRECTIONS.RIGHT,
-	KeyW: DIRECTIONS.UP,
-	KeyS: DIRECTIONS.DOWN,
-	Space: DIRECTIONS.UP,
+	[KEY_CODES.ArrowLeft]: DIRECTIONS.LEFT,
+	[KEY_CODES.ArrowRight]: DIRECTIONS.RIGHT,
+	[KEY_CODES.ArrowUp]: DIRECTIONS.UP,
+	[KEY_CODES.ArrowDown]: DIRECTIONS.DOWN,
+	[KEY_CODES.KeyA]: DIRECTIONS.LEFT,
+	[KEY_CODES.KeyD]: DIRECTIONS.RIGHT,
+	[KEY_CODES.KeyW]: DIRECTIONS.UP,
+	[KEY_CODES.KeyS]: DIRECTIONS.DOWN,
+	[KEY_CODES.Space]: DIRECTIONS.UP,
 }
 
 /**
@@ -49,6 +65,7 @@ export class Controls {
 
 	static DIRECTIONS = DIRECTIONS
 	static AXIS = AXIS
+	static KEYS = KEYS
 
 	/**
 	 * Starts listening to keyboard events and updates the keys array
@@ -64,6 +81,24 @@ export class Controls {
 	stopListening() {
 		window.removeEventListener('keydown', this.#onKeyDown.bind(this))
 		window.removeEventListener('keyup', this.#onKeyUp.bind(this))
+	}
+
+	/**
+	 * Runs a macro, load a sequence of keys to run programmatically.
+	 * @param {{ key: KEY_CODES, time: number }[]} macro
+	 */
+	loadMacros(macro) {
+		for (let i = 0; i < macro.length; i++) {
+			const { key, time } = macro[i]
+
+			setTimeout(() => {
+				this.#onKeyDown(new KeyboardEvent('keydown', { code: key }))
+
+				setTimeout(() => {
+					this.#onKeyUp(new KeyboardEvent('keyup', { code: key }))
+				}, time)
+			}, time * i)
+		}
 	}
 
 	/**

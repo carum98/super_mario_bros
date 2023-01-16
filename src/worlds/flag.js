@@ -42,6 +42,8 @@ export class Flag extends Entity {
 
 		this.flyPosition = 1
 		this.flyLimit = 9
+
+		this.endAnimation = false
 	}
 
 	update() {
@@ -54,6 +56,8 @@ export class Flag extends Entity {
 
 			if (this.flyPosition === this.flyLimit) {
 				this.deactivate()
+
+				this.endAnimation = true
 			}
 		}
 	}
