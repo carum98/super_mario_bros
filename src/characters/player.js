@@ -129,6 +129,9 @@ export class Player extends Sprite {
 			})
 
 			this.setAnimation(animation)
+
+			this.width = animation.frames[0].w
+			this.height = animation.frames[0].h
 		} else {
 			const { sprite } = Loader.Sprite.getSprite({
 				name: `${this.state}-${this.powerUp}`,
@@ -136,6 +139,9 @@ export class Player extends Sprite {
 			})
 
 			this.sprite = sprite
+
+			this.width = sprite.w
+			this.height = sprite.h
 		}
 	}
 

@@ -4,6 +4,7 @@ import { Sprite } from '../entities/sprite.js'
 import { Loader } from '../loaders/index.js'
 import { LuckyBlock } from '../worlds/lucky-block.js'
 import { Map } from '../worlds/map.js'
+import { Mushroom } from '../worlds/mushroom.js'
 import { Pipe } from '../worlds/pipes.js'
 import { Tile } from '../worlds/tile.js'
 import { Controls, KEY_CODES } from './controls.js'
@@ -67,6 +68,7 @@ export class PlayerController {
 		this.#state()
 		this.#collideWithEnemy()
 		this.#collideWithCoin()
+		this.#collideWithPowerUp()
 
 		this.#fireballMovement()
 		this.#fireballCollisions()
@@ -358,6 +360,38 @@ export class PlayerController {
 				this.game.state.increaseCoins()
 			}
 		})
+	}
+
+	#collideWithPowerUp() {
+		const { map, player, game: { entities } } = this
+
+		if (entities.length !== 0) {
+			entities.forEach((entity) => {
+				if (player.conllidesWith(entity)) {
+					entity.onCollide()
+
+					// Remove entity from array
+					const index = entities.indexOf(entity)
+					entities.splice(index, 1)
+
+					// Add power up to player
+					if (entity.powerUp) {
+						player.powerUp = entity.powerUp
+						player.updateSprite()
+					}
+
+					// Move player Y axis to prevent overlap with floor
+					if (entity instanceof Mushroom) {
+						player.y -= 8
+					}
+
+					// Change all mushrooms to fire flower
+					if (entity instanceof Mushroom) {
+						map.toogleMushroomsToFireFlower()
+					}
+				}
+			})
+		}
 	}
 
 	#handleDoubleJump() {

@@ -151,29 +151,7 @@ export class Game {
 	}
 
 	#checkCollision() {
-		const { player, entities, map } = this
-
-		if (entities.length !== 0) {
-			entities.forEach((entity) => {
-				if (player.conllidesWith(entity)) {
-					entity.onCollide()
-
-					// Remove entity from array
-					const index = entities.indexOf(entity)
-					entities.splice(index, 1)
-
-					// Add power up to player
-					if (entity.powerUp) {
-						player.powerUp = entity.powerUp
-					}
-
-					// Change all mushrooms to fire flower
-					if (entity instanceof Mushroom) {
-						this.map.toogleMushroomsToFireFlower()
-					}
-				}
-			})
-		}
+		const { player, map } = this
 
 		map.checkpoints.forEach((checkpoint) => {
 			if (player.conllidesWith(checkpoint)) {
