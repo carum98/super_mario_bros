@@ -70,6 +70,7 @@ export class Map {
 	 * @param {string} level 
 	 */
 	async #load(level) {
+		Loader.Level.get2(level)
 		const { tiles, backgroundItems, animations, enemies, checkpoints, coins } = await Loader.Level.get(level)
 
 		this.#buffer = tiles

@@ -1,5 +1,6 @@
 import { Goomba } from '../characters/goomba.js'
 import { Koopa } from '../characters/koopa.js'
+import { GameLevel } from '../core/game-level.js'
 import { BackgroundItem } from '../entities/background-item.js'
 import { Enemy } from '../entities/enemy.js'
 import { Entity } from '../entities/entity.js'
@@ -136,5 +137,17 @@ export class LevelLoader {
 			checkpoints,
 			coins,
 		}
+	}
+
+
+	/**
+	 * @param {string} level
+	 */
+	static async get2(level) {
+		const data = await import(`../../assets/levels/${level}.custom.json`, { assert: { type: "json" } })
+
+		const map = new GameLevel(data.default)
+
+		console.log(map)
 	}
 }
