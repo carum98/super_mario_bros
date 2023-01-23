@@ -11,7 +11,7 @@ export class Pipe extends Sprite {
 	 * @param {number} param.x
 	 * @param {number} param.y
 	 * @param {string} param.name
-	 * @param {{ x: number, y: number, direction: string }} [param.transport]
+	 * @param {{ map: string, direction: string, column: number, x: number, y: number }} [param.transport]
 	 */
 	constructor({ x, y, name, transport }) {
 		const { path, sprite } = Loader.Sprite.getSprite({

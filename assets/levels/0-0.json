@@ -1,35 +1,55 @@
 {
-	"floor": {
-		"sprite": "concrete",
-		"ranges": [
-			{
-				"x": 0,
-				"y": 13,
-				"columns": 16,
-				"rows": 2
+	"name": "0-0",
+	"colums": 16,
+	"rows": 15,
+	"maps": [
+		{
+			"name": "overworld",
+			"colums": 16,
+			"rows": 15,
+			"start": 0,
+			"end": 16,
+			"background": "#5d95fc",
+			"music": "overworld.mp3",
+			"tiles": {
+				"floor": {
+					"sprite": "concrete",
+					"ranges": [
+						{
+							"x": 0,
+							"y": 13,
+							"columns": 16,
+							"rows": 2
+						}
+					]
+				},
+				"background": [
+					{
+						"name": "bush-3",
+						"type": "patterns",
+						"coord": [
+							{
+								"x": 11,
+								"y": 12
+							}
+						]
+					},
+					{
+						"name": "mountain-2",
+						"type": "patterns",
+						"coord": [
+							{
+								"x": 0,
+								"y": 10
+							}
+						]
+					}
+				]
 			}
-		]
-	},
-	"background": [
-		{
-			"name": "bush-3",
-			"type": "patterns",
-			"coord": [
-				{
-					"x": 11,
-					"y": 12
-				}
-			]
-		},
-		{
-			"name": "mountain-2",
-			"type": "patterns",
-			"coord": [
-				{
-					"x": 0,
-					"y": 10
-				}
-			]
 		}
-	]
+	],
+	"end": {
+		"x": 0,
+		"y": 16
+	}
 }
