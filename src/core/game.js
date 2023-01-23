@@ -6,8 +6,6 @@ import { Sound } from "./sound.js"
 import { PowerUp } from "../entities/power-up.js"
 import { PlayerController } from "./player-controller.js"
 import { GameState } from "./game-state.js"
-import { Limit } from "../worlds/limit.js"
-import { Flag } from "../worlds/flag.js"
 
 /**
  * @class
@@ -80,8 +78,6 @@ export class Game {
 		this.#draw()
 		this.#timeDraw = performance.now() - now2
 
-		this.#checkCollision()
-
 		this.#renderEntities()
 
 		// Check if player is out of the map
@@ -93,18 +89,34 @@ export class Game {
 		}
 	}
 
+	/**
+	 * @param {{ map: string, direction: string, column: number? }} transport
+	 */
+	transport(transport) {
+		this.map.moveToMap(transport)
+
+		const currentMap = this.map.currentMap
+
+		// Change background color
+		this.map.canvas.style.background = currentMap.background
+
+		// Change music
+		this.music.pause()
+		this.music = Sound.backgroundMusic(currentMap.music)
+		this.music.play()
+
+		// Change player position
+		this.player.x = 2 * 16
+		this.player.y = 2 * 16
+	}
+
 	#update() {
 		this.playerController.update()
 		this.map.update()
 		this.information.update()
 
-		if (this.ctx) {
-			const middle = this.ctx.canvas.width / 3
-
-			if (this.map.checkpoints.some(item => item instanceof Limit)) {
-				console.log('Reached limit')
-				return
-			}
+		if (this.ctx && !this.map.limit) {
+			const middle = this.ctx.canvas.width / 2.5
 
 			if (this.player.x > middle) {
 				this.map.move()
@@ -148,27 +160,6 @@ export class Game {
 
 			this.entities.forEach((entity) => entity.draw(this.ctx))
 		}
-	}
-
-	#checkCollision() {
-		const { player, map } = this
-
-		map.checkpoints.forEach((checkpoint) => {
-			if (player.conllidesWith(checkpoint)) {
-				if (checkpoint instanceof Flag && !checkpoint.endAnimation) {
-					checkpoint.activate()
-					this.playerController.reachedFlag()
-				}
-
-				this.#reachGoal()
-			}
-		})
-	}
-
-	#reachGoal() {
-		this.music.pause()
-
-		Sound.play(Sound.Name.goal)
 	}
 
 	/**

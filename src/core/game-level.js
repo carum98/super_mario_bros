@@ -3,6 +3,13 @@ import { Goomba } from '../characters/goomba.js'
 import { BackgroundItem } from '../entities/background-item.js'
 import { Pipe } from '../worlds/pipes.js'
 import { Tile } from '../worlds/tile.js'
+import { BigCoin } from '../worlds/big-coin.js'
+import { LuckyBlock } from '../worlds/lucky-block.js'
+import { Sprite } from '../entities/sprite.js'
+import { Enemy } from '../entities/enemy.js'
+import { Flag } from '../worlds/flag.js'
+import { Entity } from '../entities/entity.js'
+import { Sound } from './sound.js'
 
 /**
  * @class GameLevel
@@ -16,9 +23,79 @@ export class GameLevel {
 		this.name = data.name
 		this.colums = data.colums
 		this.rows = data.rows
+
+		/** @type {Array<GameLevelMap>} */
 		this.maps = data.maps.map(item => new GameLevelMap(item))
 
+		this.end = new Flag({
+			x: data.end.x * 16,
+			y: data.end.y * 16,
+		})
+
 		Object.freeze(this)
+	}
+
+	/**
+	 * Get all tiles from all maps
+	 * @returns {Array<Sprite>}
+	 */
+	get tiles() {
+		return this.maps.map(map => ([
+			...map.tiles.floor,
+			...map.tiles.pipes,
+			...map.tiles.lucky,
+			...map.tiles.blocks,
+		])).flat()
+	}
+
+	/**
+	 * Get all background items from all maps
+	 * @returns {Array<BackgroundItem>}
+	 */
+	get backgroundItems() {
+		return this.maps.map(map => ([
+			...map.tiles.background,
+		])).flat()
+	}
+
+	/**
+	 * Get all animations from all maps
+	 * @returns {Array<Enemy>}
+	 */
+	get enemies() {
+		return this.maps.map(map => ([
+			...map.tiles.enemies,
+		])).flat()
+	}
+
+	/**
+	 * Get all coins from all maps
+	 * @returns {Array<BigCoin>}
+	 */
+	get coins() {
+		return this.maps.map(map => ([
+			...map.tiles.coins,
+		])).flat()
+	}
+
+	/**
+	 * Get all tiles from all maps
+	 * @returns {Array<Sprite>}
+	 */
+	get animations() {
+		return this.maps.map(map => ([
+			...map.tiles.lucky,
+		])).flat()
+	}
+
+	/**
+	 * Get all checkpoints from all maps
+	 * @returns {Array<Entity>}
+	 */
+	get checkpoints() {
+		return [
+			this.end,
+		]
 	}
 }
 
@@ -26,7 +103,7 @@ export class GameLevel {
  * @class GameLevelMap
  * @readonly
  */
-class GameLevelMap {
+export class GameLevelMap {
 	/**
 	 * @param {Object} data
 	 */
@@ -37,7 +114,7 @@ class GameLevelMap {
 		this.start = data.start
 		this.end = data.end
 		this.background = data.background
-		this.music = data.music
+		this.music = Sound.Name[data.music]
 
 		this.tiles = new GameLevelTiles(data.tiles)
 
@@ -56,16 +133,19 @@ class GameLevelTiles {
 	constructor(data) {
 		this.floor = this.#floor(data.floor)
 		this.pipes = this.#pipes(data.pipes)
-		this.lucky = data.lucky
+		this.lucky = this.#lucky(data.lucky, data.mushrooms)
 		this.blocks = this.#blocks(data.blocks)
-		this.mushrooms = data.mushrooms
 		this.enemies = this.#enamies(data.enemies)
 		this.background = this.#background(data.background)
-		this.checkpoints = data.checkpoints
+		this.coins = this.#coins(data.coins)
 
 		Object.freeze(this)
 	}
 
+	/**
+	 * @param {Object} data 
+	 * @returns {Tile[]} items
+	 */
 	#floor(data) {
 		const { ranges = [], sprite } = data
 
@@ -86,8 +166,12 @@ class GameLevelTiles {
 		return items
 	}
 
+	/**
+	 * @param {Object | undefined} data 
+	 * @returns {Pipe[]} items
+	 */
 	#pipes(data) {
-		const { coord = [], sprite } = data
+		const { coord = [], sprite } = data || {}
 
 		const items = []
 
@@ -103,6 +187,10 @@ class GameLevelTiles {
 		return items
 	}
 
+	/**
+	 * @param {Array | undefined} data 
+	 * @returns {Tile[]} items
+	 */
 	#blocks(data) {
 		const items = []
 
@@ -119,6 +207,10 @@ class GameLevelTiles {
 		return items
 	}
 
+	/**
+	 * @param {Array | undefined} data 
+	 * @returns {BackgroundItem[]} items
+	 */
 	#background(data) {
 		const items = []
 
@@ -136,6 +228,10 @@ class GameLevelTiles {
 		return items
 	}
 
+	/**
+	 * @param {Array | undefined} data 
+	 * @returns {Enemy[]} items
+	 */
 	#enamies(data) {
 		const items = []
 
@@ -151,6 +247,47 @@ class GameLevelTiles {
 					items.push(new Koopa({ x: x * 16, y: y * 16 }))
 				}
 			}
+		}
+
+		return items
+	}
+
+	/**
+	 * @param {Object | undefined} data
+	 * @param {Object} mushrooms
+	 * @returns {LuckyBlock[]} items
+	 */
+	#lucky(data, mushrooms) {
+		const { coord = [] } = data || {}
+
+		const items = []
+
+		for (const lucky of coord) {
+			const { x, y } = lucky
+
+			const hasMusroom = mushrooms.coord.some(mushroom => mushroom.x === x && mushroom.y === y)
+
+			const item = hasMusroom ? LuckyBlock.ITEM.MUSHROOM : LuckyBlock.ITEM.COIN
+
+			items.push(new LuckyBlock({ x: x * 16, y: y * 16, item }))
+		}
+
+		return items
+	}
+
+	/**
+	 * @param {Object} data 
+	 * @returns {BigCoin[]} items
+	 */
+	#coins(data) {
+		const { coord = [] } = data || {}
+
+		const items = []
+
+		for (const coin of coord) {
+			const { x, y } = coin
+
+			items.push(new BigCoin({ x: x * 16, y: y * 16 }))
 		}
 
 		return items

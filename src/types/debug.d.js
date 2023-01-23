@@ -25,4 +25,5 @@
  * @property {number} visibleBackgroundItems - Number of visible background items
  * @property {number} enemies - Number of enemies in buffer
  * @property {number} visibleEnemies - Number of visible enemies
+ * @property {number} column - Actual column
  */

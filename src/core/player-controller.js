@@ -2,6 +2,7 @@ import { Goomba } from '../characters/goomba.js'
 import { Player } from '../characters/player.js'
 import { Sprite } from '../entities/sprite.js'
 import { Loader } from '../loaders/index.js'
+import { Flag } from '../worlds/flag.js'
 import { LuckyBlock } from '../worlds/lucky-block.js'
 import { Map } from '../worlds/map.js'
 import { Mushroom } from '../worlds/mushroom.js'
@@ -69,6 +70,7 @@ export class PlayerController {
 		this.#collideWithEnemy()
 		this.#collideWithCoin()
 		this.#collideWithPowerUp()
+		this.#collideWithFlag()
 
 		this.#fireballMovement()
 		this.#fireballCollisions()
@@ -313,8 +315,6 @@ export class PlayerController {
 		this.player.updateSprite()
 
 		this.player.animation = Player.ANIMATIONS.SLIDING_DOWN
-
-		this.player.x += 12
 	}
 
 	/**
@@ -394,6 +394,22 @@ export class PlayerController {
 		}
 	}
 
+	#collideWithFlag() {
+		const { map, player, game } = this
+
+		const flag = map.checkpoints.find((checkpoint) => checkpoint instanceof Flag)
+
+		if (flag instanceof Flag && player.conllidesWith(flag) && !flag.endAnimation) {
+			flag.activate()
+			this.reachedFlag()
+
+			map.moveTo(map.column + 1)
+
+			game.music.pause()
+			Sound.play(Sound.Name.goal)
+		}
+	}
+
 	#handleDoubleJump() {
 		const { player } = this
 		const { keys } = this.#controls
@@ -470,34 +486,13 @@ export class PlayerController {
 	}
 
 	/**
-	 * @param {{ x: number, y: number, direction: string } | undefined} transport
+	 * @param {{ map: string, direction: string, column: number? } | undefined} transport
 	 */
 	async #moveInsidePipe(transport) {
 		if (!transport) return
 
-		const { x, y, direction } = transport
+		await this.pipeAnimation(transport.direction, 'left')
 
-		await this.pipeAnimation(direction, 'left')
-
-		const style = this.map.canvas.style
-
-		// Change background color
-		style.background = direction === 'out' ? '#5d95fc' : '#000'
-
-		// Change background music
-		this.game.music.pause()
-
-		if (direction === 'out') {
-			this.game.music = Sound.backgroundMusic(Sound.Name.overworld)
-		} else {
-			this.game.music = Sound.backgroundMusic(Sound.Name.background)
-		}
-
-		this.game.music.play()
-
-		this.map.moveTo(x - this.map.column)
-
-		this.player.x = 2 * 16
-		this.player.y = y * 16
+		this.game.transport(transport)
 	}
 }
