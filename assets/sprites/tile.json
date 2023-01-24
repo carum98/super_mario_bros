@@ -31,8 +31,17 @@
 		{
 			"name": "metal",
 			"frame": {
-				"x": 32,
+				"x": 112,
 				"y": 0,
+				"w": 16,
+				"h": 16
+			}
+		},
+		{
+			"name": "metal-underground",
+			"frame": {
+				"x": 112,
+				"y": 32,
 				"w": 16,
 				"h": 16
 			}
@@ -42,6 +51,15 @@
 			"frame": {
 				"x": 48,
 				"y": 0,
+				"w": 16,
+				"h": 16
+			}
+		},
+		{
+			"name": "hard-underground",
+			"frame": {
+				"x": 48,
+				"y": 32,
 				"w": 16,
 				"h": 16
 			}
@@ -110,7 +128,25 @@
 			}
 		},
 		{
+			"name": "pipe-base-right",
+			"frame": {
+				"x": 16,
+				"y": 96,
+				"w": 16,
+				"h": 16
+			}
+		},
+		{
 			"name": "pipe-left",
+			"frame": {
+				"x": 96,
+				"y": 48,
+				"w": 48,
+				"h": 32
+			}
+		},
+		{
+			"name": "pipe-left-underground",
 			"frame": {
 				"x": 96,
 				"y": 80,
@@ -141,6 +177,33 @@
 			"frame": {
 				"x": 96,
 				"y": 0,
+				"w": 16,
+				"h": 16
+			}
+		},
+		{
+			"name": "lucky-underground-1",
+			"frame": {
+				"x": 64,
+				"y": 32,
+				"w": 16,
+				"h": 16
+			}
+		},
+		{
+			"name": "lucky-underground-2",
+			"frame": {
+				"x": 80,
+				"y": 32,
+				"w": 16,
+				"h": 16
+			}
+		},
+		{
+			"name": "lucky-underground-3",
+			"frame": {
+				"x": 96,
+				"y": 32,
 				"w": 16,
 				"h": 16
 			}
@@ -360,6 +423,15 @@
 				"lucky-1",
 				"lucky-2",
 				"lucky-3"
+			],
+			"speed": 12
+		},
+		{
+			"name": "lucky-underground",
+			"frames": [
+				"lucky-underground-1",
+				"lucky-underground-2",
+				"lucky-underground-3"
 			],
 			"speed": 12
 		},

@@ -42,6 +42,7 @@ export class GameLevel {
 	get tiles() {
 		return this.maps.map(map => ([
 			...map.tiles.floor,
+			...map.tiles.walls,
 			...map.tiles.pipes,
 			...map.tiles.lucky,
 			...map.tiles.blocks,
@@ -132,6 +133,7 @@ class GameLevelTiles {
 	 */
 	constructor(data) {
 		this.floor = this.#floor(data.floor)
+		this.walls = this.#floor(data.wall)
 		this.pipes = this.#pipes(data.pipes)
 		this.lucky = this.#lucky(data.lucky, data.mushrooms)
 		this.blocks = this.#blocks(data.blocks)
@@ -143,11 +145,11 @@ class GameLevelTiles {
 	}
 
 	/**
-	 * @param {Object} data 
+	 * @param {Object | undefined} data 
 	 * @returns {Tile[]} items
 	 */
 	#floor(data) {
-		const { ranges = [], sprite } = data
+		const { ranges = [], sprite } = data || {}
 
 		const items = []
 
@@ -258,7 +260,7 @@ class GameLevelTiles {
 	 * @returns {LuckyBlock[]} items
 	 */
 	#lucky(data, mushrooms) {
-		const { coord = [] } = data || {}
+		const { coord = [], sprite } = data || {}
 
 		const items = []
 
@@ -269,7 +271,7 @@ class GameLevelTiles {
 
 			const item = hasMusroom ? LuckyBlock.ITEM.MUSHROOM : LuckyBlock.ITEM.COIN
 
-			items.push(new LuckyBlock({ x: x * 16, y: y * 16, item }))
+			items.push(new LuckyBlock({ x: x * 16, y: y * 16, name: sprite, item }))
 		}
 
 		return items

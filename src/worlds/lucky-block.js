@@ -28,10 +28,11 @@ export class LuckyBlock extends Tile {
 	 * @param {Object} param 
 	 * @param {number} param.x
 	 * @param {number} param.y
+	 * @param {string} param.name
 	 * @param {ITEM} param.item
 	 */
-	constructor({ x, y, item }) {
-		super({ x, y, name: Tile.TYPE.LUCKY, isSolid: false })
+	constructor({ x, y, name, item }) {
+		super({ x, y, name, isSolid: false })
 
 		this.active = true
 
@@ -39,6 +40,8 @@ export class LuckyBlock extends Tile {
 		this.limit = y
 
 		this.type = item
+
+		this.isUnderground = name.includes('underground')
 	}
 
 	update() {
@@ -83,7 +86,7 @@ export class LuckyBlock extends Tile {
 
 			const { sprite } = Loader.Sprite.getSprite({
 				src: Loader.Sprite.SRC.TILE,
-				name: Tile.TYPE.METAL
+				name: Tile.TYPE.METAL + (this.isUnderground ? '-underground' : ''),
 			})
 
 			this.sprite = sprite
