@@ -169,21 +169,21 @@ class GameLevelTiles {
 	}
 
 	/**
-	 * @param {Object | undefined} data 
+	 * @param {Array | undefined} data 
 	 * @returns {Pipe[]} items
 	 */
 	#pipes(data) {
-		const { coord = [], sprite } = data || {}
-
 		const items = []
 
-		for (const { x, y, transport } of coord) {
-			items.push(new Pipe({
-				x: x * 16,
-				y: y * 16,
-				name: sprite,
-				transport,
-			}))
+		for (const { coord, sprite } of data || []) {
+			for (const { x, y, transport } of coord) {
+				items.push(new Pipe({
+					x: x * 16,
+					y: y * 16,
+					name: sprite,
+					transport,
+				}))
+			}
 		}
 
 		return items

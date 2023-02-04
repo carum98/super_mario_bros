@@ -23,19 +23,21 @@
 						}
 					]
 				},
-				"pipes": {
-					"sprite": "pipe-left",
-					"coord": [
-						{
-							"x": 10,
-							"y": 11,
-							"transport": {
-								"map": "underground",
-								"direction": "in"
+				"pipes": [
+					{
+						"sprite": "pipe-left",
+						"coord": [
+							{
+								"x": 10,
+								"y": 11,
+								"transport": {
+									"map": "underground",
+									"direction": "in"
+								}
 							}
-						}
-					]
-				},
+						]
+					}
+				],
 				"blocks": [
 					{
 						"sprite": "pipe",
@@ -287,47 +289,54 @@
 						}
 					]
 				},
-				"pipes": {
-					"sprite": "pipe",
-					"coord": [
-						{
-							"x": 119,
-							"y": 10,
-							"transport": {
-								"map": "underground-2",
-								"direction": "in"
+				"pipes": [
+					{
+						"sprite": "pipe",
+						"coord": [
+							{
+								"x": 119,
+								"y": 10,
+								"transport": {
+									"map": "underground-2",
+									"direction": "in"
+								}
+							},
+							{
+								"x": 125,
+								"y": 9
+							},
+							{
+								"x": 131,
+								"y": 11
+							},
+							{
+								"x": 194,
+								"y": 10
+							},
+							{
+								"x": 198,
+								"y": 10
+							},
+							{
+								"x": 202,
+								"y": 10
 							}
-						},
-						{
-							"x": 125,
-							"y": 9
-						},
-						{
-							"x": 131,
-							"y": 11
-						},
-						{
-							"x": 182,
-							"y": 8,
-							"transport": {
-								"map": "overworld-2",
-								"direction": "in"
+						]
+					},
+					{
+						"sprite": "pipe-left",
+						"coord": [
+							{
+								"x": 182,
+								"y": 8,
+								"transport": {
+									"map": "overworld-2",
+									"direction": "in"
+								}
 							}
-						},
-						{
-							"x": 194,
-							"y": 10
-						},
-						{
-							"x": 198,
-							"y": 10
-						},
-						{
-							"x": 202,
-							"y": 10
-						}
-					]
-				},
+						]
+					}
+				],
 				"blocks": [
 					{
 						"sprite": "brick-blue",
@@ -631,6 +640,19 @@
 								"y": 12
 							}
 						]
+					},
+					{
+						"sprite": "pipe-base-right",
+						"coord": [
+							{
+								"x": 185,
+								"y": 8
+							},
+							{
+								"x": 185,
+								"y": 9
+							}
+						]
 					}
 				],
 				"lucky": {
@@ -718,15 +740,17 @@
 						}
 					]
 				},
-				"pipes": {
-					"sprite": "pipe-left",
-					"coord": [
-						{
-							"x": 221,
-							"y": 11
-						}
-					]
-				},
+				"pipes": [
+					{
+						"sprite": "pipe-left",
+						"coord": [
+							{
+								"x": 221,
+								"y": 11
+							}
+						]
+					}
+				],
 				"blocks": [
 					{
 						"sprite": "pipe-base",
@@ -1052,15 +1076,17 @@
 						]
 					}
 				],
-				"pipes": {
-					"sprite": "pipe",
-					"coord": [
-						{
-							"x": 228,
-							"y": 11
-						}
-					]
-				},
+				"pipes": [
+					{
+						"sprite": "pipe",
+						"coord": [
+							{
+								"x": 228,
+								"y": 11
+							}
+						]
+					}
+				],
 				"background": [
 					{
 						"name": "bush",
