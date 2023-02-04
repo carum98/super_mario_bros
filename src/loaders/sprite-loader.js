@@ -27,6 +27,7 @@ export class SpriteLoader {
 		SPRITES: 'sprites',
 		ANIMATIONS: 'animations',
 		PATTERNS: 'patterns',
+		RANGES: 'ranges',
 	}
 
 	/**

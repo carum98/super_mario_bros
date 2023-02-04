@@ -414,6 +414,42 @@
 				"w": 16,
 				"h": 16
 			}
+		},
+		{
+			"name": "grass-left",
+			"frame": {
+				"x": 144,
+				"y": 32,
+				"w": 16,
+				"h": 16
+			}
+		},
+		{
+			"name": "grass-center",
+			"frame": {
+				"x": 160,
+				"y": 32,
+				"w": 16,
+				"h": 16
+			}
+		},
+		{
+			"name": "grass-right",
+			"frame": {
+				"x": 176,
+				"y": 32,
+				"w": 16,
+				"h": 16
+			}
+		},
+		{
+			"name": "base-wood",
+			"frame": {
+				"x": 208,
+				"y": 0,
+				"w": 16,
+				"h": 16
+			}
 		}
 	],
 	"animations": [

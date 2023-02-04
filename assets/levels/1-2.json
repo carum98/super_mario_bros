@@ -1,7 +1,7 @@
 {
 	"name": "1-2",
-	"colums": 2,
-	"rows": 1,
+	"colums": 257,
+	"rows": 15,
 	"maps": [
 		{
 			"name": "overworld",

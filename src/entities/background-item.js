@@ -15,8 +15,10 @@ export class BackgroundItem extends Sprite {
 	 * @param {number} data.y
 	 * @param {string} data.type
 	 * @param {string} data.name
+	 * @param {number} [data.columns]
+	 * @param {number} [data.rows]
 	 */
-	constructor({ x, y, type, name }) {
+	constructor({ x, y, type, name, columns, rows }) {
 		const loader = Loader.Sprite
 
 		const frames = []
@@ -26,6 +28,23 @@ export class BackgroundItem extends Sprite {
 			const data = loader.getSprite({ src: loader.SRC.TILE, name })
 
 			frames.push([data.sprite])
+			path = data.path
+		} else if (type === loader.TYPE.RANGES) {
+			if (!columns || !rows) throw new Error('Columns and rows are required for ranges.')
+
+			const data = loader.getSprite({ src: loader.SRC.TILE, name })
+
+			for (let i = 0; i < rows; i++) {
+				const row = []
+
+				for (let j = 0; j < columns; j++) {
+					row.push(data.sprite)
+				}
+
+				frames.push(row)
+			}
+
+
 			path = data.path
 		} else {
 			const data = loader.getPattern({ src: loader.SRC.TILE, name })
@@ -60,6 +79,10 @@ export class BackgroundItem extends Sprite {
 				const frame = row[j]
 
 				if (j === 0 && i > 0) {
+					if (!row[i - 1]) {
+						continue
+					}
+
 					const { w: preW, h: preH } = row[i - 1]
 					const { x: sx, y: sy, w: sw, h: sh } = frame
 

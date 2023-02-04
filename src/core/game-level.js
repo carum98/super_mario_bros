@@ -153,17 +153,9 @@ class GameLevelTiles {
 
 		const items = []
 
-		for (const { x, y, columns, rows } of ranges) {
-			for (let i = 0; i < columns; i++) {
-				for (let j = 0; j < rows; j++) {
-					items.push(new Tile({
-						x: x * 16 + i * 16,
-						y: y * 16 + j * 16,
-						name: sprite,
-					}))
-				}
-			}
-		}
+		this.#ranges(ranges, (x, y) => {
+			items.push(new Tile({ x, y, name: sprite }))
+		})
 
 		return items
 	}
@@ -217,12 +209,14 @@ class GameLevelTiles {
 		const items = []
 
 		for (const { coord, name, type } of data || []) {
-			for (const { x, y } of coord) {
+			for (const { x, y, columns, rows } of coord) {
 				items.push(new BackgroundItem({
 					x: x * 16,
 					y: y * 16,
 					name,
-					type
+					type,
+					columns,
+					rows,
 				}))
 			}
 		}
@@ -293,5 +287,28 @@ class GameLevelTiles {
 		}
 
 		return items
+	}
+
+	/**
+	 * @callback builder
+	 * @param {number} x
+	 * @param {number} y
+	 */
+
+	/**
+	 * @param {Array<{x: number, y: number, columns: number, rows: number }>} ranges 
+	 * @param {builder} callback
+	 */
+	#ranges(ranges, callback) {
+		for (const { x, y, columns, rows } of ranges) {
+			for (let i = 0; i < columns; i++) {
+				for (let j = 0; j < rows; j++) {
+					callback(
+						x * 16 + i * 16,
+						y * 16 + j * 16
+					)
+				}
+			}
+		}
 	}
 }
