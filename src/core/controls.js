@@ -85,7 +85,7 @@ export class Controls {
 
 	/**
 	 * Runs a macro, load a sequence of keys to run programmatically.
-	 * @param {{ key: KEY_CODES, time: number }[]} macro
+	 * @param {{ key: KEY_CODES[], time: number }[]} macro
 	 */
 	loadMacros(macro) {
 		for (let i = 0; i < macro.length; i++) {

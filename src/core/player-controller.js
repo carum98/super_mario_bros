@@ -407,6 +407,10 @@ export class PlayerController {
 
 			game.music.pause()
 			Sound.play(Sound.Name.goal)
+
+			setTimeout(() => {
+				game.state.nextLevel()
+			}, 5000)
 		}
 	}
 

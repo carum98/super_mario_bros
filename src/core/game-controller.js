@@ -8,6 +8,7 @@ import { RouterController, ScreenNames } from './router-controller.js'
  * @class
  * @property {HTMLCanvasElement} canvas
  * @property {GameState} state
+ * @property {number} actualLevel
  * @property {GameLoop} loop
  * @property {Game | null} renderEngine
  * @property {RouterController} router
@@ -20,7 +21,9 @@ export class GameController {
 	 */
 	constructor({ canvas, state }) {
 		this.canvas = canvas
+
 		this.state = state
+		this.currentLevel = this.state.level
 
 		this.renderEngine = null
 
@@ -97,5 +100,11 @@ export class GameController {
 		}
 
 		this.renderEngine?.render(stop)
+
+		if (this.currentLevel !== this.state.level) {
+			this.currentLevel = this.state.level
+
+			this.startLevel()
+		}
 	}
 }

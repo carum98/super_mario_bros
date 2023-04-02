@@ -75,6 +75,7 @@ export class Information {
 
 			this.texts[1].updateText(score.toString().padStart(6, '0'))
 			this.texts[2].updateText('×' + coins.toString().padStart(2, '0'))
+			this.texts[4].updateText(this.state.world + '-' + this.state.level)
 			this.texts[6].updateText(timer.toString().padStart(3, '0'))
 		}
 	}
